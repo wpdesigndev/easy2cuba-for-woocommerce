@@ -17,6 +17,7 @@ class E2C_Updater {
 	const ASSET     = 'easy2cuba-for-woocommerce.zip';
 	const SLUG      = 'easy2cuba-for-woocommerce';
 	const CACHE_KEY = 'e2c_github_release';
+	const PAGES     = 'https://wpdesigndev.github.io/easy2cuba-for-woocommerce/';
 
 	public static function init() {
 		add_filter( 'pre_set_site_transient_update_plugins', array( __CLASS__, 'check' ) );
@@ -105,29 +106,56 @@ class E2C_Updater {
 		return $transient;
 	}
 
-	/** Ventana "Ver detalles" de la actualización. */
+	/** Ventana "Ver detalles" del plugin (lista de Plugins y aviso de actualización). */
 	public static function info( $result, $action, $args ) {
 		if ( 'plugin_information' !== $action || empty( $args->slug ) || self::SLUG !== $args->slug ) {
 			return $result;
 		}
 		$release = self::latest();
-		$notes   = ! empty( $release['notes'] ) ? wpautop( esc_html( $release['notes'] ) ) : '';
+		$readme  = self::readme();
+		$s       = self::sections( $readme );
+
+		$sections = array();
+		foreach ( array( 'description', 'installation', 'faq', 'screenshots', 'changelog' ) as $key ) {
+			if ( ! empty( $s[ $key ] ) ) {
+				$sections[ $key ] = $s[ $key ];
+			}
+		}
+		if ( empty( $sections['description'] ) ) {
+			$sections['description'] = '<p>' . esc_html( E2C_I18n::t( 'plugin_desc' ) ) . '</p>';
+		}
+		if ( empty( $sections['changelog'] ) && ! empty( $release['notes'] ) ) {
+			$sections['changelog'] = self::to_html( $release['notes'] );
+		}
+
+		// "Probado hasta 6.8" cubre 6.8.x, como en WordPress.org (WordPress compara la versión completa).
+		$tested = self::head( $readme, 'tested up to', '' );
+		$wp     = get_bloginfo( 'version' );
+		if ( $tested && 0 === strpos( $wp, $tested . '.' ) ) {
+			$tested = $wp;
+		}
+
+		$version = ! empty( $release['version'] ) ? $release['version'] : E2C_VERSION;
+		if ( ! empty( $readme['header']['stable tag'] ) && version_compare( $readme['header']['stable tag'], $version, '>' ) ) {
+			$version = $readme['header']['stable tag'];
+		}
 
 		return (object) array(
 			'name'          => 'Easy2Cuba for WooCommerce',
 			'slug'          => self::SLUG,
-			'version'       => ! empty( $release['version'] ) ? $release['version'] : E2C_VERSION,
+			'version'       => $version,
 			'author'        => '<a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI</a>',
-			'homepage'      => 'https://github.com/' . self::REPO,
-			'requires'      => '6.0',
-			'requires_php'  => '7.4',
+			'homepage'      => self::PAGES,
+			'requires'      => self::head( $readme, 'requires at least', '6.0' ),
+			'tested'        => $tested,
+			'requires_php'  => self::head( $readme, 'requires php', '7.4' ),
 			'last_updated'  => ! empty( $release['date'] ) ? $release['date'] : '',
 			'download_link' => ! empty( $release['package'] ) ? $release['package'] : '',
-			'sections'      => array(
-				'description' => '<p>' . esc_html( E2C_I18n::t( 'plugin_desc' ) ) . '</p>',
-				'changelog'   => $notes ? $notes : '<p>' . esc_html( E2C_I18n::t( 'plugin_desc' ) ) . '</p>',
+			'sections'      => $sections,
+			'banners'       => array(
+				'low'  => self::PAGES . 'img/banner-772x250.png',
+				'high' => self::PAGES . 'img/banner-1544x500.png',
 			),
-			'banners'       => array(),
 			'icons'         => array(
 				'1x' => E2C_URL . 'assets/img/logo-128.png',
 				'2x' => E2C_URL . 'assets/img/icon-256x256.png',
@@ -135,7 +163,172 @@ class E2C_Updater {
 		);
 	}
 
+	/**
+	 * Lee el readme de la versión publicada en GitHub (así "Ver detalles" muestra
+	 * las novedades antes de actualizar). Si GitHub no responde, usa el del plugin instalado.
+	 */
+	private static function readme() {
+		$file = 'en' === E2C_I18n::lang() ? 'readme-en.txt' : 'readme.txt';
+		$key  = 'e2c_readme_' . md5( $file );
+		$text = get_site_transient( $key );
+
+		if ( false === $text ) {
+			$text     = '';
+			$response = wp_remote_get(
+				'https://raw.githubusercontent.com/' . self::REPO . '/main/' . $file,
+				array(
+					'timeout' => 10,
+					'headers' => array( 'User-Agent' => 'Easy2Cuba-for-WooCommerce/' . E2C_VERSION ),
+				)
+			);
+			if ( ! is_wp_error( $response ) && 200 === (int) wp_remote_retrieve_response_code( $response ) ) {
+				$body = (string) wp_remote_retrieve_body( $response );
+				if ( false !== strpos( $body, '== Description ==' ) ) {
+					$text = $body;
+				}
+			}
+			set_site_transient( $key, $text, $text ? 6 * HOUR_IN_SECONDS : HOUR_IN_SECONDS );
+		}
+
+		if ( '' === $text ) {
+			$local = E2C_PATH . $file;
+			if ( ! is_readable( $local ) ) {
+				$local = E2C_PATH . 'readme.txt';
+			}
+			$text = is_readable( $local ) ? (string) file_get_contents( $local ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		}
+		return self::parse( $text );
+	}
+
+	private static function head( $readme, $key, $default ) {
+		return ! empty( $readme['header'][ $key ] ) ? $readme['header'][ $key ] : $default;
+	}
+
+	/** Separa el readme en cabecera y secciones (formato de WordPress.org). */
+	private static function parse( $text ) {
+		$text  = str_replace( array( "\r\n", "\r" ), "\n", $text );
+		$parts = preg_split( '/^==\s*([^=].*?)\s*==\s*$/m', $text, -1, PREG_SPLIT_DELIM_CAPTURE );
+		$out   = array(
+			'header'   => array(),
+			'sections' => array(),
+		);
+		foreach ( explode( "\n", (string) array_shift( $parts ) ) as $line ) {
+			if ( preg_match( '/^([A-Za-z ]+):\s*(.+)$/', trim( $line ), $m ) ) {
+				$out['header'][ strtolower( trim( $m[1] ) ) ] = trim( $m[2] );
+			}
+		}
+		for ( $i = 0; $i + 1 < count( $parts ); $i += 2 ) {
+			$out['sections'][ strtolower( trim( $parts[ $i ] ) ) ] = trim( $parts[ $i + 1 ] );
+		}
+		return $out;
+	}
+
+	private static function sections( $readme ) {
+		$map = array(
+			'description'                => 'description',
+			'installation'               => 'installation',
+			'frequently asked questions' => 'faq',
+			'faq'                        => 'faq',
+			'screenshots'                => 'screenshots',
+			'changelog'                  => 'changelog',
+		);
+		$out = array();
+		foreach ( $readme['sections'] as $name => $body ) {
+			if ( ! isset( $map[ $name ] ) ) {
+				continue;
+			}
+			$key         = $map[ $name ];
+			$out[ $key ] = 'screenshots' === $key ? self::screenshots( $body ) : self::to_html( $body );
+		}
+		return $out;
+	}
+
+	/** Capturas alojadas en la página del plugin (GitHub Pages). */
+	private static function screenshots( $body ) {
+		$files = array( 'checkout.png', 'admin-envios.png', 'admin-facturas.png', 'factura-pdf.png' );
+		$html  = '<ol>';
+		$n     = 0;
+		foreach ( explode( "\n", $body ) as $line ) {
+			if ( ! preg_match( '/^\d+\.\s+(.+)$/', trim( $line ), $m ) || ! isset( $files[ $n ] ) ) {
+				continue;
+			}
+			$src   = self::PAGES . 'screenshots/' . $files[ $n ];
+			$html .= '<li><a href="' . esc_url( $src ) . '" target="_blank" rel="noopener noreferrer"><img src="' . esc_url( $src ) . '" alt="' . esc_attr( $m[1] ) . '"></a><p>' . self::inline( $m[1] ) . '</p></li>';
+			$n++;
+		}
+		return $n ? $html . '</ol>' : '';
+	}
+
+	/** Convierte el texto del readme (o de las notas de la release) en HTML sencillo. */
+	private static function to_html( $text ) {
+		$text  = str_replace( array( "\r\n", "\r" ), "\n", (string) $text );
+		$html  = '';
+		$list  = '';
+		$para  = array();
+		$close = function () use ( &$html, &$list, &$para ) {
+			if ( $para ) {
+				$html .= '<p>' . implode( ' ', $para ) . '</p>';
+				$para  = array();
+			}
+			if ( $list ) {
+				$html .= '</' . $list . '>';
+				$list  = '';
+			}
+		};
+
+		foreach ( explode( "\n", $text ) as $raw ) {
+			$line = trim( $raw );
+			if ( '' === $line ) {
+				$close();
+				continue;
+			}
+			if ( preg_match( '/^=+\s*(.+?)\s*=+$/', $line, $m ) || preg_match( '/^#{1,6}\s+(.+)$/', $line, $m ) ) {
+				$close();
+				$html .= '<h4>' . self::inline( $m[1] ) . '</h4>';
+				continue;
+			}
+			if ( preg_match( '/^[*\-]\s+(.+)$/', $line, $m ) || preg_match( '/^\d+\.\s+(.+)$/', $line, $m ) ) {
+				$type = preg_match( '/^\d+\./', $line ) ? 'ol' : 'ul';
+				if ( $para ) {
+					$html .= '<p>' . implode( ' ', $para ) . '</p>';
+					$para  = array();
+				}
+				if ( $list !== $type ) {
+					if ( $list ) {
+						$html .= '</' . $list . '>';
+					}
+					$html .= '<' . $type . '>';
+					$list  = $type;
+				}
+				$html .= '<li>' . self::inline( $m[1] ) . '</li>';
+				continue;
+			}
+			if ( $list ) {
+				$html .= '</' . $list . '>';
+				$list  = '';
+			}
+			$para[] = self::inline( $line );
+		}
+		$close();
+		return $html;
+	}
+
+	private static function inline( $text ) {
+		$text = esc_html( $text );
+		$text = preg_replace( '/\*\*(.+?)\*\*/', '<strong>$1</strong>', $text );
+		$text = preg_replace( '/`(.+?)`/', '<code>$1</code>', $text );
+		return preg_replace_callback(
+			'/\[([^\]]+)\]\(([^)\s]+)\)/',
+			function ( $m ) {
+				return '<a href="' . esc_url( html_entity_decode( $m[2] ) ) . '" target="_blank" rel="noopener noreferrer">' . $m[1] . '</a>';
+			},
+			$text
+		);
+	}
+
 	public static function flush( $upgrader = null, $options = array() ) {
 		delete_site_transient( self::CACHE_KEY );
+		delete_site_transient( 'e2c_readme_' . md5( 'readme.txt' ) );
+		delete_site_transient( 'e2c_readme_' . md5( 'readme-en.txt' ) );
 	}
 }
