@@ -33,7 +33,7 @@
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.6; }
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
 a { color: var(--blue); }
 a:focus-visible, .btn:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 8px; }
 .wrap { max-width: 1160px; margin: 0 auto; padding-inline: 20px; }
@@ -68,6 +68,7 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--red); outline-off
 .hero p.lead { font-size: 20px; color: #d5e2f7; margin: 0 0 30px; max-width: 34em; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; }
 .meta { margin-top: 22px; font-size: 14px; color: #b9cdf0; }
+.hero .shot img { width: 100%; height: auto; aspect-ratio: 1392 / 1150; object-fit: cover; object-position: top; }
 .shot { border-radius: 16px; overflow: hidden; background: var(--white); box-shadow: 0 30px 70px rgba(0,0,0,.35); border: 6px solid rgba(255,255,255,.12); }
 
 /* Secciones */
