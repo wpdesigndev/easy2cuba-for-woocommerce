@@ -13,6 +13,7 @@
   <a href="../../releases/latest"><strong>⬇ Descargar la última versión</strong></a>
   &nbsp;·&nbsp; <a href="#english">English</a>
   &nbsp;·&nbsp; Desarrollado por <a href="https://gmeti.com">GMETI</a>
+  &nbsp;·&nbsp; Creado por <a href="https://www.instagram.com/chuckgomez92">Chuck Gomez</a>
 </p>
 
 ---
@@ -73,4 +74,4 @@ GPLv2 o posterior. Incluye [FPDF](http://www.fpdf.org) para generar los PDF (lic
 
 **Install:** download `easy2cuba-for-woocommerce.zip` from the [latest release](../../releases/latest), then *Plugins → Add New → Upload Plugin*. Updates arrive automatically from this repository.
 
-Developed by [GMETI](https://gmeti.com) · Support: easy2cubaforwoo@gmeti.com · License: GPLv2 or later.
+Developed by [GMETI](https://gmeti.com) · Created by [Chuck Gomez](https://www.instagram.com/chuckgomez92) · Support: easy2cubaforwoo@gmeti.com · License: GPLv2 or later.
