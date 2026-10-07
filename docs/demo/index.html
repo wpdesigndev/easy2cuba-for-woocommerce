@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Demo · Easy2Cuba for WooCommerce</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Prueba el checkout de Easy2Cuba for WooCommerce: quién compra, quién recibe en Cuba, provincias, municipios y envío por provincia.">
+<link rel="icon" href="../img/favicon.png">
+<style>@font-face{font-family:"Sora";src:url("../fonts/Sora-var.woff") format("woff");font-weight:100 900;font-display:swap}@font-face{font-family:"Plus Jakarta Sans";src:url("../fonts/PlusJakartaSans-var.woff") format("woff");font-weight:200 800;font-display:swap}</style>
+<style>
+/* Layout: two-column checkout (form left, sticky order summary right), stacks on phones; admin view in a tab */
+:root{
+  --bg:#f5f7fa; --surface:#ffffff; --fg:#0d2647; --muted:#4a6688; --line:#d9e1ec;
+  --accent:#0450b4; --accent-ink:#ffffff; --accent-soft:#e3ecf9; --navy:#04397a;
+  --red:#e51a3a; --red-ink:#ffffff;
+  --ok:#17804a; --err:#b42318; --err-soft:#fdecea; --note:#fff6db; --note-ink:#6b5300;
+  --display:"Sora",ui-sans-serif,system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b1424; --surface:#122038; --fg:#e6eef9; --muted:#9db0ca; --line:#24385a;
+  --accent:#6ea3ff; --accent-ink:#06142b; --accent-soft:#18305a; --navy:#9cc0ff;
+  --red:#ff4a64; --red-ink:#1a0308;
+  --ok:#4cc584; --err:#ff8a7a; --err-soft:#3a1d1b; --note:#2e2812; --note-ink:#ecd58a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b1424; --surface:#122038; --fg:#e6eef9; --muted:#9db0ca; --line:#24385a;
+  --accent:#6ea3ff; --accent-ink:#06142b; --accent-soft:#18305a; --navy:#9cc0ff;
+  --red:#ff4a64; --red-ink:#1a0308;
+  --ok:#4cc584; --err:#ff8a7a; --err-soft:#3a1d1b; --note:#2e2812; --note-ink:#ecd58a; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.preview-note{background:var(--note);color:var(--note-ink);border-radius:var(--r);padding:10px 14px;font-size:13.5px}
+.topbar{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch}
+.tabs,.lang{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:4px}
+.tabs{flex:1 1 420px;flex-wrap:wrap}
+.tabs button,.lang button{font:inherit;font-weight:600;font-size:14px;border:0;border-radius:7px;padding:10px 12px;background:transparent;color:var(--muted);cursor:pointer}
+.tabs button{flex:1 1 180px}
+.tabs button[aria-pressed="true"],.lang button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.tabs button:focus-visible,.lang button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#v-shop{display:flex;flex-direction:column;gap:20px}
+#v-shop[hidden]{display:none}
+header.shop{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+header.shop h1{font-family:var(--display);font-size:26px;font-weight:700;margin:0;letter-spacing:-.01em;color:var(--navy)}
+.steps{display:flex;gap:6px;font-size:13px;color:var(--muted)}
+.steps b{color:var(--red)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:20px;min-width:0}
+section.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:16px}
+.sec-head{display:flex;gap:12px;align-items:flex-start}
+.sec-num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--red);color:var(--red-ink);font-family:var(--display);font-weight:600;font-size:14px;display:grid;place-items:center}
+.sec-head h2{font-family:var(--display);font-size:18px;font-weight:600;margin:2px 0 2px;text-wrap:balance}
+.sec-head p{margin:0;color:var(--muted);font-size:13.5px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.full{grid-column:1/-1}
+@media (max-width:520px){.fields{grid-template-columns:minmax(0,1fr)}}
+.f{display:flex;flex-direction:column;gap:5px;min-width:0}
+.f label{font-size:13px;font-weight:600}
+.opt{font-weight:400;color:var(--muted)}
+.f input,.f select,.f textarea{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 16px;width:100%}
+.f select{-webkit-appearance:none;appearance:none;padding-right:44px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2304397a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;background-size:16px}
+.phone select{background-image:none;padding-right:12px}
+.f.consent{background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:14px 16px}
+.f.consent label{display:flex;gap:10px;align-items:flex-start;font-weight:600}
+.f.consent input{width:18px;height:18px;flex:none;margin-top:2px}
+.demo-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;background:var(--navy,#04397a);color:#fff;border-radius:var(--r);padding:12px 16px;font-size:14px}
+.demo-bar a{color:#fff;font-weight:700}
+.demo-bar .dl{background:#e51a3a;padding:8px 14px;border-radius:999px;text-decoration:none}
+.f ::placeholder{color:var(--muted);opacity:.75}
+.f textarea{min-height:76px;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.f select:disabled{opacity:.55}
+.hint{font-size:12px;color:var(--muted)}
+.hint.found{color:var(--fg)}
+.hint.found b{color:var(--accent)}
+.msg{font-size:12px;color:var(--err)}
+.f.bad input,.f.bad select{border-color:var(--err);background:var(--err-soft)}
+.phone{display:flex;gap:8px}
+.phone select{width:auto;flex:none}
+.phone .pref{flex:none;width:76px;text-align:center}
+.phone input{flex:1;min-width:0}
+aside{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}
+aside h2{font-family:var(--display);font-size:17px;font-weight:600;margin:0}
+.item{display:flex;justify-content:space-between;gap:10px;font-size:14px;align-items:center}
+.item > span:first-child{min-width:0}
+.prod{display:flex;gap:12px;align-items:center;min-width:0}
+.thumb{flex:none;width:52px;height:52px;border-radius:8px;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;overflow:hidden}
+.thumb svg{width:34px;height:34px}
+.prod-name{min-width:0}
+.qty{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.item small{display:block;color:var(--muted);font-size:12px}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+hr{border:0;border-top:1px solid var(--line);margin:0}
+.total{font-family:var(--display);font-weight:700;font-size:20px;color:var(--navy)}
+.pay{display:flex;flex-direction:column;gap:8px}
+.pay label{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:14px}
+.pay label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.pay input{accent-color:var(--accent)}
+button.go{font:inherit;font-family:var(--display);font-weight:600;font-size:16px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:14px;cursor:pointer}
+button.go:hover{filter:brightness(1.08)}
+button.go:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.result{border:1px solid var(--ok);border-radius:var(--r);padding:16px;background:var(--surface)}
+.result h3{margin:0 0 8px;font-family:var(--display);font-size:16px;color:var(--ok)}
+.result dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;margin:0;font-size:13.5px}
+.result dt{color:var(--muted)}
+.result dd{margin:0;overflow-wrap:anywhere}
+.ex{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+/* Admin */
+.admin{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.admin-bar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;background:var(--navy);color:var(--surface);font-size:13px;padding:9px 16px}
+.admin-body{padding:22px;display:flex;flex-direction:column;gap:16px}
+.admin h2{font-family:var(--display);font-size:20px;margin:0 0 4px}
+.admin .sub{margin:0;color:var(--muted);font-size:14px;max-width:62ch}
+.bulk{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13.5px}
+.bulk label{font-weight:600}
+.bulk input,.price{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:7px 10px;width:110px;font-variant-numeric:tabular-nums}
+.sep{flex:1}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;padding:10px 14px;background:var(--bg)}
+td{padding:8px 14px;border-top:1px solid var(--line)}
+td.n{color:var(--muted);font-variant-numeric:tabular-nums}
+.cur{display:inline-flex;align-items:center;gap:6px}
+.pill{font-size:12px;padding:2px 8px;border-radius:99px;font-weight:600;background:var(--ok);color:var(--surface)}
+.sw{position:relative;display:inline-block;width:40px;height:22px;flex:none;vertical-align:middle}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.sw span{position:absolute;inset:0;border-radius:99px;background:var(--line);transition:background .15s;pointer-events:none}
+.sw span::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--surface);transition:transform .15s}
+.sw input:checked+span{background:var(--accent)}
+.sw input:checked+span::after{transform:translateX(18px)}
+.sw input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+tr.off td:not(:first-child){opacity:.45}
+.save-row{display:flex;gap:12px;align-items:center}
+.btn-pri,.btn-sec{font:inherit;font-weight:600;border-radius:7px;padding:9px 16px;cursor:pointer}
+.btn-pri{background:var(--accent);color:var(--accent-ink);border:0}
+.btn-sec{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.saved{color:var(--ok);font-weight:600;font-size:14px}
+.admin-foot{padding:16px 4px 0;font-size:12.5px;color:var(--muted);text-align:center}
+.admin-foot a{color:var(--accent);font-weight:600;text-decoration:none}
+.admin-foot a:hover{text-decoration:underline}
+.plugin-head{display:flex;gap:14px;align-items:center;padding:20px 22px;border-bottom:1px solid var(--line);background:var(--accent-soft)}
+.plugin-head .logo{flex:none;width:64px;height:64px;border-radius:14px;display:block;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.plugin-head h1{font-family:var(--display);font-size:22px;font-weight:700;margin:0;color:var(--navy);letter-spacing:-.01em;text-wrap:balance}
+.plugin-head p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.unit{display:block;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* Admin tabs & invoices */
+.atabs{display:flex;gap:2px;padding:0 22px;border-bottom:1px solid var(--line);background:var(--surface);overflow-x:auto}
+.atabs button{font:inherit;font-weight:600;font-size:14px;color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:12px 14px 10px;cursor:pointer;white-space:nowrap}
+.atabs button[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--red)}
+.atabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.set-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--bg)}
+.set-grid .toggle-row,.set-grid .save-row{grid-column:1/-1}
+@media (max-width:640px){.set-grid{grid-template-columns:minmax(0,1fr)}}
+.toggle-row{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.toggle-row b{display:block;font-size:14px}
+.toggle-row small,.f2 small{display:block;color:var(--muted);font-size:12.5px}
+.f2{display:flex;flex-direction:column;gap:5px;min-width:0}
+.f2 label{font-size:13px;font-weight:600}
+.f2 input{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:9px 11px;width:100%}
+.f2 input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.list-head{display:flex;align-items:baseline;gap:10px;margin-top:6px}
+.list-head h3{font-family:var(--display);font-size:17px;margin:0;color:var(--navy)}
+.count{font-size:13px;color:var(--muted)}
+.inv-table{min-width:820px}
+.inv-table td{vertical-align:middle}
+.inv-table .r{text-align:right}
+.inv-table td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.inv-no{font:inherit;font-weight:700;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.inv-actions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:nowrap}
+.btn-sec.small,.btn-del{padding:5px 10px;font-size:13px}
+.btn-del{font:inherit;font-weight:600;font-size:13px;border-radius:7px;cursor:pointer;background:transparent;color:var(--err);border:1px solid var(--err)}
+.btn-del.sure{background:var(--err);color:var(--surface)}
+.empty{color:var(--muted);text-align:center;padding:18px;border:1px dashed var(--line);border-radius:8px;margin:0}
+.chip{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:99px;background:var(--note);color:var(--note-ink);margin-left:6px;vertical-align:middle;font-weight:600}
+.info{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px 24px;margin:0;font-size:14px;border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--bg)}
+.info dt{color:var(--muted);font-weight:600}
+.info dd{margin:0;overflow-wrap:anywhere}
+.info a{color:var(--accent);font-weight:600}
+.mail{font-weight:600;user-select:all}
+.info-copy{margin:0;color:var(--muted);font-size:13px}
+.full2{grid-column:1/-1}
+.lbl{font-size:13px;font-weight:600}
+.logo-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.logo-box{width:180px;height:72px;border:1px dashed var(--line);border-radius:8px;background:var(--surface);display:grid;place-items:center;overflow:hidden;color:var(--muted);font-size:12.5px;text-align:center;padding:6px}
+.logo-box img{max-width:166px;max-height:58px;width:auto;height:auto;object-fit:contain;display:block}
+.logo-btns{display:flex;gap:8px;align-items:center}
+.filebtn{position:relative;display:inline-flex;align-items:center;cursor:pointer;border-radius:7px;font-weight:600;border:1px solid var(--accent);color:var(--accent);background:transparent}
+.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.filebtn:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.pp-logo{max-height:64px;max-width:220px;object-fit:contain;display:block}
+/* Modal + PDF paper */
+.modal{position:fixed;inset:0;background:rgba(6,18,40,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal[hidden]{display:none}
+.modal-box{background:var(--bg);border-radius:12px;width:min(860px,100%);max-height:100%;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.modal-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.modal-bar b{font-family:var(--display);color:var(--navy)}
+.modal-scroll{overflow:auto;padding:20px}
+.paper{background:#fff;color:#14233b;width:100%;max-width:760px;margin:0 auto;padding:36px 40px;box-shadow:0 2px 10px rgba(0,0,0,.15);font-family:var(--body);font-size:12.5px;line-height:1.45;display:flex;flex-direction:column;gap:18px}
+@media (max-width:600px){.paper{padding:22px 18px}}
+.pp-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:3px solid #04397a;padding-bottom:14px}
+.pp-store{font-family:var(--display);font-size:20px;font-weight:700;color:#04397a}
+.pp-store small{display:block;font-family:var(--body);font-size:11.5px;font-weight:400;color:#4a6688}
+.pp-meta{text-align:right}
+.pp-meta .pp-title{font-family:var(--display);font-size:22px;font-weight:700;color:#e51a3a;letter-spacing:.06em}
+.pp-meta div{color:#4a6688}
+.pp-meta b{color:#14233b}
+.pp-deliver{border:2px solid #04397a;border-radius:8px;overflow:hidden}
+.pp-deliver h4{margin:0;background:#04397a;color:#fff;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px}
+.pp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;padding:12px}
+@media (max-width:600px){.pp-grid{grid-template-columns:minmax(0,1fr)}}
+.pp-grid div{min-width:0;overflow-wrap:anywhere}
+.pp-grid span{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#4a6688}
+.pp-grid b{font-size:13px}
+.pp-grid .wide{grid-column:1/-1}
+.pp-buyer h4,.pp-sec h4{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#04397a}
+.pp-buyer .pp-grid{padding:0}
+.pp-table{width:100%;border-collapse:collapse}
+.pp-table th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#4a6688;border-bottom:1px solid #c9d4e3;padding:6px 4px}
+.pp-table td{padding:7px 4px;border-bottom:1px solid #e4eaf2}
+.pp-table .r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pp-totals{margin-left:auto;width:min(280px,100%);display:grid;grid-template-columns:1fr auto;gap:4px 16px;font-variant-numeric:tabular-nums}
+.pp-totals .t{font-family:var(--display);font-weight:700;font-size:16px;color:#04397a;border-top:2px solid #04397a;padding-top:6px}
+.pp-sec p{margin:0}
+.pp-foot{border-top:1px solid #c9d4e3;padding-top:10px;text-align:center;color:#4a6688;font-size:11px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--navy);color:var(--surface);padding:10px 16px;border-radius:8px;font-size:14px;z-index:60;box-shadow:0 6px 20px rgba(0,0,0,.25);max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion:reduce){.sw span,.sw span::after{transition:none}}
+</style>
+
+<div class="wrap">
+  <div class="demo-bar"><a href="../" data-t="back"></a><span data-t="demoNote"></span><a class="dl" href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest/download/easy2cuba-for-woocommerce.zip" data-t="dlBtn"></a></div>
+  <div class="preview-note" data-t="note"></div>
+
+  <div class="topbar">
+    <div class="tabs">
+      <button type="button" id="t-shop" aria-pressed="true" data-t="tabShop"></button>
+      <button type="button" id="t-admin" aria-pressed="false" data-t="tabAdmin"></button>
+    </div>
+    <div class="lang" aria-label="Idioma / Language">
+      <button type="button" id="l-es" aria-pressed="true">Español</button>
+      <button type="button" id="l-en" aria-pressed="false">English</button>
+    </div>
+  </div>
+
+  <!-- ADMINISTRACIÓN -->
+  <div id="v-admin" hidden>
+  <div class="admin">
+    <div class="admin-bar"><span data-t="wpPanel"></span><span>WooCommerce › Easy2Cuba</span></div>
+    <div class="plugin-head">
+      <img class="logo" src="data:image/png;base64,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" alt="Easy2Cuba" width="64" height="64">
+      <div>
+        <h1>Easy2Cuba for WooCommerce</h1>
+        <p data-t="tagline"></p>
+      </div>
+    </div>
+    <nav class="atabs" role="tablist">
+      <button type="button" role="tab" data-panel="a-ship" aria-selected="true" data-t="atShip"></button>
+      <button type="button" role="tab" data-panel="a-inv" aria-selected="false" data-t="atInv"></button>
+      <button type="button" role="tab" data-panel="a-info" aria-selected="false" data-t="atInfo"></button>
+    </nav>
+    <div class="admin-body apanel" id="a-ship">
+      <div>
+        <h2 data-t="admTitle"></h2>
+        <p class="sub" data-t="admSub"></p>
+      </div>
+      <div class="bulk">
+        <label for="bulk" data-t="bulkLbl"></label>
+        <input id="bulk" type="number" min="0" step="0.01" placeholder="10.00">
+        <button type="button" class="btn-sec" id="bulk-go" data-t="apply"></button>
+        <span class="sep"></span>
+        <button type="button" class="btn-sec" id="all-on" data-t="allOn"></button>
+        <button type="button" class="btn-sec" id="all-off" data-t="allOff"></button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th data-t="thDel"></th><th data-t="thProv"></th><th data-t="thMun"></th><th data-t="thCost"></th></tr></thead>
+          <tbody id="price-rows"></tbody>
+        </table>
+      </div>
+      <div class="save-row"><button type="button" class="btn-pri" id="save" data-t="save"></button><span id="saved" class="saved" hidden data-t="saved"></span></div>
+    </div>
+
+    <!-- FACTURAS -->
+    <div class="admin-body apanel" id="a-inv" hidden>
+      <div>
+        <h2 data-t="invTitle"></h2>
+        <p class="sub" data-t="invSub"></p>
+      </div>
+      <div class="set-grid">
+        <label class="toggle-row" for="inv-on">
+          <span class="sw"><input type="checkbox" id="inv-on" checked><span></span></span>
+          <span><b data-t="invOn"></b><small data-t="invOnSub"></small></span>
+        </label>
+        <div class="f2">
+          <label for="inv-email" data-t="invEmail"></label>
+          <input id="inv-email" type="email" value="admin@mitienda.com">
+          <small data-t="invEmailSub"></small>
+        </div>
+        <div class="f2">
+          <label for="inv-copy" data-t="invCopy"></label>
+          <input id="inv-copy" type="text">
+          <small data-t="invCopySub"></small>
+        </div>
+        <div class="f2 full2">
+          <span class="lbl" data-t="invLogo"></span>
+          <div class="logo-row">
+            <div class="logo-box" id="logo-box"><span data-t="noLogo"></span></div>
+            <div class="logo-btns">
+              <label class="btn-sec small filebtn" for="logo-file"><span data-t="pickLogo"></span><input type="file" id="logo-file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label>
+              <button type="button" class="btn-del" id="logo-rm" hidden data-t="rmLogo"></button>
+            </div>
+          </div>
+          <small data-t="invLogoSub"></small>
+        </div>
+        <div class="save-row"><button type="button" class="btn-pri" id="inv-save" data-t="save"></button><span id="inv-saved" class="saved" hidden data-t="saved"></span></div>
+      </div>
+
+      <div class="list-head">
+        <h3 data-t="invList"></h3>
+        <span class="count" id="inv-count"></span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="inv-table">
+          <thead><tr><th data-t="thInvNo"></th><th data-t="thDate"></th><th data-t="thBuyer"></th><th data-t="thRecip"></th><th data-t="thProv"></th><th class="r">Total</th><th data-t="thSent"></th><th class="r" data-t="thActions"></th></tr></thead>
+          <tbody id="inv-rows"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="inv-empty" hidden data-t="invEmpty"></p>
+    </div>
+
+    <!-- INFORMACIÓN -->
+    <div class="admin-body apanel" id="a-info" hidden>
+      <div>
+        <h2 data-t="infoTitle"></h2>
+        <p class="sub" data-t="infoSub"></p>
+      </div>
+      <dl class="info">
+        <dt data-t="iName"></dt><dd>Easy2Cuba for WooCommerce</dd>
+        <dt data-t="iVersion"></dt><dd>1.6.5</dd>
+        <dt data-t="iBy"></dt><dd><a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI</a></dd>
+        <dt data-t="iCreated"></dt><dd><a href="https://www.instagram.com/chuckgomez92" target="_blank" rel="noopener noreferrer">Chuck Gomez</a></dd>
+        <dt data-t="iPage"></dt><dd><a href="https://wpdesigndev.github.io/easy2cuba-for-woocommerce/" target="_blank" rel="noopener">wpdesigndev.github.io/easy2cuba-for-woocommerce</a></dd>
+        <dt data-t="iSupport"></dt><dd><span class="mail" id="sup-mail">easy2cubaforwoo@gmeti.com</span> <button type="button" class="btn-sec small" id="copy-mail" data-t="copyBtn"></button></dd>
+        <dt data-t="iReq"></dt><dd>WordPress 6.0+ · WooCommerce 7.0+ · PHP 7.4+</dd>
+        <dt data-t="iLangs"></dt><dd>Español, English</dd>
+        <dt data-t="iLicense"></dt><dd>GPLv2</dd>
+      </dl>
+    </div>
+  </div>
+  <footer class="admin-foot" id="copy"></footer>
+  </div>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="m-title">
+      <div class="modal-bar">
+        <b id="m-title"></b>
+        <span class="sep"></span>
+        <button type="button" class="btn-sec small" id="m-dl" data-t="dlPdf"></button>
+        <button type="button" class="btn-sec small" id="m-close" data-t="close"></button>
+      </div>
+      <div class="modal-scroll"><div class="paper" id="paper"></div></div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT -->
+  <div id="v-shop">
+  <header class="shop">
+    <h1 data-t="h1"></h1>
+    <div class="steps"><span data-t="st1"></span>›<b data-t="st2"></b>›<span data-t="st3"></span></div>
+  </header>
+
+  <form id="checkout" class="grid" novalidate>
+    <div class="col">
+
+      <section class="card">
+        <div class="sec-head"><div class="sec-num">1</div><div>
+          <h2 data-t="s1"></h2>
+          <p data-t="s1sub"></p>
+        </div></div>
+        <div class="fields">
+          <div class="f"><label for="b_nombre" data-t="names"></label><input id="b_nombre" autocomplete="given-name" data-ph="phBNames" required></div>
+          <div class="f"><label for="b_apellidos" data-t="lastnames"></label><input id="b_apellidos" autocomplete="family-name" data-ph="phBLast" required></div>
+          <div class="f"><label for="b_email" data-t="email"></label><input id="b_email" type="email" autocomplete="email" data-ph="phEmail" required><span class="hint" data-t="emailHint"></span></div>
+          <div class="f"><label for="b_tel"><span data-t="phone"></span> <span class="opt" data-t="optional"></span></label>
+            <div class="phone"><input id="b_pref" class="pref" type="tel" inputmode="tel" maxlength="5" autocomplete="tel-country-code" aria-label="Prefijo"><input id="b_tel" type="tel" inputmode="tel" autocomplete="tel-national" data-ph="phBPhone"></div></div>
+          <div class="f full"><label for="b_dir" data-t="address"></label><input id="b_dir" autocomplete="street-address" data-ph="phAddr" required></div>
+          <div class="f full"><label for="b_pais" data-t="cLabel"></label><select id="b_pais" autocomplete="country" required></select><span class="hint" data-t="cAuto"></span></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="sec-head"><div class="sec-num">2</div><div>
+          <h2 data-t="s2"></h2>
+          <p data-t="s2sub"></p>
+        </div></div>
+        <div class="fields">
+          <div class="f"><label for="s_nombre" data-t="names"></label><input id="s_nombre" data-ph="phSNames" required></div>
+          <div class="f"><label for="s_apellidos" data-t="lastnames"></label><input id="s_apellidos" data-ph="phSLast" required></div>
+          <div class="f"><label for="s_tel" data-t="mobile"></label>
+            <div class="phone"><select aria-label="+53" disabled><option>+53</option></select><input id="s_tel" type="tel" inputmode="tel" placeholder="5 123 4567" required></div><span class="hint" data-t="mobileHint"></span></div>
+          <div class="f"><label for="s_fijo"><span data-t="landline"></span> <span class="opt" data-t="optional"></span></label>
+            <div class="phone"><select aria-label="+53" disabled><option>+53</option></select><input id="s_fijo" type="tel" inputmode="tel" placeholder="7 832 1234"></div><span class="hint" data-t="landHint"></span></div>
+          <div class="f full"><label for="s_ci"><span data-t="ci"></span> <span class="opt" data-t="optional"></span></label><input id="s_ci" inputmode="numeric" maxlength="11" placeholder="85010112345"><span class="hint" data-t="ciHint"></span></div>
+          <div class="f"><label for="s_prov" data-t="prov"></label><select id="s_prov" required></select><span class="hint" id="zone"></span></div>
+          <div class="f"><label for="s_mun" data-t="mun"></label><select id="s_mun" required disabled></select></div>
+          <div class="f full"><label for="s_calle" data-t="street"></label><input id="s_calle" data-ph="phStreet" required></div>
+          <div class="f"><label for="s_entre" data-t="between"></label><input id="s_entre" data-ph="phBetween" required></div>
+          <div class="f"><label for="s_reparto" data-t="reparto"></label><input id="s_reparto" placeholder="Vedado"></div>
+          <div class="f full"><label for="s_ref"><span data-t="refs"></span> <span class="opt" data-t="optional"></span></label><textarea id="s_ref" data-ph="phRefs"></textarea></div>
+          <div class="f full consent"><label><input type="checkbox" id="s_consent" required> <span data-t="consent"></span></label></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="sec-head"><div class="sec-num">3</div><div>
+          <h2 data-t="s3"></h2>
+          <p data-t="s3sub"></p>
+        </div></div>
+        <div class="f"><label for="notas"><span data-t="notes"></span> <span class="opt" data-t="optional"></span></label><textarea id="notas" data-ph="phNotes"></textarea></div>
+      </section>
+    </div>
+
+    <aside>
+      <section class="card">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h2 data-t="yourOrder"></h2><span class="ex" data-t="example"></span></div>
+        <div id="items" style="display:flex;flex-direction:column;gap:12px"></div>
+        <hr>
+        <div class="item"><span data-t="subtotal"></span><span class="num">$72.00</span></div>
+        <div class="item"><span><span data-t="shipping"></span> <small id="ship-where"></small></span><span class="num" id="ship">—</span></div>
+        <hr>
+        <div class="item total"><span>Total</span><span class="num" id="total">$72.00</span></div>
+        <div class="pay" role="radiogroup">
+          <span class="ex" data-t="payActive"></span>
+          <label><input type="radio" name="pay" checked> <span data-t="payCard"></span></label>
+          <label><input type="radio" name="pay"> PayPal</label>
+          <label><input type="radio" name="pay"> <span data-t="payBank"></span></label>
+        </div>
+        <button class="go" type="submit" data-t="placeOrder"></button>
+        <div id="out" hidden></div>
+      </section>
+    </aside>
+  </form>
+  </div>
+</div>
+
+<script>
+const T = {
+ es:{
+  note:"<b>Demostración interactiva.</b> Los productos, precios y facturas son de ejemplo. Rellena el checkout y haz el pedido: verás su factura en Administración › Facturas.",
+  tabShop:"Checkout (lo que ve el cliente)", tabAdmin:"Administración (lo que ves tú)",
+  wpPanel:"Panel de WordPress", admTitle:"Envíos por provincia",
+  admSub:"El precio se suma al total cuando el cliente elige la provincia de entrega. Escribe 0 para envío gratis. Las provincias desactivadas no aparecen en el checkout.",
+  bulkLbl:"Poner el mismo precio a todas", apply:"Aplicar", allOn:"Activar todas", allOff:"Desactivar todas",
+  thDel:"Entrega", thProv:"Provincia", thMun:"Municipios", thCost:"Costo de envío (USD)", save:"Guardar cambios", saved:"Cambios guardados", free:"Gratis",
+  copy:y=>`© ${y} <a href="https://gmeti.com" target="_blank" rel="noopener">GMETI</a> y afiliados. Todos los derechos reservados.`,
+  h1:"Finalizar compra", st1:"Carrito", st2:"Datos y envío", st3:"Confirmación",
+  s1:"Quién compra", s1sub:"La persona que paga. Puede estar dentro o fuera de Cuba.",
+  names:"Nombres", lastnames:"Apellidos", email:"Correo electrónico", emailHint:"Aquí llega la confirmación del pedido.",
+  phone:"Teléfono", optional:"(opcional)", address:"Dirección",
+  phBNames:"Juan Carlos", phBLast:"Pérez González", phEmail:"juancarlos@gmail.com", phBPhone:"305 555 1234", phAddr:"1250 SW 8th St, Miami, FL 33135",
+  cEmpty:"Escribe el prefijo del teléfono y aquí verás tu país.", cUnknown:"No reconocemos ese prefijo. Revísalo.", cLabel:"País", cPick:"Elige tu país…", cAuto:"Elígelo aquí o se pone solo al escribir el prefijo del teléfono.", consent:"Confirmo que la persona que recibe me autorizó a compartir sus datos para la entrega.", eConsent:"Marca la casilla para confirmar que tienes permiso de quien recibe.", iCreated:"Creado por", iPage:"Página del plugin", back:"← Volver a Easy2Cuba", demoNote:"Demostración: no se hacen pedidos ni pagos reales.", dlBtn:"Descargar gratis", cUSCA:"Estados Unidos o Canadá", or:" o ",
+  s2:"Quién recibe en Cuba", s2sub:"Los datos de la persona y la dirección donde entregamos el pedido.",
+  phSNames:"María Elena", phSLast:"Rodríguez López",
+  mobile:"Teléfono móvil", mobileHint:"El mensajero llama antes de llegar.", landline:"Teléfono fijo", landHint:"Por si no se localiza en el móvil.",
+  ci:"Carné de identidad", ciHint:"Lo pide el mensajero al entregar.",
+  prov:"Provincia", mun:"Municipio", provPick:"Elige la provincia", munPick:"Elige el municipio", munFirst:"Elige primero la provincia",
+  zoneEmpty:"Elige provincia para ver el costo de envío.", zoneTo:"Envío a",
+  street:"Calle y número", phStreet:"Calle 23 No. 456, apto 4B", between:"Entre calles", phBetween:"entre L y M", reparto:"Reparto / Consejo popular",
+  refs:"Referencias para el mensajero", phRefs:"Casa de rejas verdes frente al parque. Tocar fuerte.",
+  s3:"Notas del pedido", s3sub:"Cualquier detalle extra: horario preferido, un mensaje para quien recibe…",
+  notes:"Notas", phNotes:"Entregar por la tarde, después de las 3 pm. Es un regalo de cumpleaños.",
+  yourOrder:"Tu pedido", example:"ejemplo", subtotal:"Subtotal", shipping:"Envío", noProv:"Sin elegir provincia",
+  payActive:"Métodos activos en tu WooCommerce", payCard:"Tarjeta de crédito o débito (Stripe)", payBank:"Transferencia bancaria", placeOrder:"Realizar pedido",
+  each:"c/u", tagline:"La forma más fácil de vender y enviar a Cuba",
+  atShip:"Envíos", atInv:"Facturas", atInfo:"Información",
+  invTitle:"Facturas en PDF", invSub:"Con cada pedido se genera una factura en PDF con todo lo que el cliente puso en el checkout, y se envía al correo que indiques. Puedes reenviarla al mensajero o al dueño.",
+  invOn:"Enviar una factura en PDF con cada pedido", invOnSub:"Se envía en cuanto el cliente realiza el pedido.",
+  invEmail:"Correo que recibe las facturas", invEmailSub:"Por defecto, el correo del administrador de la tienda. Puedes poner varios separados por comas.",
+  invCopy:"Pie de página del PDF", invCopySub:"Por defecto: © año actual + nombre de tu sitio.",
+  invLogo:"Logo de la factura", invLogoSub:"Sale arriba en el PDF en lugar del nombre de la tienda. Mejor en PNG con fondo transparente.", noLogo:"Sin logo: se usa el nombre de la tienda", pickLogo:"Elegir logo", rmLogo:"Quitar", logoBad:"Ese archivo no es una imagen.",
+  invList:"Facturas enviadas", invEmpty:"Todavía no se ha enviado ninguna factura.",
+  thInvNo:"Factura", thDate:"Fecha", thBuyer:"Compra", thRecip:"Recibe", thSent:"Enviada a", thActions:"Acciones",
+  view:"Ver", del:"Eliminar", sure:"¿Seguro?", deleted:"Factura eliminada del registro.", nInv:n=>n===1?"1 factura":n+" facturas",
+  dlPdf:"Descargar PDF", close:"Cerrar", dlNote:"En el plugin este botón descarga el PDF.",
+  infoTitle:"Información del plugin", infoSub:"Datos de Easy2Cuba for WooCommerce y cómo contactar con soporte.",
+  iName:"Nombre", iVersion:"Versión", iBy:"Desarrollado por", iWeb:"Sitio web", iSupport:"Soporte", iReq:"Requisitos", iLangs:"Idiomas", iLicense:"Licencia",
+  copyBtn:"Copiar", copied:"Correo copiado.",
+  pInvoice:"FACTURA", pNo:"Nº", pDate:"Fecha", pOrder:"Pedido", pDeliver:"Entregar a", pBuyer:"Quién compra",
+  pName:"Nombre", pMobile:"Móvil", pLand:"Fijo", pCi:"Carné de identidad", pStreet:"Calle y número", pBetween:"Entre calles", pReparto:"Reparto", pMun:"Municipio", pProv:"Provincia", pRefs:"Referencias para el mensajero",
+  pEmail:"Correo", pPhone:"Teléfono", pCountry:"País", pAddr:"Dirección", pProd:"Producto", pQty:"Cant.", pPrice:"Precio", pPay:"Método de pago", pNotes:"Notas del pedido",
+  sentTo:"Factura {n} enviada a {e}.", mystore:"Mi Tienda", siteNote:"mitienda.com",
+  p1:"Combo de aseo familiar", p2:"Pollo troceado 4 kg", p3:"Aceite de girasol 1 L",
+  eReq:"Este dato es obligatorio.", eEmail:"Escribe un correo válido, por ejemplo nombre@gmail.com.", eCu:"Los teléfonos de Cuba tienen 8 dígitos.", eCi:"El carné tiene 11 dígitos.", ePref:"Escribe el prefijo de tu país a la izquierda.",
+  rTitle:"Así llegaría el pedido a tu panel", rBuys:"Compra", rGets:"Recibe", rPhones:"Teléfonos", rMob:"Móvil", rLand:"Fijo", rAddr:"Dirección", rPlace:"Lugar"
+ },
+ en:{
+  note:"<b>Interactive demo.</b> Products, prices and invoices are examples. Fill in the checkout and place the order: you will see its invoice in Admin › Invoices.",
+  tabShop:"Checkout (what customers see)", tabAdmin:"Admin (what you see)",
+  wpPanel:"WordPress dashboard", admTitle:"Shipping by province",
+  admSub:"The price is added to the total when the customer picks the delivery province. Enter 0 for free shipping. Disabled provinces don't appear at checkout.",
+  bulkLbl:"Set the same price for all", apply:"Apply", allOn:"Enable all", allOff:"Disable all",
+  thDel:"Delivery", thProv:"Province", thMun:"Municipalities", thCost:"Shipping cost (USD)", save:"Save changes", saved:"Changes saved", free:"Free",
+  copy:y=>`© ${y} <a href="https://gmeti.com" target="_blank" rel="noopener">GMETI</a> and affiliates. All rights reserved.`,
+  h1:"Checkout", st1:"Cart", st2:"Details & shipping", st3:"Confirmation",
+  s1:"Who's buying", s1sub:"The person paying. They can be in Cuba or abroad.",
+  names:"First names", lastnames:"Last names", email:"Email", emailHint:"Your order confirmation goes here.",
+  phone:"Phone", optional:"(optional)", address:"Address",
+  phBNames:"John Michael", phBLast:"Smith Johnson", phEmail:"johnsmith@gmail.com", phBPhone:"305 555 1234", phAddr:"1250 SW 8th St, Miami, FL 33135",
+  cEmpty:"Type your phone's country code and your country will show here.", cUnknown:"We don't recognize that code. Please check it.", cLabel:"Country", cPick:"Choose your country…", cAuto:"Choose it here, or it is set automatically when you type the phone country code.", consent:"I confirm the recipient allowed me to share their details for the delivery.", eConsent:"Tick the box to confirm you have the recipient's permission.", iCreated:"Created by", iPage:"Plugin page", back:"← Back to Easy2Cuba", demoNote:"Demo: no real orders or payments are made.", dlBtn:"Download free", cUSCA:"United States or Canada", or:" or ",
+  s2:"Who receives in Cuba", s2sub:"The recipient's details and the delivery address.",
+  phSNames:"María Elena", phSLast:"Rodríguez López",
+  mobile:"Mobile phone", mobileHint:"The courier calls before arriving.", landline:"Landline", landHint:"In case the mobile can't be reached.",
+  ci:"ID card number (Carné de identidad)", ciHint:"The courier asks for it on delivery.",
+  prov:"Province", mun:"Municipality", provPick:"Choose the province", munPick:"Choose the municipality", munFirst:"Choose the province first",
+  zoneEmpty:"Choose a province to see the shipping cost.", zoneTo:"Shipping to",
+  street:"Street and number", phStreet:"Calle 23 No. 456, apt 4B", between:"Between streets", phBetween:"between L and M", reparto:"Neighborhood (Reparto)",
+  refs:"Directions for the courier", phRefs:"House with green gates across from the park. Knock loudly.",
+  s3:"Order notes", s3sub:"Anything else: preferred time, a message for the recipient…",
+  notes:"Notes", phNotes:"Deliver in the afternoon, after 3 pm. It's a birthday gift.",
+  yourOrder:"Your order", example:"example", subtotal:"Subtotal", shipping:"Shipping", noProv:"No province selected",
+  payActive:"Methods enabled in your WooCommerce", payCard:"Credit or debit card (Stripe)", payBank:"Bank transfer", placeOrder:"Place order",
+  each:"each", tagline:"The easiest way to sell and ship to Cuba",
+  atShip:"Shipping", atInv:"Invoices", atInfo:"About",
+  invTitle:"PDF invoices", invSub:"Every order creates a PDF invoice with everything the customer entered at checkout, sent to the email you choose. You can forward it to the courier or the owner.",
+  invOn:"Send a PDF invoice with every order", invOnSub:"It is sent as soon as the customer places the order.",
+  invEmail:"Email that receives the invoices", invEmailSub:"By default, the store admin email. You can enter several separated by commas.",
+  invCopy:"PDF footer", invCopySub:"Default: © current year + your site name.",
+  invLogo:"Invoice logo", invLogoSub:"Shown at the top of the PDF instead of the store name. PNG with a transparent background works best.", noLogo:"No logo: the store name is used", pickLogo:"Choose logo", rmLogo:"Remove", logoBad:"That file is not an image.",
+  invList:"Sent invoices", invEmpty:"No invoices have been sent yet.",
+  thInvNo:"Invoice", thDate:"Date", thBuyer:"Buyer", thRecip:"Recipient", thSent:"Sent to", thActions:"Actions",
+  view:"View", del:"Delete", sure:"Sure?", deleted:"Invoice removed from the log.", nInv:n=>n===1?"1 invoice":n+" invoices",
+  dlPdf:"Download PDF", close:"Close", dlNote:"In the plugin this button downloads the PDF.",
+  infoTitle:"About the plugin", infoSub:"Easy2Cuba for WooCommerce details and how to reach support.",
+  iName:"Name", iVersion:"Version", iBy:"Developed by", iWeb:"Website", iSupport:"Support", iReq:"Requirements", iLangs:"Languages", iLicense:"License",
+  copyBtn:"Copy", copied:"Email copied.",
+  pInvoice:"INVOICE", pNo:"No.", pDate:"Date", pOrder:"Order", pDeliver:"Deliver to", pBuyer:"Buyer",
+  pName:"Name", pMobile:"Mobile", pLand:"Landline", pCi:"ID card", pStreet:"Street and number", pBetween:"Between streets", pReparto:"Neighborhood", pMun:"Municipality", pProv:"Province", pRefs:"Directions for the courier",
+  pEmail:"Email", pPhone:"Phone", pCountry:"Country", pAddr:"Address", pProd:"Product", pQty:"Qty", pPrice:"Price", pPay:"Payment method", pNotes:"Order notes",
+  sentTo:"Invoice {n} sent to {e}.", mystore:"My Store", siteNote:"mystore.com",
+  p1:"Family hygiene bundle", p2:"Chicken pieces 4 kg", p3:"Sunflower oil 1 L",
+  eReq:"This field is required.", eEmail:"Enter a valid email, for example name@gmail.com.", eCu:"Cuban phone numbers have 8 digits.", eCi:"The ID number has 11 digits.", ePref:"Enter your country code on the left.",
+  rTitle:"How the order would reach your dashboard", rBuys:"Buyer", rGets:"Recipient", rPhones:"Phones", rMob:"Mobile", rLand:"Landline", rAddr:"Address", rPlace:"Location"
+ }
+};
+let L = "es";
+const t = k => T[L][k];
+
+const CUBA = {
+ "Pinar del Río":["Consolación del Sur","Guane","La Palma","Los Palacios","Mantua","Minas de Matahambre","Pinar del Río","San Juan y Martínez","San Luis","Sandino","Viñales"],
+ "Artemisa":["Alquízar","Artemisa","Bahía Honda","Bauta","Caimito","Candelaria","Guanajay","Güira de Melena","Mariel","San Antonio de los Baños","San Cristóbal"],
+ "La Habana":["Arroyo Naranjo","Boyeros","Centro Habana","Cerro","Cotorro","Diez de Octubre","Guanabacoa","La Habana del Este","La Habana Vieja","La Lisa","Marianao","Playa","Plaza de la Revolución","Regla","San Miguel del Padrón"],
+ "Mayabeque":["Batabanó","Bejucal","Güines","Jaruco","Madruga","Melena del Sur","Nueva Paz","Quivicán","San José de las Lajas","San Nicolás","Santa Cruz del Norte"],
+ "Matanzas":["Calimete","Cárdenas","Ciénaga de Zapata","Colón","Jagüey Grande","Jovellanos","Limonar","Los Arabos","Martí","Matanzas","Pedro Betancourt","Perico","Unión de Reyes"],
+ "Cienfuegos":["Abreus","Aguada de Pasajeros","Cienfuegos","Cruces","Cumanayagua","Lajas","Palmira","Rodas"],
+ "Villa Clara":["Caibarién","Camajuaní","Cifuentes","Corralillo","Encrucijada","Manicaragua","Placetas","Quemado de Güines","Ranchuelo","Remedios","Sagua la Grande","Santa Clara","Santo Domingo"],
+ "Sancti Spíritus":["Cabaiguán","Fomento","Jatibonico","La Sierpe","Sancti Spíritus","Taguasco","Trinidad","Yaguajay"],
+ "Ciego de Ávila":["Baraguá","Bolivia","Chambas","Ciego de Ávila","Ciro Redondo","Florencia","Majagua","Morón","Primero de Enero","Venezuela"],
+ "Camagüey":["Camagüey","Carlos Manuel de Céspedes","Esmeralda","Florida","Guáimaro","Jimaguayú","Minas","Najasa","Nuevitas","Santa Cruz del Sur","Sibanicú","Sierra de Cubitas","Vertientes"],
+ "Las Tunas":["Amancio","Colombia","Jesús Menéndez","Jobabo","Las Tunas","Majibacoa","Manatí","Puerto Padre"],
+ "Holguín":["Antilla","Báguanos","Banes","Cacocum","Calixto García","Cueto","Frank País","Gibara","Holguín","Mayarí","Moa","Rafael Freyre","Sagua de Tánamo","Urbano Noris"],
+ "Granma":["Bartolomé Masó","Bayamo","Buey Arriba","Campechuela","Cauto Cristo","Guisa","Jiguaní","Manzanillo","Media Luna","Niquero","Pilón","Río Cauto","Yara"],
+ "Santiago de Cuba":["Contramaestre","Guamá","Mella","Palma Soriano","San Luis","Santiago de Cuba","Segundo Frente","Songo-La Maya","Tercer Frente"],
+ "Guantánamo":["Baracoa","Caimanera","El Salvador","Guantánamo","Imías","Maisí","Manuel Tames","Niceto Pérez","San Antonio del Sur","Yateras"],
+ "Isla de la Juventud":["Isla de la Juventud"]
+};
+const PRICES = {"Pinar del Río":10,"Artemisa":8,"La Habana":5,"Mayabeque":8,"Matanzas":9,"Cienfuegos":12,"Villa Clara":12,"Sancti Spíritus":13,"Ciego de Ávila":14,"Camagüey":15,"Las Tunas":16,"Holguín":17,"Granma":17,"Santiago de Cuba":18,"Guantánamo":19,"Isla de la Juventud":20};
+const ACTIVE = {}; Object.keys(CUBA).forEach(p => ACTIVE[p] = true);
+const SUB = 72;
+
+// Productos de ejemplo con foto
+const IMG = {
+ p1:'<svg viewBox="0 0 40 40"><rect x="6" y="14" width="28" height="20" rx="3" fill="#7fb6e8"/><rect x="6" y="10" width="28" height="7" rx="2" fill="#4f8fd0"/><rect x="17" y="10" width="6" height="24" fill="#f4d35e"/></svg>',
+ p2:'<svg viewBox="0 0 40 40"><rect x="5" y="9" width="30" height="24" rx="4" fill="#e9eef3" stroke="#b9c4cf"/><ellipse cx="16" cy="21" rx="7" ry="5" fill="#f2b38a"/><ellipse cx="25" cy="22" rx="6" ry="4.5" fill="#e89d70"/><ellipse cx="20" cy="17" rx="5" ry="3.5" fill="#f5c4a1"/></svg>',
+ p3:'<svg viewBox="0 0 40 40"><rect x="16" y="4" width="8" height="5" rx="1" fill="#2f7d32"/><path d="M15 10h10l3 6v18a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V16z" fill="#f6c443"/><rect x="13" y="20" width="14" height="9" rx="1" fill="#fff6d0"/></svg>'
+};
+const ITEMS = [["p1",1,35],["p2",2,28],["p3",3,9]];
+
+const $ = id => document.getElementById(id);
+const prov = $("s_prov"), mun = $("s_mun");
+
+function renderItems(){
+  $("items").innerHTML = ITEMS.map(([k,q,pr]) => {
+    const unit = pr/q;
+    const calc = q>1 ? `<span class="unit">$${unit.toFixed(2)} ${t("each")} × ${q} = $${pr.toFixed(2)}</span>` : "";
+    return `<div class="item"><span class="prod"><span class="thumb">${IMG[k]}</span><span class="prod-name">${t(k)} <span class="qty">(x${q})</span>${calc}</span></span><span class="num">$${pr.toFixed(2)}</span></div>`;
+  }).join("");
+}
+
+function fillProv(){
+  const cur = prov.value;
+  prov.innerHTML = ""; prov.add(new Option(t("provPick"),""));
+  Object.keys(CUBA).filter(p => ACTIVE[p]).forEach(p => prov.add(new Option(p,p)));
+  prov.value = ACTIVE[cur] ? cur : "";
+  fillMun(cur && prov.value===cur ? mun.value : "");
+}
+function fillMun(keep){
+  const list = CUBA[prov.value];
+  mun.innerHTML = "";
+  if(!list){ mun.add(new Option(t("munFirst"),"")); mun.disabled = true; }
+  else { mun.add(new Option(t("munPick"),"")); list.forEach(m => mun.add(new Option(m,m))); mun.disabled = false;
+    if(keep && list.includes(keep)) mun.value = keep; else if(list.length===1) mun.value = list[0]; }
+  updateShip();
+}
+const money = c => c===0 ? t("free") : "$"+c.toFixed(2);
+function updateShip(){
+  if(!prov.value){ $("ship").textContent="—"; $("ship-where").textContent=t("noProv"); $("total").textContent="$"+SUB.toFixed(2); $("zone").textContent=t("zoneEmpty"); return; }
+  const c = PRICES[prov.value] || 0;
+  $("ship").textContent = money(c);
+  $("ship-where").textContent = prov.value;
+  $("total").textContent = "$"+(SUB+c).toFixed(2);
+  $("zone").innerHTML = `${t("zoneTo")} <b>${prov.value}</b>: <b>${money(c)}</b>`;
+}
+prov.addEventListener("change", () => fillMun(""));
+
+// Prefijo telefónico → país
+const CODES = {"1":"US CA","1242":"BS","1246":"BB","1264":"AI","1268":"AG","1284":"VG","1340":"VI","1345":"KY","1441":"BM","1473":"GD","1649":"TC","1664":"MS","1670":"MP","1671":"GU","1684":"AS","1721":"SX","1758":"LC","1767":"DM","1784":"VC","1787":"PR","1939":"PR","1809":"DO","1829":"DO","1849":"DO","1868":"TT","1869":"KN","1876":"JM","1658":"JM",
+"7":"RU KZ","20":"EG","27":"ZA","30":"GR","31":"NL","32":"BE","33":"FR","34":"ES","36":"HU","39":"IT","40":"RO","41":"CH","43":"AT","44":"GB","45":"DK","46":"SE","47":"NO","48":"PL","49":"DE","51":"PE","52":"MX","53":"CU","54":"AR","55":"BR","56":"CL","57":"CO","58":"VE","60":"MY","61":"AU","62":"ID","63":"PH","64":"NZ","65":"SG","66":"TH","81":"JP","82":"KR","84":"VN","86":"CN","90":"TR","91":"IN","92":"PK","93":"AF","94":"LK","95":"MM","98":"IR",
+"211":"SS","212":"MA","213":"DZ","216":"TN","218":"LY","220":"GM","221":"SN","222":"MR","223":"ML","224":"GN","225":"CI","226":"BF","227":"NE","228":"TG","229":"BJ","230":"MU","231":"LR","232":"SL","233":"GH","234":"NG","235":"TD","236":"CF","237":"CM","238":"CV","239":"ST","240":"GQ","241":"GA","242":"CG","243":"CD","244":"AO","245":"GW","248":"SC","249":"SD","250":"RW","251":"ET","252":"SO","253":"DJ","254":"KE","255":"TZ","256":"UG","257":"BI","258":"MZ","260":"ZM","261":"MG","262":"RE","263":"ZW","264":"NA","265":"MW","266":"LS","267":"BW","268":"SZ","269":"KM","290":"SH","291":"ER","297":"AW","298":"FO","299":"GL",
+"350":"GI","351":"PT","352":"LU","353":"IE","354":"IS","355":"AL","356":"MT","357":"CY","358":"FI","359":"BG","370":"LT","371":"LV","372":"EE","373":"MD","374":"AM","375":"BY","376":"AD","377":"MC","378":"SM","380":"UA","381":"RS","382":"ME","383":"XK","385":"HR","386":"SI","387":"BA","389":"MK","420":"CZ","421":"SK","423":"LI",
+"500":"FK","501":"BZ","502":"GT","503":"SV","504":"HN","505":"NI","506":"CR","507":"PA","508":"PM","509":"HT","590":"GP","591":"BO","592":"GY","593":"EC","594":"GF","595":"PY","596":"MQ","597":"SR","598":"UY","599":"CW",
+"670":"TL","673":"BN","674":"NR","675":"PG","676":"TO","677":"SB","678":"VU","679":"FJ","680":"PW","685":"WS","686":"KI","687":"NC","689":"PF","691":"FM","692":"MH",
+"850":"KP","852":"HK","853":"MO","855":"KH","856":"LA","880":"BD","886":"TW","960":"MV","961":"LB","962":"JO","963":"SY","964":"IQ","965":"KW","966":"SA","967":"YE","968":"OM","970":"PS","971":"AE","972":"IL","973":"BH","974":"QA","975":"BT","976":"MN","977":"NP","992":"TJ","993":"TM","994":"AZ","995":"GE","996":"KG","998":"UZ"};
+const cname = c => { try { return new Intl.DisplayNames([L],{type:"region"}).of(c); } catch(e){ return c; } };
+let billCountry = "";
+const ISO = [...new Set(Object.values(CODES).join(" ").split(" "))];
+function fillCountries(){
+  const sel = $("b_pais"), cur = sel.value;
+  const list = ISO.map(c=>[c,cname(c)]).sort((a,b)=>a[1].localeCompare(b[1],L));
+  sel.innerHTML = `<option value="">${t("cPick")}</option>` + list.map(([c,n])=>`<option value="${c}">${n.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</option>`).join("");
+  sel.value = cur;
+}
+function detectCountry(fromUser){
+  const el = $("b_pref");
+  const d = el.value.replace(/\D/g,"").slice(0,4);
+  el.value = d ? "+"+d : "";
+  billCountry = "";
+  if(!d) return;
+  let k = d; while(k && !CODES[k]) k = k.slice(0,-1);
+  if(!k) return;
+  const codes = CODES[k].split(" ");
+  billCountry = codes[0];
+  if(fromUser !== true) return;
+  const sel = $("b_pais");
+  if(codes.includes(sel.value)) return;
+  sel.value = codes[0]; setErr(sel,"");
+}
+$("b_pref").addEventListener("input", ()=>detectCountry(true));
+
+// Idioma
+function applyLang(){
+  document.documentElement.lang = L;
+  document.querySelectorAll("[data-t]").forEach(el => el.innerHTML = t(el.dataset.t));
+  document.querySelectorAll("[data-ph]").forEach(el => el.placeholder = t(el.dataset.ph));
+  $("copy").innerHTML = t("copy")(new Date().getFullYear());
+  $("l-es").setAttribute("aria-pressed", L==="es"); $("l-en").setAttribute("aria-pressed", L==="en");
+  renderItems(); fillProv(); fillCountries(); detectCountry();
+  if(!$("v-admin").hidden) renderAdmin();
+  renderInv(); renderInfo(); renderLogo();
+  document.querySelectorAll(".f.bad").forEach(f => { f.classList.remove("bad"); f.querySelector(".msg")?.remove(); });
+  $("out").hidden = true;
+}
+$("l-es").addEventListener("click",()=>{ L="es"; applyLang(); });
+$("l-en").addEventListener("click",()=>{ L="en"; applyLang(); });
+
+// Pestañas
+function show(admin){
+  $("v-admin").hidden = !admin; $("v-shop").hidden = admin;
+  $("t-admin").setAttribute("aria-pressed",admin); $("t-shop").setAttribute("aria-pressed",!admin);
+  $("saved").hidden = true;
+  if(admin) renderAdmin();
+}
+$("t-shop").addEventListener("click",()=>show(false));
+$("t-admin").addEventListener("click",()=>show(true));
+
+// Administración
+function renderAdmin(){
+  $("price-rows").innerHTML = Object.keys(CUBA).map((p,i)=>{
+    const v = PRICES[p], on = ACTIVE[p];
+    return `<tr class="${on?"":"off"}"><td><label class="sw"><input type="checkbox" class="act" id="ac${i}" data-p="${p}" ${on?"checked":""} aria-label="${p}"><span></span></label></td>
+      <td>${p}</td><td class="n">${CUBA[p].length}</td>
+      <td><span class="cur">$ <input class="price" id="pr${i}" data-p="${p}" type="number" min="0" step="0.01" value="${v.toFixed(2)}" aria-label="${t("thCost")} ${p}"> ${v===0?`<span class="pill">${t("free")}</span>`:""}</span></td></tr>`;
+  }).join("");
+}
+$("price-rows").addEventListener("change", e => {
+  if(e.target.classList.contains("act")) e.target.closest("tr").classList.toggle("off", !e.target.checked);
+});
+function setAll(on){ document.querySelectorAll(".act").forEach(c => { c.checked = on; c.closest("tr").classList.toggle("off",!on); }); }
+$("all-on").addEventListener("click",()=>setAll(true));
+$("all-off").addEventListener("click",()=>setAll(false));
+$("bulk-go").addEventListener("click",()=>{
+  const v = parseFloat($("bulk").value); if(isNaN(v)||v<0) return;
+  document.querySelectorAll(".price").forEach(i=>i.value=v.toFixed(2));
+});
+$("save").addEventListener("click",()=>{
+  document.querySelectorAll(".price").forEach(i=>{ const v=parseFloat(i.value); PRICES[i.dataset.p] = isNaN(v)||v<0 ? 0 : v; });
+  document.querySelectorAll(".act").forEach(c => ACTIVE[c.dataset.p] = c.checked);
+  renderAdmin(); fillProv(); $("saved").hidden = false;
+});
+
+// Validación y envío
+function setErr(el,msg){
+  const f = el.closest(".f"); if(!f) return;
+  f.classList.toggle("bad",!!msg);
+  let m = f.querySelector(".msg");
+  if(msg){ if(!m){ m=document.createElement("span"); m.className="msg"; f.appendChild(m);} m.textContent=msg; }
+  else if(m) m.remove();
+}
+const digits = v => v.replace(/\D/g,"");
+const rules = {
+  b_email: v => /^\S+@\S+\.\S+$/.test(v) ? "" : t("eEmail"),
+  b_tel: v => !v || billCountry ? "" : t("ePref"),
+  s_tel: v => /^\d{8}$/.test(digits(v)) ? "" : t("eCu"),
+  s_fijo: v => !v || /^\d{8}$/.test(digits(v)) ? "" : t("eCu"),
+  s_ci: v => !v || /^\d{11}$/.test(v) ? "" : t("eCi")
+};
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+$("checkout").addEventListener("submit", e => {
+  e.preventDefault();
+  let first = null;
+  ["b_nombre","b_apellidos","b_email","b_tel","b_dir","b_pais","s_nombre","s_apellidos","s_tel","s_fijo","s_ci","s_prov","s_mun","s_calle","s_entre"].forEach(id => {
+    const el = $(id), v = el.value.trim();
+    let msg = el.required && !v ? t("eReq") : (rules[id] ? rules[id](v) : "");
+    setErr(el,msg);
+    if(msg && !first) first = el;
+  });
+  const cs = $("s_consent"), cf = cs.closest(".f");
+  if(!cs.checked){ cf.classList.add("bad"); let m=cf.querySelector(".msg"); if(!m){m=document.createElement("span");m.className="msg";cf.appendChild(m);} m.textContent=t("eConsent"); if(!first) first=cs; } else { cf.classList.remove("bad"); cf.querySelector(".msg")?.remove(); }
+  const out = $("out");
+  if(first){ out.hidden = true; first.focus(); first.scrollIntoView({block:"center",behavior:"smooth"}); return; }
+  const rows = [
+    [t("rBuys"), $("b_nombre").value+" "+$("b_apellidos").value+($("b_pais").value?" · "+cname($("b_pais").value):"")],
+    [t("rGets"), $("s_nombre").value+" "+$("s_apellidos").value],
+    [t("rPhones"), t("rMob")+" +53 "+$("s_tel").value+($("s_fijo").value?" · "+t("rLand")+" +53 "+$("s_fijo").value:"")],
+    [t("rAddr"), $("s_calle").value+", "+$("s_entre").value+($("s_reparto").value?", "+$("s_reparto").value:"")],
+    [t("rPlace"), mun.value+", "+prov.value],
+    [t("shipping"), $("ship").textContent],
+    ["Total", $("total").textContent]
+  ];
+  out.className = "result"; out.hidden = false;
+  out.innerHTML = `<h3>${t("rTitle")}</h3><dl>`+rows.map(r=>`<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join("")+"</dl>";
+  addInvoiceFromForm();
+});
+document.querySelectorAll("#checkout input, #checkout select").forEach(el => { el.addEventListener("input", () => setErr(el,"")); el.addEventListener("change", () => setErr(el,"")); });
+
+// ---------- Facturas (vista previa) ----------
+const YEAR = new Date().getFullYear();
+let invCopyCustom = null;
+const copyText = () => invCopyCustom ?? (L==="es" ? `© ${YEAR} ${t("mystore")}. Todos los derechos reservados.` : `© ${YEAR} ${t("mystore")}. All rights reserved.`);
+let nextNo = 4, nextOrder = 1045;
+const INVOICES = [
+ {no:"FAC-0003", order:1044, date:"2026-10-06 14:12", example:true, sentTo:"admin@mitienda.com", pay:"PayPal", notes:"Entregar antes del viernes.",
+  buyer:{n:"Yanet",l:"Morales Díaz",email:"yanetmd@gmail.com",phone:"+1 786 555 0142",country:"Estados Unidos",addr:"2310 W 60th St, Hialeah, FL 33016"},
+  rec:{n:"Rosa María",l:"Díaz Suárez",mobile:"+53 52345678",land:"+53 48761234",ci:"60031512345",street:"Calle Martí No. 112",between:"entre Isabel Rubio y Rafael Morales",reparto:"Centro",mun:"Pinar del Río",prov:"Pinar del Río",refs:"Puerta azul al lado de la bodega."},
+  items:[["p2",2,28],["p3",3,9]], ship:10},
+ {no:"FAC-0002", order:1043, date:"2026-10-05 09:47", example:true, sentTo:"admin@mitienda.com", pay:"Stripe (Visa •••• 4242)", notes:"",
+  buyer:{n:"Carlos Alberto",l:"Ruiz Peña",email:"carlosruiz@gmail.com",phone:"+34 612 345 678",country:"España",addr:"Calle de Alcalá 120, Madrid"},
+  rec:{n:"Alberto",l:"Ruiz Cabrera",mobile:"+53 55123456",land:"",ci:"",street:"Calle 8 No. 309",between:"entre 13 y 15",reparto:"Vista Alegre",mun:"Santiago de Cuba",prov:"Santiago de Cuba",refs:""},
+  items:[["p1",1,35]], ship:18},
+ {no:"FAC-0001", order:1042, date:"2026-10-04 18:03", example:true, sentTo:"admin@mitienda.com", pay:"Zelle", notes:"Es un regalo de cumpleaños.",
+  buyer:{n:"Lisandra",l:"Pérez Hernández",email:"lisy.ph@gmail.com",phone:"",country:"Estados Unidos",addr:"1250 SW 8th St, Miami, FL 33135"},
+  rec:{n:"Mercedes",l:"Hernández Gil",mobile:"+53 53987654",land:"+53 72034567",ci:"48120312345",street:"Calle 23 No. 456, apto 4B",between:"entre L y M",reparto:"Vedado",mun:"Plaza de la Revolución",prov:"La Habana",refs:"Edificio con rejas verdes. Tocar fuerte."},
+  items:[["p1",1,35],["p2",2,28],["p3",3,9]], ship:5}
+];
+const sumItems = inv => inv.items.reduce((a,i)=>a+i[2],0);
+const money2 = v => "$"+v.toFixed(2);
+function fmtDate(d){ try { return new Date(d.replace(" ","T")).toLocaleString(L==="es"?"es-ES":"en-US",{dateStyle:"medium",timeStyle:"short"}); } catch(e){ return d; } }
+
+function renderInv(){
+  const rows = $("inv-rows");
+  rows.innerHTML = INVOICES.map((v,i)=>`<tr>
+    <td><button type="button" class="inv-no" data-i="${i}">${v.no}</button>${v.example?`<span class="chip">${t("example")}</span>`:""}</td>
+    <td class="num">${fmtDate(v.date)}</td>
+    <td>${esc(v.buyer.n+" "+v.buyer.l)}</td>
+    <td>${esc(v.rec.n+" "+v.rec.l)}</td>
+    <td>${esc(v.rec.prov)}</td>
+    <td class="num r">${money2(sumItems(v)+v.ship)}</td>
+    <td>${esc(v.sentTo)}</td>
+    <td><div class="inv-actions"><button type="button" class="btn-sec small" data-view="${i}">${t("view")}</button><button type="button" class="btn-del" data-del="${i}">${t("del")}</button></div></td>
+  </tr>`).join("");
+  $("inv-empty").hidden = INVOICES.length>0;
+  rows.closest(".tbl-wrap").hidden = INVOICES.length===0;
+  $("inv-count").textContent = t("nInv")(INVOICES.length);
+  if(invCopyCustom===null) $("inv-copy").value = copyText();
+}
+$("inv-rows").addEventListener("click", e=>{
+  const v = e.target.closest("[data-view],.inv-no"); 
+  if(v){ openInvoice(+(v.dataset.view ?? v.dataset.i)); return; }
+  const d = e.target.closest("[data-del]");
+  if(d){
+    if(!d.classList.contains("sure")){ d.classList.add("sure"); d.textContent=t("sure"); setTimeout(()=>{ if(d.isConnected){ d.classList.remove("sure"); d.textContent=t("del"); } },3000); return; }
+    INVOICES.splice(+d.dataset.del,1); renderInv(); toast(t("deleted"));
+  }
+});
+$("inv-save").addEventListener("click",()=>{
+  invCopyCustom = $("inv-copy").value.trim() || null;
+  $("inv-saved").hidden=false; setTimeout(()=>$("inv-saved").hidden=true,2500); renderInv();
+});
+$("inv-copy").addEventListener("input",()=>{ invCopyCustom = $("inv-copy").value; });
+
+function row(label,val,wide){ return val ? `<div${wide?' class="wide"':''}><span>${label}</span><b>${esc(val)}</b></div>` : ""; }
+function invoiceHTML(v){
+  const sub = sumItems(v);
+  return `<div class="pp-head">
+      <div class="pp-store">${invLogo?`<img class="pp-logo" src="${invLogo}" alt="${t("mystore")}">`:`${t("mystore")}<small>${t("siteNote")}</small>`}</div>
+      <div class="pp-meta"><div class="pp-title">${t("pInvoice")}</div>
+        <div>${t("pNo")} <b>${v.no}</b></div><div>${t("pOrder")} <b>#${v.order}</b></div><div>${t("pDate")} <b>${fmtDate(v.date)}</b></div></div>
+    </div>
+    <section class="pp-deliver"><h4>${t("pDeliver")}</h4><div class="pp-grid">
+      ${row(t("pName"), v.rec.n+" "+v.rec.l, true)}
+      ${row(t("pMobile"), v.rec.mobile)}${row(t("pLand"), v.rec.land)}
+      ${row(t("pCi"), v.rec.ci)}
+      ${row(t("pProv"), v.rec.prov)}${row(t("pMun"), v.rec.mun)}
+      ${row(t("pStreet"), v.rec.street, true)}
+      ${row(t("pBetween"), v.rec.between)}${row(t("pReparto"), v.rec.reparto)}
+      ${row(t("pRefs"), v.rec.refs, true)}
+    </div></section>
+    <section class="pp-buyer"><h4>${t("pBuyer")}</h4><div class="pp-grid">
+      ${row(t("pName"), v.buyer.n+" "+v.buyer.l)}${row(t("pEmail"), v.buyer.email)}
+      ${row(t("pPhone"), v.buyer.phone)}
+      ${row(t("pAddr"), v.buyer.addr, true)}
+      ${row(t("pCountry"), v.buyer.country)}
+    </div></section>
+    <table class="pp-table"><thead><tr><th>${t("pProd")}</th><th class="r">${t("pQty")}</th><th class="r">${t("pPrice")}</th><th class="r">Total</th></tr></thead>
+      <tbody>${v.items.map(([k,q,pr])=>`<tr><td>${t(k)}</td><td class="r">${q}</td><td class="r">${money2(pr/q)}</td><td class="r">${money2(pr)}</td></tr>`).join("")}</tbody></table>
+    <div class="pp-totals"><span>${t("subtotal")}</span><span>${money2(sub)}</span>
+      <span>${t("shipping")} · ${esc(v.rec.prov)}</span><span>${v.ship===0?t("free"):money2(v.ship)}</span>
+      <span class="t">Total</span><span class="t">${money2(sub+v.ship)}</span></div>
+    <section class="pp-sec"><h4>${t("pPay")}</h4><p>${esc(v.pay)}</p></section>
+    ${v.notes?`<section class="pp-sec"><h4>${t("pNotes")}</h4><p>${esc(v.notes)}</p></section>`:""}
+    <div class="pp-foot">${esc(copyText())}</div>`;
+}
+let lastFocus=null;
+function openInvoice(i){
+  const v = INVOICES[i]; if(!v) return;
+  lastFocus = document.activeElement;
+  $("m-title").textContent = `${t("pInvoice")[0]+t("pInvoice").slice(1).toLowerCase()} ${v.no}`;
+  $("paper").innerHTML = invoiceHTML(v);
+  $("modal").hidden = false; $("m-close").focus();
+}
+function closeModal(){ $("modal").hidden = true; lastFocus?.focus?.(); }
+$("m-close").addEventListener("click", closeModal);
+$("modal").addEventListener("click", e=>{ if(e.target.id==="modal") closeModal(); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !$("modal").hidden) closeModal(); });
+$("m-dl").addEventListener("click", ()=>toast(t("dlNote")));
+
+let toastTimer;
+function toast(msg){
+  let el = document.querySelector(".toast"); if(!el){ el=document.createElement("div"); el.className="toast"; el.setAttribute("role","status"); document.body.appendChild(el); }
+  el.textContent = msg; el.hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.hidden=true,3000);
+}
+
+function addInvoiceFromForm(){
+  if(!$("inv-on").checked) return;
+  const no = "FAC-"+String(nextNo++).padStart(4,"0");
+  const pad = n=>String(n).padStart(2,"0"); const d=new Date();
+  const payLabel = document.querySelector('.pay input:checked')?.closest("label")?.textContent.trim() || "";
+  const email = $("inv-email").value.trim() || "admin@mitienda.com";
+  INVOICES.unshift({no, order:nextOrder++, date:`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`, sentTo:email, pay:payLabel, notes:$("notas").value.trim(),
+    buyer:{n:$("b_nombre").value,l:$("b_apellidos").value,email:$("b_email").value,phone:$("b_tel").value?($("b_pref").value+" "+$("b_tel").value):"",country:$("b_pais").value?cname($("b_pais").value):"",addr:$("b_dir").value},
+    rec:{n:$("s_nombre").value,l:$("s_apellidos").value,mobile:"+53 "+$("s_tel").value,land:$("s_fijo").value?"+53 "+$("s_fijo").value:"",ci:$("s_ci").value,street:$("s_calle").value,between:$("s_entre").value,reparto:$("s_reparto").value,mun:mun.value,prov:prov.value,refs:$("s_ref").value},
+    items:ITEMS.map(x=>x.slice()), ship:PRICES[prov.value]||0});
+  renderInv();
+  toast(t("sentTo").replace("{n}",no).replace("{e}",email));
+}
+
+// Logo de la factura
+let invLogo = null;
+function renderLogo(){
+  $("logo-box").innerHTML = invLogo ? `<img src="${invLogo}" alt="">` : `<span>${t("noLogo")}</span>`;
+  $("logo-rm").hidden = !invLogo;
+}
+$("logo-file").addEventListener("change", e=>{
+  const f = e.target.files && e.target.files[0]; if(!f) return;
+  if(!/^image\//.test(f.type)){ toast(t("logoBad")); return; }
+  const r = new FileReader(); r.onload = ()=>{ invLogo = r.result; renderLogo(); }; r.readAsDataURL(f);
+  e.target.value = "";
+});
+$("logo-rm").addEventListener("click", ()=>{ invLogo = null; renderLogo(); });
+
+// Información
+function renderInfo(){}
+$("copy-mail").addEventListener("click", ()=>{
+  const txt = $("sup-mail").textContent;
+  const done = ()=>toast(t("copied"));
+  try { navigator.clipboard.writeText(txt).then(done, ()=>{ selectMail(); }); } catch(e){ selectMail(); }
+});
+function selectMail(){ const r=document.createRange(); r.selectNodeContents($("sup-mail")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+// Pestañas de administración
+document.querySelectorAll(".atabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".atabs button").forEach(x=>x.setAttribute("aria-selected", x===b));
+  document.querySelectorAll(".apanel").forEach(pn=>pn.hidden = pn.id!==b.dataset.panel);
+  $("saved").hidden = true;
+}));
+
+applyLang();
+
+</script>

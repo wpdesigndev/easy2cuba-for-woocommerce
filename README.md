@@ -11,6 +11,7 @@
 
 <p align="center">
   <a href="../../releases/latest"><strong>⬇ Descargar la última versión</strong></a>
+  &nbsp;·&nbsp; <a href="https://wpdesigndev.github.io/easy2cuba-for-woocommerce/demo/">▶ Probar la demo</a>
   &nbsp;·&nbsp; <a href="#english">English</a>
   &nbsp;·&nbsp; Desarrollado por <a href="https://gmeti.com">GMETI</a>
   &nbsp;·&nbsp; Creado por <a href="https://www.instagram.com/chuckgomez92">Chuck Gomez</a>
