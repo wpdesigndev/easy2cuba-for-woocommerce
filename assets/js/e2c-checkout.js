@@ -178,6 +178,24 @@
 		return true;
 	}
 
+	/* ---------- Mismo texto en los desplegables que en los campos ---------- */
+
+	// Cada tema pone su color y tamaño de letra a los campos; los desplegables (provincia, municipio
+	// y el buscador de país) copian los de un campo de texto para verse iguales.
+	function matchSelects() {
+		var ref = document.querySelector( '.e2c-form .e2c-fields input.input-text' );
+		if ( ! ref || ! window.getComputedStyle ) {
+			return;
+		}
+		var cs = window.getComputedStyle( ref );
+		$( '.e2c-form .e2c-fields select, .e2c-form .e2c-fields .select2-selection__rendered' ).css( {
+			color: cs.color,
+			fontSize: cs.fontSize,
+			fontFamily: cs.fontFamily,
+			fontWeight: cs.fontWeight
+		} );
+	}
+
 	/* ---------- Arranque ---------- */
 
 	$( function () {
@@ -208,6 +226,12 @@
 				$row.find( '.e2c-error' ).remove();
 				$row.removeClass( 'woocommerce-invalid' );
 			}
+		} );
+
+		matchSelects();
+		$( document.body ).on( 'country_to_state_changed updated_checkout', matchSelects );
+		$( document.body ).on( 'change', '#billing_country', function () {
+			setTimeout( matchSelects, 0 );
 		} );
 
 		$form.on( 'checkout_place_order', function () {

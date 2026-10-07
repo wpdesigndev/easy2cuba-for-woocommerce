@@ -115,10 +115,6 @@ body.e2c-wide .woocommerce:has(form.e2c-form) {
 /* Mismo espacio interior en todos los campos, sea cual sea el tema. */
 .e2c-form .e2c-fields input.input-text,
 .e2c-form .e2c-fields textarea { padding: 12px 16px !important; }
-.e2c-form .e2c-fields input.input-text,
-.e2c-form .e2c-fields select,
-.e2c-form .e2c-fields textarea,
-.e2c-form .e2c-fields .select2-selection__rendered { font-size: 15px !important; color: var(--e2c-fg) !important; }
 .e2c-form .e2c-fields select { background-color: var(--e2c-bg) !important; }
 .e2c-form .e2c-fields select:focus { background-color: var(--e2c-surface) !important; }
 .e2c-form .form-row.woocommerce-invalid select { background-color: var(--e2c-err-soft) !important; }
@@ -165,7 +161,7 @@ body.e2c-wide .woocommerce:has(form.e2c-form) {
 	background: var(--e2c-bg); border: 1px solid var(--e2c-line); border-radius: 8px; box-shadow: none;
 }
 .e2c-form .e2c-fields .select2-container .select2-selection--single .select2-selection__rendered {
-	font-size: 15px; color: var(--e2c-fg); line-height: 1.4; padding: 12px 44px 12px 16px !important;
+	line-height: 1.4; padding: 12px 44px 12px 16px !important;
 }
 .e2c-form .e2c-fields .select2-container .select2-selection--single .select2-selection__placeholder { color: var(--e2c-muted); }
 .e2c-form .e2c-fields .select2-container .select2-selection--single .select2-selection__arrow { height: 100%; top: 0; right: 14px; }
