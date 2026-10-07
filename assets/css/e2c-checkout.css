@@ -254,3 +254,33 @@ body.e2c-wide .woocommerce:has(form.e2c-form) {
 .e2c-form .e2c-fields .e2c-consent label.checkbox { display: flex; gap: 10px; align-items: flex-start; font-weight: 500; font-size: 14px; line-height: 1.45; cursor: pointer; }
 .e2c-form .e2c-fields .e2c-consent input.input-checkbox { margin: 3px 0 0; width: 18px; height: 18px; flex: none; accent-color: var(--e2c-accent); }
 .e2c-form .e2c-fields .e2c-consent.woocommerce-invalid { border-color: var(--e2c-err); background: var(--e2c-err-soft); }
+
+/* Bordes de los campos: siempre los de Easy2Cuba, aunque el tema ponga otros (p. ej. negros).
+   Normal: gris claro · Bien rellenado: verde · Con error: rojo. */
+.e2c-form .e2c-fields input.input-text,
+.e2c-form .e2c-fields select,
+.e2c-form .e2c-fields textarea,
+.e2c-form .e2c-fields .select2-container .select2-selection--single {
+	border: 1px solid var(--e2c-line) !important;
+	border-radius: 8px !important;
+	box-shadow: none !important;
+}
+.e2c-form .e2c-fields .form-row.woocommerce-validated input.input-text,
+.e2c-form .e2c-fields .form-row.woocommerce-validated select,
+.e2c-form .e2c-fields .form-row.woocommerce-validated textarea,
+.e2c-form .e2c-fields .form-row.woocommerce-validated .select2-container:not(.select2-container--open) .select2-selection--single {
+	border-color: var(--wc-green, #7ad03a) !important;
+}
+.e2c-form .e2c-fields .form-row.woocommerce-invalid input.input-text,
+.e2c-form .e2c-fields .form-row.woocommerce-invalid select,
+.e2c-form .e2c-fields .form-row.woocommerce-invalid textarea,
+.e2c-form .e2c-fields .form-row.woocommerce-invalid .select2-container:not(.select2-container--open) .select2-selection--single {
+	border-color: var(--e2c-err) !important;
+}
+.e2c-form .e2c-fields input.input-text:focus,
+.e2c-form .e2c-fields select:focus,
+.e2c-form .e2c-fields textarea:focus,
+.e2c-form .e2c-fields .select2-container--focus .select2-selection--single,
+.e2c-form .e2c-fields .select2-container--open .select2-selection--single {
+	border-color: transparent !important;
+}
