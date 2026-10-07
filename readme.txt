@@ -4,7 +4,7 @@ Tags: woocommerce, checkout, cuba, shipping, envios
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.6.2
+Stable tag: 1.6.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,6 +105,9 @@ Escribe a easy2cubaforwoo@gmeti.com.
 4. Documento PDF con todos los datos de la entrega.
 
 == Changelog ==
+
+= 1.6.3 =
+* País, Provincia y Municipio tienen el mismo espacio interior, fondo y letra que los demás campos, con cualquier tema.
 
 = 1.6.2 =
 * El campo País tiene el mismo aspecto que los demás campos (bordes, tamaño y color verde al estar bien).
