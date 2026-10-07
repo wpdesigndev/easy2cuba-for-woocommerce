@@ -34,6 +34,9 @@ class E2C_Checkout {
 		add_filter( 'woocommerce_form_field_e2c_cu_phone', array( __CLASS__, 'field_cu_phone' ), 10, 4 );
 		add_filter( 'woocommerce_form_field', array( __CLASS__, 'add_hint' ), 10, 4 );
 		add_filter( 'woocommerce_checkout_get_value', array( __CLASS__, 'get_value' ), 10, 2 );
+		// Al cambiar el país, WooCommerce reescribe etiquetas y orden de los campos de dirección según
+		// el país; en este checkout los campos son propios, así que no debe tocarlos.
+		add_filter( 'woocommerce_country_locale_field_selectors', array( __CLASS__, 'locale_selectors' ) );
 
 		// El envío lo calcula Easy2Cuba según la provincia, no las zonas de envío de WooCommerce.
 		add_filter( 'woocommerce_cart_needs_shipping', '__return_false', 99 );
@@ -152,12 +155,20 @@ class E2C_Checkout {
 			'billing_address_1'  => array(
 				'label'          => call_user_func( $t, 'address' ),
 				'placeholder'    => call_user_func( $t, 'ph_address' ),
-				'required'       => false,
+				'required'       => true,
 				'class'          => array( 'form-row-wide' ),
 				'autocomplete'   => 'street-address',
 				'priority'       => 50,
-				'e2c_hint'       => esc_html( call_user_func( $t, 'c_empty' ) ),
-				'e2c_hint_class' => 'e2c-country-hint',
+			),
+			'billing_country'    => array(
+				'type'         => 'country',
+				'label'        => call_user_func( $t, 'c_label' ),
+				'placeholder'  => call_user_func( $t, 'c_pick' ),
+				'required'     => true,
+				'class'        => array( 'form-row-wide', 'address-field', 'update_totals_on_change' ),
+				'autocomplete' => 'country',
+				'priority'     => 60,
+				'e2c_hint'     => esc_html( call_user_func( $t, 'c_auto' ) ),
 			),
 		);
 
@@ -337,7 +348,6 @@ class E2C_Checkout {
 		$html .= '<input type="tel" class="input-text e2c-prefix" name="e2c_phone_prefix" id="e2c_phone_prefix" value="' . esc_attr( $prefix ? '+' . $prefix : '' ) . '" maxlength="5" inputmode="tel" autocomplete="tel-country-code" aria-label="' . esc_attr( E2C_I18n::t( 'prefix' ) ) . '" />';
 		$html .= '<input type="tel" class="input-text" name="' . esc_attr( $key ) . '" id="' . esc_attr( $key ) . '" value="' . esc_attr( $number ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" autocomplete="tel-national" />';
 		$html .= '</span>';
-		$html .= '<span class="e2c-hint e2c-country-hint">' . esc_html( E2C_I18n::t( 'c_empty' ) ) . '</span>';
 		$html .= '</p>';
 		return $html;
 	}
@@ -354,6 +364,10 @@ class E2C_Checkout {
 		$html .= '</span>';
 		$html .= '</p>';
 		return $html;
+	}
+
+	public static function locale_selectors( $selectors ) {
+		return ( function_exists( 'is_checkout' ) && is_checkout() && ! is_wc_endpoint_url() ) ? array() : $selectors;
 	}
 
 	/** Añade la descripción fija debajo del campo (siempre visible). */
@@ -535,13 +549,10 @@ class E2C_Checkout {
 	public static function posted_data( $data ) {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifica el nonce del checkout.
 		$prefix = isset( $_POST['e2c_phone_prefix'] ) ? E2C_Data::digits( wp_unslash( $_POST['e2c_phone_prefix'] ) ) : '';
-		$iso    = E2C_Data::country_from_prefix( $prefix );
 		// phpcs:enable
 
-		// El país real del comprador sale del prefijo. Si no hay prefijo, WooCommerce y las pasarelas
-		// de pago reciben el país de la tienda para no fallar, pero la factura lo deja en blanco.
-		$data['e2c_buyer_country'] = $iso;
-		$data['billing_country']   = $iso ? $iso : WC()->countries->get_base_country();
+		// País elegido por el comprador (el prefijo del teléfono lo rellena solo, pero se puede cambiar).
+		$data['e2c_buyer_country'] = isset( $data['billing_country'] ) ? (string) $data['billing_country'] : '';
 		if ( ! empty( $data['billing_phone'] ) && $prefix ) {
 			$data['billing_phone'] = '+' . $prefix . ' ' . $data['billing_phone'];
 		}

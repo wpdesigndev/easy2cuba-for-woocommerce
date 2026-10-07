@@ -4,7 +4,7 @@ Tags: woocommerce, checkout, cuba, shipping, envios
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.5.1
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,8 +17,8 @@ La forma más fácil de vender y enviar a Cuba.
 = Quién compra =
 
 * Nombres, apellidos y correo, donde llega la confirmación del pedido.
-* Teléfono opcional con prefijo libre: el país se detecta solo a partir del prefijo.
-* Dirección opcional.
+* Teléfono opcional con prefijo libre.
+* Dirección y país obligatorios: el país se elige en la lista o se pone solo al escribir el prefijo del teléfono.
 
 = Quién recibe en Cuba =
 
@@ -105,6 +105,12 @@ Escribe a easy2cubaforwoo@gmeti.com.
 4. Documento PDF con todos los datos de la entrega.
 
 == Changelog ==
+
+= 1.6.0 =
+* Nuevo campo País en «Quién compra», con todos los países: se elige en la lista o se pone solo al escribir el prefijo del teléfono.
+* La dirección y el país de quien compra son obligatorios.
+* El PDF muestra los datos en el mismo orden que el checkout.
+* Pestaña Información: GMETI enlazado, «Creado por Chuck Gomez» y la página del plugin.
 
 = 1.5.1 =
 * "Ver detalles" en Plugins ahora muestra la descripción completa, instalación, preguntas frecuentes, capturas y novedades de cada versión, en español o inglés.

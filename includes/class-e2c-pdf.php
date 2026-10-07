@@ -193,11 +193,11 @@ class E2C_PDF extends E2C_FPDF {
 			array( E2C_I18n::t( 'rec_mobile' ), $r['mobile'], false ),
 			array( E2C_I18n::t( 'rec_landline' ), $r['land'], false ),
 			array( E2C_I18n::t( 'rec_ci' ), $r['ci'], true ),
+			array( E2C_I18n::t( 'province' ), $r['prov'], false ),
+			array( E2C_I18n::t( 'municipality' ), $r['mun'], false ),
 			array( E2C_I18n::t( 'street' ), $r['street'], true ),
 			array( E2C_I18n::t( 'between' ), $r['between'], false ),
 			array( E2C_I18n::t( 'rec_reparto' ), $r['reparto'], false ),
-			array( E2C_I18n::t( 'province' ), $r['prov'], false ),
-			array( E2C_I18n::t( 'municipality' ), $r['mun'], false ),
 			array( E2C_I18n::t( 'refs' ), $r['refs'], true ),
 		);
 		$this->ensure_space( 60 );
@@ -222,8 +222,8 @@ class E2C_PDF extends E2C_FPDF {
 			array( E2C_I18n::t( 'pdf_name' ), $b['name'], false ),
 			array( E2C_I18n::t( 'email' ), $b['email'], false ),
 			array( E2C_I18n::t( 'phone' ), $b['phone'], false ),
-			array( E2C_I18n::t( 'c_label' ), $b['country'], false ),
 			array( E2C_I18n::t( 'address' ), $b['addr'], true ),
+			array( E2C_I18n::t( 'c_label' ), $b['country'], false ),
 		);
 		$this->ensure_space( 30 );
 		$this->section_title( E2C_I18n::t( 'pdf_buyer' ) );

@@ -51,54 +51,40 @@
 
 	/* ---------- Prefijo → país ---------- */
 
-	var displayNames = null;
-	try {
-		displayNames = new Intl.DisplayNames( [ D.lang ], { type: 'region' } );
-	} catch ( e ) {}
-
-	function countryName( iso ) {
-		try {
-			return displayNames ? displayNames.of( iso ) : iso;
-		} catch ( e ) {
-			return iso;
-		}
-	}
-
 	var billCountry = '';
 
-	function detectCountry() {
+	/** Lee el prefijo del teléfono y elige el país en el selector (si se reconoce). */
+	function detectCountry( fromUser ) {
 		var $p = $( '#e2c_phone_prefix' );
 		if ( ! $p.length ) {
 			return;
 		}
 		var d = String( $p.val() || '' ).replace( /\D/g, '' ).slice( 0, 4 );
 		$p.val( d ? '+' + d : '' );
-
-		var html;
-		var found = false;
-		var iso = '';
 		billCountry = '';
-
 		if ( ! d ) {
-			html = esc( T.c_empty );
-		} else {
-			var k = d;
-			while ( k && ! D.prefixes[ k ] ) {
-				k = k.slice( 0, -1 );
-			}
-			if ( ! k ) {
-				html = esc( T.c_unknown );
-			} else {
-				var codes = D.prefixes[ k ].split( ' ' );
-				iso = codes[ 0 ];
-				billCountry = k === '1' ? T.c_usca : codes.map( countryName ).join( T.or );
-				found = true;
-				html = esc( T.c_label ) + ': <b>' + esc( billCountry ) + '</b>';
-			}
+			return;
 		}
-
-		$( '.e2c-country-hint' ).html( html ).toggleClass( 'e2c-found', found );
-		$( '#billing_country' ).val( iso || D.base || '' );
+		var k = d;
+		while ( k && ! D.prefixes[ k ] ) {
+			k = k.slice( 0, -1 );
+		}
+		if ( ! k ) {
+			return;
+		}
+		billCountry = D.prefixes[ k ].split( ' ' )[ 0 ];
+		if ( ! fromUser ) {
+			return;
+		}
+		var $c = $( '#billing_country' );
+		var codes = D.prefixes[ k ].split( ' ' );
+		// Si el país elegido ya comparte ese prefijo (p. ej. +1 Canadá), se respeta.
+		if ( codes.indexOf( $c.val() ) !== -1 ) {
+			return;
+		}
+		if ( $c.find( 'option[value="' + billCountry + '"]' ).length ) {
+			$c.val( billCountry ).trigger( 'change' );
+		}
 	}
 
 	/* ---------- Validación antes de enviar ---------- */
@@ -210,8 +196,10 @@
 			fillMunicipalities( '' );
 		} );
 
-		$( document.body ).on( 'input change', '#e2c_phone_prefix', detectCountry );
-		detectCountry();
+		$( document.body ).on( 'input change', '#e2c_phone_prefix', function () {
+			detectCountry( true );
+		} );
+		detectCountry( false );
 
 		$form.on( 'input change', 'input, select, textarea', function () {
 			var $row = $( this ).closest( '.form-row' );

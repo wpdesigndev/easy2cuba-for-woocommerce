@@ -21,7 +21,7 @@
 
 ## Qué hace
 
-- **Quién compra y quién recibe, por separado.** Quien paga puede estar en cualquier país; el teléfono con prefijo detecta su país automáticamente.
+- **Quién compra y quién recibe, por separado.** Quien paga puede estar en cualquier país; su país se elige en la lista o se pone solo con el prefijo del teléfono.
 - **Toda Cuba.** Las 15 provincias, el municipio especial Isla de la Juventud y los 168 municipios, con móvil y fijo cubanos (+53), carné de identidad, entre calles, reparto y referencias para el mensajero.
 - **Envío por provincia.** Pones el precio de cada provincia, activas solo donde entregas y el costo se suma solo al total.
 - **Resumen claro del pedido.** Foto del producto, cantidad y precio por unidad (`$14.00 c/u × 2 = $28.00`).
@@ -63,7 +63,7 @@ GPLv2 o posterior. Incluye [FPDF](http://www.fpdf.org) para generar los PDF (lic
 
 **Easy2Cuba for WooCommerce** turns the WooCommerce checkout into one built to sell from anywhere and deliver in Cuba.
 
-- Separate **buyer** and **recipient in Cuba**; the buyer's country is detected from the phone prefix.
+- Separate **buyer** and **recipient in Cuba**; the buyer's country is chosen from a list or set automatically from the phone prefix.
 - All **15 provinces, Isla de la Juventud and 168 municipalities**, Cuban mobile/landline (+53), ID card, cross streets, neighborhood and courier directions.
 - **Shipping price per province**, with provinces you can switch on or off.
 - Clear order summary with photos, quantities and unit prices.

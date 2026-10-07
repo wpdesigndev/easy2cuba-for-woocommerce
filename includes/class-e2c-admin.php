@@ -677,8 +677,9 @@ class E2C_Admin {
 			<dl class="e2c-info">
 				<dt><?php echo esc_html( call_user_func( $t, 'i_name' ) ); ?></dt><dd>Easy2Cuba for WooCommerce</dd>
 				<dt><?php echo esc_html( call_user_func( $t, 'i_version' ) ); ?></dt><dd><?php echo esc_html( E2C_VERSION ); ?></dd>
-				<dt><?php echo esc_html( call_user_func( $t, 'i_by' ) ); ?></dt><dd>GMETI</dd>
-				<dt><?php echo esc_html( call_user_func( $t, 'i_web' ) ); ?></dt><dd><a href="https://gmeti.com" target="_blank" rel="noopener">gmeti.com</a></dd>
+				<dt><?php echo esc_html( call_user_func( $t, 'i_by' ) ); ?></dt><dd><a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI</a></dd>
+				<dt><?php echo esc_html( call_user_func( $t, 'i_created' ) ); ?></dt><dd><a href="https://www.instagram.com/chuckgomez92" target="_blank" rel="noopener noreferrer">Chuck Gomez</a></dd>
+				<dt><?php echo esc_html( call_user_func( $t, 'i_page' ) ); ?></dt><dd><a href="https://wpdesigndev.github.io/easy2cuba-for-woocommerce/" target="_blank" rel="noopener">wpdesigndev.github.io/easy2cuba-for-woocommerce</a></dd>
 				<dt><?php echo esc_html( call_user_func( $t, 'i_support' ) ); ?></dt>
 				<dd>
 					<span class="e2c-mail" id="e2c-support-mail"><?php echo esc_html( self::SUPPORT_EMAIL ); ?></span>

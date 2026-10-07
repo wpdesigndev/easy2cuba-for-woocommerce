@@ -26,7 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
 		}
 		?>
-		<input type="hidden" name="billing_country" id="billing_country" value="<?php echo esc_attr( $checkout->get_value( 'billing_country' ) ); ?>" />
 	</div>
 
 	<?php do_action( 'woocommerce_after_checkout_billing_form', $checkout ); ?>
