@@ -1,0 +1,225 @@
+/* Easy2Cuba for WooCommerce — checkout */
+/* Layout: two columns (form left, sticky order summary right), stacks on narrow screens. Colors from the Easy2Cuba logo. */
+
+.e2c-form {
+	--e2c-bg: #f5f7fa;
+	--e2c-surface: #ffffff;
+	--e2c-fg: #0d2647;
+	--e2c-muted: #4a6688;
+	--e2c-line: #d9e1ec;
+	--e2c-navy: #04397a;
+	--e2c-accent: #0450b4;
+	--e2c-accent-soft: #e3ecf9;
+	--e2c-red: #e51a3a;
+	--e2c-ok: #17804a;
+	--e2c-err: #b42318;
+	--e2c-err-soft: #fdecea;
+	--e2c-display: "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	--e2c-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	--e2c-r: 10px;
+
+	font-family: var(--e2c-body);
+	color: var(--e2c-fg);
+	font-size: 15px;
+	line-height: 1.5;
+	display: flex !important;
+	flex-direction: column;
+	gap: 20px;
+	max-width: none !important;
+	width: 100% !important;
+	margin: 0 0 4.5rem !important;
+	padding-bottom: 1.5rem;
+}
+
+.e2c-form *,
+.e2c-form *::before,
+.e2c-form *::after { box-sizing: border-box; }
+
+/* Ancho: el checkout sale del contenedor estrecho del tema y usa casi toda la pantalla */
+body.e2c-wide .woocommerce:has(form.e2c-form) {
+	--e2c-w: min(1440px, calc(100vw - 48px));
+	width: var(--e2c-w) !important;
+	max-width: var(--e2c-w) !important;
+	margin-left: calc((100% - var(--e2c-w)) / 2) !important;
+	margin-right: calc((100% - var(--e2c-w)) / 2) !important;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	box-sizing: border-box;
+}
+@media (max-width: 600px) {
+	body.e2c-wide .woocommerce:has(form.e2c-form) { --e2c-w: calc(100vw - 32px); }
+}
+
+/* Pasos */
+.e2c-form .e2c-steps { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--e2c-muted); }
+.e2c-form .e2c-steps a { color: var(--e2c-muted); text-decoration: none; }
+.e2c-form .e2c-steps a:hover { color: var(--e2c-accent); text-decoration: underline; }
+.e2c-form .e2c-steps b { color: var(--e2c-red); font-weight: 600; }
+
+/* Columnas */
+.e2c-form .e2c-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 30%); gap: 28px; align-items: start; }
+.e2c-form .e2c-main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.e2c-form #customer_details,
+.e2c-form #order_review,
+.e2c-form #order_review_heading { width: auto !important; float: none !important; margin: 0 !important; padding: 0 !important; }
+.e2c-form #customer_details.e2c-customer { display: flex; flex-direction: column; gap: 20px; }
+.e2c-form .e2c-aside { position: sticky; top: 24px; min-width: 0; }
+.admin-bar .e2c-form .e2c-aside { top: 56px; }
+@media (max-width: 900px) {
+	.e2c-form .e2c-grid { grid-template-columns: minmax(0, 1fr); }
+	.e2c-form .e2c-aside { position: static; }
+}
+
+/* Tarjetas */
+.e2c-form .e2c-card { background: var(--e2c-surface); border: 1px solid var(--e2c-line); border-radius: var(--e2c-r); padding: 28px 28px 34px; }
+.e2c-form .e2c-section { display: flex; flex-direction: column; gap: 20px; }
+.e2c-form .e2c-section.e2c-empty { padding: 0; border: 0; background: transparent; }
+.e2c-form .e2c-sec-head { display: flex; gap: 12px; align-items: flex-start; }
+.e2c-form .e2c-num {
+	flex: none; width: 28px; height: 28px; border-radius: 50%;
+	background: var(--e2c-red); color: #fff;
+	font-family: var(--e2c-display); font-weight: 600; font-size: 14px; line-height: 28px; text-align: center;
+}
+.e2c-form .e2c-sec-head h3,
+.e2c-form #order_review_heading {
+	font-family: var(--e2c-display); font-size: 18px; font-weight: 600; line-height: 1.3;
+	color: var(--e2c-navy); margin: 2px 0 2px !important; padding: 0; text-transform: none; letter-spacing: 0; text-wrap: balance;
+}
+.e2c-form .e2c-sec-head p { margin: 0; color: var(--e2c-muted); font-size: 13.5px; }
+
+/* Campos */
+.e2c-form .e2c-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 16px; }
+.e2c-form .e2c-fields > .clear { display: none; }
+.e2c-form .e2c-fields .form-row {
+	display: flex; flex-direction: column; gap: 5px;
+	width: auto !important; float: none !important; margin: 0 !important; padding: 0 !important; min-width: 0;
+}
+.e2c-form .e2c-fields .form-row-wide,
+.e2c-form .e2c-fields .create-account,
+.e2c-form .e2c-fields .notes { grid-column: 1 / -1; }
+@media (max-width: 560px) {
+	.e2c-form .e2c-fields { grid-template-columns: minmax(0, 1fr); }
+}
+.e2c-form .e2c-fields .form-row label { font-size: 13px; font-weight: 600; color: var(--e2c-fg); margin: 0; line-height: 1.4; }
+.e2c-form .form-row label .required { display: none; }
+.e2c-form .form-row label .optional { font-weight: 400; color: var(--e2c-muted); }
+.e2c-form .woocommerce-input-wrapper { display: block; width: 100%; }
+
+.e2c-form .e2c-fields input.input-text,
+.e2c-form .e2c-fields select,
+.e2c-form .e2c-fields textarea {
+	font: inherit; font-size: 15px; color: var(--e2c-fg);
+	background: var(--e2c-bg); border: 1px solid var(--e2c-line); border-radius: 8px;
+	padding: 10px 12px; width: 100%; max-width: 100%; height: auto; min-height: 44px; box-shadow: none; margin: 0;
+}
+.e2c-form .e2c-fields select { appearance: auto; }
+.e2c-form .e2c-fields textarea { min-height: 84px; resize: vertical; }
+.e2c-form .e2c-fields ::placeholder { color: var(--e2c-muted); opacity: .7; }
+.e2c-form .e2c-fields input.input-text:focus,
+.e2c-form .e2c-fields select:focus,
+.e2c-form .e2c-fields textarea:focus { outline: 2px solid var(--e2c-accent); outline-offset: 1px; border-color: transparent; background: var(--e2c-surface); }
+.e2c-form .e2c-fields select:disabled { opacity: .55; }
+
+/* Teléfonos */
+.e2c-form .e2c-fields .e2c-phone { display: flex !important; gap: 8px; align-items: stretch; }
+.e2c-form .e2c-fields .e2c-phone input.input-text { flex: 1 1 auto !important; width: auto !important; min-width: 0 !important; }
+.e2c-form .e2c-fields .e2c-phone input.input-text.e2c-prefix { flex: 0 0 76px !important; width: 76px !important; text-align: center; padding-left: 6px; padding-right: 6px; }
+.e2c-form .e2c-cc {
+	flex: none; display: inline-flex; align-items: center; padding: 0 12px; min-height: 44px;
+	border: 1px solid var(--e2c-line); border-radius: 8px; background: var(--e2c-accent-soft);
+	color: var(--e2c-navy); font-weight: 600; font-variant-numeric: tabular-nums;
+}
+
+/* Descripciones y errores */
+.e2c-form .e2c-hint { display: block; font-size: 12px; color: var(--e2c-muted); line-height: 1.4; }
+.e2c-form .e2c-hint b { color: var(--e2c-navy); font-weight: 600; }
+.e2c-form .e2c-hint.e2c-found b { color: var(--e2c-accent); }
+.e2c-form .e2c-error { display: block; font-size: 12px; color: var(--e2c-err); }
+.e2c-form .form-row.woocommerce-invalid input.input-text,
+.e2c-form .form-row.woocommerce-invalid select { border-color: var(--e2c-err); background: var(--e2c-err-soft); }
+.e2c-form .form-row.woocommerce-invalid label { color: var(--e2c-err); }
+.e2c-form .form-row.woocommerce-validated input.input-text,
+.e2c-form .form-row.woocommerce-validated select { border-color: var(--e2c-line); }
+
+/* Cuenta */
+.e2c-form .woocommerce-account-fields .create-account label { display: flex; gap: 8px; align-items: center; font-weight: 500; }
+
+/* Resumen del pedido */
+.e2c-form .e2c-summary { display: flex; flex-direction: column; gap: 20px; }
+.e2c-form table.e2c-review { width: 100%; border: 0 !important; border-collapse: collapse; margin: 0 !important; font-size: 14px; background: transparent; }
+.e2c-form table.e2c-review th,
+.e2c-form table.e2c-review td { border: 0 !important; padding: 10px 0 !important; background: transparent !important; vertical-align: middle; font-weight: 400; text-align: left; }
+.e2c-form table.e2c-review td.product-total,
+.e2c-form table.e2c-review tfoot td { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; padding-left: 12px !important; }
+.e2c-form table.e2c-review tbody tr + tr td { border-top: 1px solid var(--e2c-line) !important; }
+.e2c-form table.e2c-review tfoot tr:first-child th,
+.e2c-form table.e2c-review tfoot tr:first-child td { border-top: 1px solid var(--e2c-line) !important; padding-top: 12px !important; }
+.e2c-form table.e2c-review tfoot th small { display: block; color: var(--e2c-muted); font-size: 12px; font-weight: 400; }
+.e2c-form table.e2c-review tfoot td small { color: var(--e2c-muted); font-size: 12px; white-space: normal; }
+.e2c-form table.e2c-review tr.order-total th,
+.e2c-form table.e2c-review tr.order-total td {
+	border-top: 1px solid var(--e2c-line) !important; padding-top: 12px !important;
+	font-family: var(--e2c-display); font-size: 20px; font-weight: 700; color: var(--e2c-navy);
+}
+.e2c-form table.e2c-review tr.order-total td strong { font-weight: 700; }
+
+.e2c-form .e2c-prod { display: flex; gap: 12px; align-items: center; min-width: 0; }
+.e2c-form .e2c-thumb { flex: none; width: 48px; height: 48px; border-radius: 8px; border: 1px solid var(--e2c-line); background: var(--e2c-bg); overflow: hidden; display: block; }
+.e2c-form .e2c-thumb img { width: 48px !important; height: 48px !important; object-fit: cover; display: block; margin: 0 !important; max-width: none; border-radius: 0; }
+.e2c-form .e2c-prod-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.e2c-form .e2c-prod-name { font-weight: 500; overflow-wrap: anywhere; }
+.e2c-form .e2c-qty { color: var(--e2c-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.e2c-form .e2c-unit { font-size: 12px; color: var(--e2c-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.e2c-form table.e2c-review td.product-total { width: 1%; }
+.e2c-form .e2c-prod-text dl.variation { margin: 2px 0 0; font-size: 12px; color: var(--e2c-muted); }
+
+/* Pago */
+.e2c-form #payment { background: transparent !important; border-radius: 0; margin: 0 !important; padding: 0 !important; display: flex; flex-direction: column; gap: 18px; }
+.e2c-form #payment > * { margin-top: 0 !important; margin-bottom: 0 !important; }
+.e2c-form #payment ul.payment_methods { padding: 0 !important; margin: 0 !important; border: 0 !important; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.e2c-form #payment ul.payment_methods li {
+	border: 1px solid var(--e2c-line); border-radius: 8px; padding: 10px 12px !important; margin: 0 !important; background: var(--e2c-surface); list-style: none;
+}
+.e2c-form #payment ul.payment_methods li:has(> input:checked) { border-color: var(--e2c-accent); background: var(--e2c-accent-soft); }
+.e2c-form #payment ul.payment_methods li:not(.wc_payment_method) { border: 0; padding: 0 !important; background: transparent; }
+.e2c-form #payment ul.payment_methods li .woocommerce-info,
+.e2c-form #payment ul.payment_methods li .woocommerce-notice { margin: 0 !important; border-radius: 8px; font-size: 14px; line-height: 1.5; }
+.e2c-form #payment ul.payment_methods li > label { font-size: 14px; font-weight: 500; cursor: pointer; display: inline; }
+.e2c-form #payment ul.payment_methods li > input { margin-right: 8px; accent-color: var(--e2c-accent); }
+.e2c-form #payment ul.payment_methods li img { max-height: 22px; width: auto; display: inline-block; vertical-align: middle; margin: 0 0 0 6px; }
+.e2c-form #payment div.payment_box { background: var(--e2c-surface) !important; border-radius: 8px; margin: 10px 0 2px !important; padding: 12px !important; font-size: 13.5px; color: var(--e2c-fg); }
+.e2c-form #payment div.payment_box::before { display: none !important; }
+.e2c-form #payment div.form-row.place-order { padding: 0 !important; margin: 0 !important; display: flex; flex-direction: column; gap: 16px; }
+.e2c-form #payment div.form-row.place-order > noscript,
+.e2c-form #payment div.form-row.place-order > input[type="hidden"] { display: none; }
+.e2c-form .woocommerce-privacy-policy-text p,
+.e2c-form .woocommerce-terms-and-conditions-wrapper p { margin: 0; line-height: 1.55; }
+.e2c-form .woocommerce-terms-and-conditions-wrapper { font-size: 13px; color: var(--e2c-muted); }
+.e2c-form #place_order {
+	width: 100%; float: none; font-family: var(--e2c-display); font-weight: 600; font-size: 16px;
+	background: var(--e2c-accent) !important; color: #fff !important; border: 0 !important; border-radius: 8px !important;
+	padding: 14px 18px !important; cursor: pointer; text-transform: none; letter-spacing: 0; box-shadow: none; line-height: 1.3;
+}
+.e2c-form #place_order:hover { background: var(--e2c-navy) !important; }
+.e2c-form #place_order:focus-visible { outline: 3px solid var(--e2c-navy); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+	.e2c-form * { transition: none !important; }
+}
+
+/* Textos legales del pago con tamaño fijo (algunos temas los agrandan) */
+.e2c-form .woocommerce-privacy-policy-text,
+.e2c-form .woocommerce-privacy-policy-text p,
+.e2c-form .woocommerce-terms-and-conditions-wrapper,
+.e2c-form .woocommerce-terms-and-conditions-wrapper p,
+.e2c-form .woocommerce-terms-and-conditions-checkbox-text {
+	font-size: 13px !important;
+	line-height: 1.55 !important;
+	color: var(--e2c-muted);
+}
+
+/* Casilla de permiso de quien recibe */
+.e2c-form .e2c-fields .e2c-consent { padding: 14px 16px !important; border: 1px dashed var(--e2c-line); border-radius: 8px; background: var(--e2c-bg); }
+.e2c-form .e2c-fields .e2c-consent label.checkbox { display: flex; gap: 10px; align-items: flex-start; font-weight: 500; font-size: 14px; line-height: 1.45; cursor: pointer; }
+.e2c-form .e2c-fields .e2c-consent input.input-checkbox { margin: 3px 0 0; width: 18px; height: 18px; flex: none; accent-color: var(--e2c-accent); }
+.e2c-form .e2c-fields .e2c-consent.woocommerce-invalid { border-color: var(--e2c-err); background: var(--e2c-err-soft); }

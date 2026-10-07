@@ -1,0 +1,6 @@
+# Lo que no forma parte del plugin instalable
+/docs          export-ignore
+/README.md     export-ignore
+/.gitattributes export-ignore
+/.gitignore    export-ignore
+/.github       export-ignore
