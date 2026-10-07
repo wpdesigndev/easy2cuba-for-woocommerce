@@ -4,7 +4,7 @@ Tags: woocommerce, checkout, cuba, shipping, envios
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,7 +106,7 @@ Escribe a easy2cubaforwoo@gmeti.com.
 
 == Changelog ==
 
-= Próxima versión =
+= 1.6.1 =
 * «Comprobar de nuevo» en Escritorio › Actualizaciones busca la versión nueva al momento, sin esperar 6 horas.
 * El cuadro «Datos de entrega en Cuba» (pedido en la administración, página de gracias y correos de WooCommerce) sigue el mismo orden que el checkout.
 
