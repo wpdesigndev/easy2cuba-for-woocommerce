@@ -6,7 +6,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Prueba el checkout de Easy2Cuba for WooCommerce: quién compra, quién recibe en Cuba, provincias, municipios y envío por provincia.">
 <link rel="icon" href="../img/favicon.png">
-<style>@font-face{font-family:"Sora";src:url("../fonts/Sora-var.woff") format("woff");font-weight:100 900;font-display:swap}@font-face{font-family:"Plus Jakarta Sans";src:url("../fonts/PlusJakartaSans-var.woff") format("woff");font-weight:200 800;font-display:swap}</style>
+<style>@font-face{font-family:"Sora";src:url("../fonts/Sora-var.woff") format("woff");font-weight:100 900;font-display:swap}@font-face{font-family:"Plus Jakarta Sans";src:url("../fonts/PlusJakartaSans-var.woff") format("woff");font-weight:200 800;font-display:swap}.smtp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:640px){.smtp-grid{grid-template-columns:minmax(0,1fr)}}
+.ret-row{display:flex;align-items:center;gap:10px}
+.page-ok{color:#2e7d32;font-weight:600}
+.test-box{border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px}
+.test-box h3{margin:0}
+.test-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.test-row input{flex:1 1 220px;min-width:0;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.smtp-grid select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;width:100%}
+</style>
 <style>
 /* Layout: two-column checkout (form left, sticky order summary right), stacks on phones; admin view in a tab */
 :root{
@@ -263,6 +272,15 @@ tr.off td:not(:first-child){opacity:.45}
     </nav>
     <div class="admin-body apanel" id="a-ship">
       <div>
+        <h2 data-t="admGeneral"></h2>
+      </div>
+      <div class="set-grid">
+        <label class="toggle-row" for="set-enable"><span class="sw"><input type="checkbox" id="set-enable" checked><span></span></span><span><b data-t="admEnable"></b><small data-t="admEnableD"></small></span></label>
+        <label class="toggle-row" for="set-wide"><span class="sw"><input type="checkbox" id="set-wide" checked><span></span></span><span><b data-t="admWide"></b><small data-t="admWideD"></small></span></label>
+        <label class="toggle-row" for="set-consent"><span class="sw"><input type="checkbox" id="set-consent" checked><span></span></span><span><b data-t="admConsent"></b><small data-t="admConsentD"></small></span></label>
+        <div class="f2 full2"><span class="lbl" data-t="admPage"></span><small class="page-ok">✓ <span data-t="admPageOk"></span></small></div>
+      </div>
+      <div>
         <h2 data-t="admTitle"></h2>
         <p class="sub" data-t="admSub"></p>
       </div>
@@ -315,7 +333,24 @@ tr.off td:not(:first-child){opacity:.45}
           </div>
           <small data-t="invLogoSub"></small>
         </div>
+<div class="f2 full2"><label for="inv-ret" data-t="retLabel"></label><div class="ret-row"><input id="inv-ret" type="number" min="0" value="0" style="width:90px"> <span data-t="retMonths"></span></div><small data-t="retD"></small></div>
+        <label class="toggle-row full2" for="smtp-on"><span class="sw"><input type="checkbox" id="smtp-on"><span></span></span><span><b data-t="smtpOn"></b><small data-t="smtpOnD"></small></span></label>
+        <div class="smtp-grid full2" id="smtp-fields" hidden>
+          <div class="f2"><label for="smtp-host" data-t="smtpHost"></label><input id="smtp-host" type="text" placeholder="smtp.gmail.com"></div>
+          <div class="f2"><label for="smtp-port" data-t="smtpPort"></label><input id="smtp-port" type="number" placeholder="587"></div>
+          <div class="f2"><label for="smtp-sec" data-t="smtpSecure"></label><select id="smtp-sec"><option>TLS</option><option>SSL</option><option value="" data-t="smtpNone"></option></select></div>
+          <div class="f2"><label for="smtp-user" data-t="smtpUser"></label><input id="smtp-user" type="text" placeholder="tucorreo@gmail.com"></div>
+          <div class="f2"><label for="smtp-pass" data-t="smtpPass"></label><input id="smtp-pass" type="password" placeholder=""></div>
+          <div class="f2"><label for="from-email" data-t="fromEmail"></label><input id="from-email" type="email" placeholder=""><small data-t="fromEmailD"></small></div>
+          <div class="f2"><label for="from-name" data-t="fromName"></label><input id="from-name" type="text" placeholder=""><small data-t="fromNameD"></small></div>
+        </div>
         <div class="save-row"><button type="button" class="btn-pri" id="inv-save" data-t="save"></button><span id="inv-saved" class="saved" hidden data-t="saved"></span></div>
+      </div>
+
+<div class="test-box">
+        <h3 data-t="testTitle"></h3>
+        <p class="sub" data-t="testSub"></p>
+        <div class="test-row"><label for="test-to" data-t="testEmail"></label><input id="test-to" type="email" value="admin@mitienda.com"><button type="button" class="btn-pri" id="test-send" data-t="testSend"></button><button type="button" class="btn-sec" id="test-view" data-t="testView"></button></div>
       </div>
 
       <div class="list-head">
@@ -449,6 +484,7 @@ tr.off td:not(:first-child){opacity:.45}
 <script>
 const T = {
  es:{
+  admGeneral:"General", admEnable:"Usar el checkout de Easy2Cuba", admEnableD:"Si lo desactivas, tu tienda vuelve al checkout normal de WooCommerce.", admWide:"Checkout a lo ancho de la pantalla", admWideD:"Usa casi todo el ancho de la ventana aunque tu tema tenga un contenido más estrecho. Desactívalo si choca con el diseño de tu tema.", admConsent:"Pedir permiso para los datos de quien recibe", admConsentD:"Muestra en el checkout una casilla obligatoria en la que quien compra confirma que puede compartir los datos de quien recibe.", admPage:"Página de checkout", admPageOk:"Tu página de checkout usa el checkout clásico. Todo listo.", retLabel:"Borrar del registro las facturas con más de", retMonths:"meses", retD:"Pon 0 para no borrarlas nunca. Se revisa una vez al día. Los pedidos de WooCommerce no se tocan.", smtpOn:"Enviar las facturas por SMTP", smtpOnD:"Actívalo si la factura de prueba no llega. Usa los datos del servidor de tu correo. Con Gmail: servidor smtp.gmail.com, puerto 587, seguridad TLS, tu dirección de Gmail y una contraseña de aplicación.", smtpHost:"Servidor SMTP", smtpPort:"Puerto", smtpSecure:"Seguridad", smtpNone:"Ninguna", smtpUser:"Usuario", smtpPass:"Contraseña", fromEmail:"Correo del remitente", fromEmailD:"Opcional. Con SMTP normalmente tiene que ser la misma cuenta del usuario.", fromName:"Nombre del remitente", fromNameD:"Por defecto, el nombre de tu sitio.", testTitle:"Probar el envío", testSub:"Envía una factura de prueba con datos de ejemplo para comprobar que llega y cómo se ve. No usa un número de factura ni aparece en el registro.", testEmail:"Enviar a", testSend:"Enviar factura de prueba", testView:"Ver PDF de prueba", testSent:"Factura de prueba enviada a {e}. (En la demo no se envía ningún correo.)",
   note:"<b>Demostración interactiva.</b> Los productos, precios y facturas son de ejemplo. Rellena el checkout y haz el pedido: verás su factura en Administración › Facturas.",
   tabShop:"Checkout (lo que ve el cliente)", tabAdmin:"Administración (lo que ves tú)",
   wpPanel:"Panel de WordPress", admTitle:"Envíos por provincia",
@@ -461,7 +497,7 @@ const T = {
   names:"Nombres", lastnames:"Apellidos", email:"Correo electrónico", emailHint:"Aquí llega la confirmación del pedido.",
   phone:"Teléfono", optional:"(opcional)", address:"Dirección",
   phBNames:"Juan Carlos", phBLast:"Pérez González", phEmail:"juancarlos@gmail.com", phBPhone:"305 555 1234", phAddr:"1250 SW 8th St, Miami, FL 33135",
-  cEmpty:"Escribe el prefijo del teléfono y aquí verás tu país.", cUnknown:"No reconocemos ese prefijo. Revísalo.", cLabel:"País", cPick:"Elige tu país…", cAuto:"Elígelo aquí o se pone solo al escribir el prefijo del teléfono.", consent:"Confirmo que la persona que recibe me autorizó a compartir sus datos para la entrega.", eConsent:"Marca la casilla para confirmar que tienes permiso de quien recibe.", iCreated:"Creado por", iPage:"Página del plugin", back:"← Volver a Easy2Cuba", demoNote:"Demostración: no se hacen pedidos ni pagos reales.", dlBtn:"Descargar gratis", cUSCA:"Estados Unidos o Canadá", or:" o ",
+  cEmpty:"Escribe el prefijo del teléfono y aquí verás tu país.", cUnknown:"No reconocemos ese prefijo. Revísalo.", cLabel:"País", cPick:"Elige tu país…", cAuto:"Elígelo aquí o se pone solo al escribir el prefijo del teléfono.", consent:"Confirmo que la persona que recibe me autorizó a compartir sus datos para la entrega.", eConsent:"Marca la casilla para confirmar que puedes compartir los datos de quien recibe.", iCreated:"Creado por", iPage:"Página del plugin", back:"← Volver a Easy2Cuba", demoNote:"Demostración: no se hacen pedidos ni pagos reales.", dlBtn:"Descargar gratis", cUSCA:"Estados Unidos o Canadá", or:" o ",
   s2:"Quién recibe en Cuba", s2sub:"Los datos de la persona y la dirección donde entregamos el pedido.",
   phSNames:"María Elena", phSLast:"Rodríguez López",
   mobile:"Teléfono móvil", mobileHint:"El mensajero llama antes de llegar.", landline:"Teléfono fijo", landHint:"Por si no se localiza en el móvil.",
@@ -476,12 +512,12 @@ const T = {
   payActive:"Métodos activos en tu WooCommerce", payCard:"Tarjeta de crédito o débito (Stripe)", payBank:"Transferencia bancaria", placeOrder:"Realizar pedido",
   each:"c/u", tagline:"La forma más fácil de vender y enviar a Cuba",
   atShip:"Envíos", atInv:"Facturas", atInfo:"Información",
-  invTitle:"Facturas en PDF", invSub:"Con cada pedido se genera una factura en PDF con todo lo que el cliente puso en el checkout, y se envía al correo que indiques. Puedes reenviarla al mensajero o al dueño.",
-  invOn:"Enviar una factura en PDF con cada pedido", invOnSub:"Se envía en cuanto el cliente realiza el pedido.",
+  invTitle:"Facturas en PDF", invSub:"Cuando se confirma el pago de un pedido, se genera una factura en PDF con todo lo que el cliente puso en el checkout y se envía al correo que indiques. Puedes reenviarla al mensajero o al dueño.",
+  invOn:"Enviar una factura en PDF cuando se confirme el pago", invOnSub:"Se envía cuando el pedido pasa a \"Procesando\" o \"Completado\". Con pago contra entrega se envía al hacer el pedido.",
   invEmail:"Correo que recibe las facturas", invEmailSub:"Por defecto, el correo del administrador de la tienda. Puedes poner varios separados por comas.",
   invCopy:"Pie de página del PDF", invCopySub:"Por defecto: © año actual + nombre de tu sitio.",
-  invLogo:"Logo de la factura", invLogoSub:"Sale arriba en el PDF en lugar del nombre de la tienda. Mejor en PNG con fondo transparente.", noLogo:"Sin logo: se usa el nombre de la tienda", pickLogo:"Elegir logo", rmLogo:"Quitar", logoBad:"Ese archivo no es una imagen.",
-  invList:"Facturas enviadas", invEmpty:"Todavía no se ha enviado ninguna factura.",
+  invLogo:"Logo de la factura", invLogoSub:"Sale arriba en el PDF en lugar del nombre de la tienda. Usa PNG o JPG, mejor con fondo transparente.", noLogo:"Sin logo: se usa el nombre de la tienda", pickLogo:"Elegir logo", rmLogo:"Quitar", logoBad:"Ese archivo no es una imagen.",
+  invList:"Facturas enviadas", invEmpty:"Todavía no se ha enviado ninguna factura. Se enviarán cuando se confirme el pago de un pedido.",
   thInvNo:"Factura", thDate:"Fecha", thBuyer:"Compra", thRecip:"Recibe", thSent:"Enviada a", thActions:"Acciones",
   view:"Ver", del:"Eliminar", sure:"¿Seguro?", deleted:"Factura eliminada del registro.", nInv:n=>n===1?"1 factura":n+" facturas",
   dlPdf:"Descargar PDF", close:"Cerrar", dlNote:"En el plugin este botón descarga el PDF.",
@@ -493,10 +529,11 @@ const T = {
   pEmail:"Correo", pPhone:"Teléfono", pCountry:"País", pAddr:"Dirección", pProd:"Producto", pQty:"Cant.", pPrice:"Precio", pPay:"Método de pago", pNotes:"Notas del pedido",
   sentTo:"Factura {n} enviada a {e}.", mystore:"Mi Tienda", siteNote:"mitienda.com",
   p1:"Combo de aseo familiar", p2:"Pollo troceado 4 kg", p3:"Aceite de girasol 1 L",
-  eReq:"Este dato es obligatorio.", eEmail:"Escribe un correo válido, por ejemplo nombre@gmail.com.", eCu:"Los teléfonos de Cuba tienen 8 dígitos.", eCi:"El carné tiene 11 dígitos.", ePref:"Escribe el prefijo de tu país a la izquierda.",
+  eReq:"Este dato es obligatorio.", eEmail:"Escribe un correo válido, por ejemplo nombre@gmail.com.", eCu:"Los teléfonos de Cuba tienen 8 dígitos.", eCi:"El carné de identidad tiene 11 dígitos.", ePref:"Escribe el prefijo de tu país junto al teléfono.",
   rTitle:"Así llegaría el pedido a tu panel", rBuys:"Compra", rGets:"Recibe", rPhones:"Teléfonos", rMob:"Móvil", rLand:"Fijo", rAddr:"Dirección", rPlace:"Lugar"
  },
  en:{
+  admGeneral:"General", admEnable:"Use the Easy2Cuba checkout", admEnableD:"If you turn it off, your store goes back to the standard WooCommerce checkout.", admWide:"Full-width checkout", admWideD:"Uses most of the window width even if your theme has a narrower content area. Turn it off if it clashes with your theme layout.", admConsent:"Ask for permission to share the recipient's details", admConsentD:"Shows a required checkbox at checkout where the buyer confirms they may share the recipient's details.", admPage:"Checkout page", admPageOk:"Your checkout page uses the classic checkout. All set.", retLabel:"Remove invoices from the log after", retMonths:"months", retD:"Enter 0 to keep them forever. Checked once a day. WooCommerce orders are not touched.", smtpOn:"Send invoices via SMTP", smtpOnD:"Turn it on if the test invoice does not arrive. Use your email provider's server details. With Gmail: server smtp.gmail.com, port 587, TLS security, your Gmail address and an app password.", smtpHost:"SMTP server", smtpPort:"Port", smtpSecure:"Security", smtpNone:"None", smtpUser:"Username", smtpPass:"Password", fromEmail:"Sender email", fromEmailD:"Optional. With SMTP it usually has to be the same account as the username.", fromName:"Sender name", fromNameD:"Defaults to your site name.", testTitle:"Test delivery", testSub:"Send a test invoice with sample data to check that it arrives and how it looks. It doesn't use an invoice number or appear in the log.", testEmail:"Send to", testSend:"Send test invoice", testView:"View test PDF", testSent:"Test invoice sent to {e}. (The demo doesn't send any email.)",
   note:"<b>Interactive demo.</b> Products, prices and invoices are examples. Fill in the checkout and place the order: you will see its invoice in Admin › Invoices.",
   tabShop:"Checkout (what customers see)", tabAdmin:"Admin (what you see)",
   wpPanel:"WordPress dashboard", admTitle:"Shipping by province",
@@ -509,7 +546,7 @@ const T = {
   names:"First names", lastnames:"Last names", email:"Email", emailHint:"Your order confirmation goes here.",
   phone:"Phone", optional:"(optional)", address:"Address",
   phBNames:"John Michael", phBLast:"Smith Johnson", phEmail:"johnsmith@gmail.com", phBPhone:"305 555 1234", phAddr:"1250 SW 8th St, Miami, FL 33135",
-  cEmpty:"Type your phone's country code and your country will show here.", cUnknown:"We don't recognize that code. Please check it.", cLabel:"Country", cPick:"Choose your country…", cAuto:"Choose it here, or it is set automatically when you type the phone country code.", consent:"I confirm the recipient allowed me to share their details for the delivery.", eConsent:"Tick the box to confirm you have the recipient's permission.", iCreated:"Created by", iPage:"Plugin page", back:"← Back to Easy2Cuba", demoNote:"Demo: no real orders or payments are made.", dlBtn:"Download free", cUSCA:"United States or Canada", or:" or ",
+  cEmpty:"Type your phone's country code and your country will show here.", cUnknown:"We don't recognize that code. Please check it.", cLabel:"Country", cPick:"Choose your country…", cAuto:"Choose it here, or it is set automatically when you type the phone country code.", consent:"I confirm the recipient has authorized me to share their details for the delivery.", eConsent:"Tick the box to confirm you may share the recipient's details.", iCreated:"Created by", iPage:"Plugin page", back:"← Back to Easy2Cuba", demoNote:"Demo: no real orders or payments are made.", dlBtn:"Download free", cUSCA:"United States or Canada", or:" or ",
   s2:"Who receives in Cuba", s2sub:"The recipient's details and the delivery address.",
   phSNames:"María Elena", phSLast:"Rodríguez López",
   mobile:"Mobile phone", mobileHint:"The courier calls before arriving.", landline:"Landline", landHint:"In case the mobile can't be reached.",
@@ -524,12 +561,12 @@ const T = {
   payActive:"Methods enabled in your WooCommerce", payCard:"Credit or debit card (Stripe)", payBank:"Bank transfer", placeOrder:"Place order",
   each:"each", tagline:"The easiest way to sell and ship to Cuba",
   atShip:"Shipping", atInv:"Invoices", atInfo:"About",
-  invTitle:"PDF invoices", invSub:"Every order creates a PDF invoice with everything the customer entered at checkout, sent to the email you choose. You can forward it to the courier or the owner.",
-  invOn:"Send a PDF invoice with every order", invOnSub:"It is sent as soon as the customer places the order.",
+  invTitle:"PDF invoices", invSub:"When an order payment is confirmed, a PDF invoice with everything the customer entered at checkout is created and sent to the email you choose. You can forward it to the courier or the owner.",
+  invOn:"Send a PDF invoice when the payment is confirmed", invOnSub:"It is sent when the order moves to \"Processing\" or \"Completed\". With cash on delivery it is sent when the order is placed.",
   invEmail:"Email that receives the invoices", invEmailSub:"By default, the store admin email. You can enter several separated by commas.",
   invCopy:"PDF footer", invCopySub:"Default: © current year + your site name.",
-  invLogo:"Invoice logo", invLogoSub:"Shown at the top of the PDF instead of the store name. PNG with a transparent background works best.", noLogo:"No logo: the store name is used", pickLogo:"Choose logo", rmLogo:"Remove", logoBad:"That file is not an image.",
-  invList:"Sent invoices", invEmpty:"No invoices have been sent yet.",
+  invLogo:"Invoice logo", invLogoSub:"Shown at the top of the PDF instead of the store name. Use PNG or JPG, ideally with a transparent background.", noLogo:"No logo: the store name is used", pickLogo:"Choose logo", rmLogo:"Remove", logoBad:"That file is not an image.",
+  invList:"Sent invoices", invEmpty:"No invoices have been sent yet. They are sent when an order payment is confirmed.",
   thInvNo:"Invoice", thDate:"Date", thBuyer:"Buyer", thRecip:"Recipient", thSent:"Sent to", thActions:"Actions",
   view:"View", del:"Delete", sure:"Sure?", deleted:"Invoice removed from the log.", nInv:n=>n===1?"1 invoice":n+" invoices",
   dlPdf:"Download PDF", close:"Close", dlNote:"In the plugin this button downloads the PDF.",
@@ -541,7 +578,7 @@ const T = {
   pEmail:"Email", pPhone:"Phone", pCountry:"Country", pAddr:"Address", pProd:"Product", pQty:"Qty", pPrice:"Price", pPay:"Payment method", pNotes:"Order notes",
   sentTo:"Invoice {n} sent to {e}.", mystore:"My Store", siteNote:"mystore.com",
   p1:"Family hygiene bundle", p2:"Chicken pieces 4 kg", p3:"Sunflower oil 1 L",
-  eReq:"This field is required.", eEmail:"Enter a valid email, for example name@gmail.com.", eCu:"Cuban phone numbers have 8 digits.", eCi:"The ID number has 11 digits.", ePref:"Enter your country code on the left.",
+  eReq:"This field is required.", eEmail:"Enter a valid email, for example name@gmail.com.", eCu:"Cuban phone numbers have 8 digits.", eCi:"The ID card number has 11 digits.", ePref:"Enter your country code next to the phone number.",
   rTitle:"How the order would reach your dashboard", rBuys:"Buyer", rGets:"Recipient", rPhones:"Phones", rMob:"Mobile", rLand:"Landline", rAddr:"Address", rPlace:"Location"
  }
 };
@@ -727,7 +764,7 @@ $("checkout").addEventListener("submit", e => {
     if(msg && !first) first = el;
   });
   const cs = $("s_consent"), cf = cs.closest(".f");
-  if(!cs.checked){ cf.classList.add("bad"); let m=cf.querySelector(".msg"); if(!m){m=document.createElement("span");m.className="msg";cf.appendChild(m);} m.textContent=t("eConsent"); if(!first) first=cs; } else { cf.classList.remove("bad"); cf.querySelector(".msg")?.remove(); }
+  if(!cf.hidden && !cs.checked){ cf.classList.add("bad"); let m=cf.querySelector(".msg"); if(!m){m=document.createElement("span");m.className="msg";cf.appendChild(m);} m.textContent=t("eConsent"); if(!first) first=cs; } else { cf.classList.remove("bad"); cf.querySelector(".msg")?.remove(); }
   const out = $("out");
   if(first){ out.hidden = true; first.focus(); first.scrollIntoView({block:"center",behavior:"smooth"}); return; }
   const rows = [
@@ -895,6 +932,19 @@ document.querySelectorAll(".atabs button").forEach(b=>b.addEventListener("click"
   document.querySelectorAll(".apanel").forEach(pn=>pn.hidden = pn.id!==b.dataset.panel);
   $("saved").hidden = true;
 }));
+
+// Ajustes generales, SMTP y prueba de envío
+$("set-consent").addEventListener("change", ()=>{ const f=$("s_consent").closest(".f"); f.hidden = !$("set-consent").checked; if(f.hidden){ $("s_consent").checked=false; f.classList.remove("bad"); f.querySelector(".msg")?.remove(); } });
+$("smtp-on").addEventListener("change", ()=>{ $("smtp-fields").hidden = !$("smtp-on").checked; });
+$("test-send").addEventListener("click", ()=>toast(t("testSent").replace("{e}", $("test-to").value.trim() || "admin@mitienda.com")));
+$("test-view").addEventListener("click", ()=>{
+  const base = INVOICES[INVOICES.length-1]; if(!base) return;
+  const v = Object.assign({}, base, {no:"FAC-0000", order:1000});
+  lastFocus = document.activeElement;
+  $("m-title").textContent = t("testView");
+  $("paper").innerHTML = invoiceHTML(v);
+  $("modal").hidden = false; $("m-close").focus();
+});
 
 applyLang();
 
