@@ -80,6 +80,7 @@
 		var codes = D.prefixes[ k ].split( ' ' );
 		// Si el país elegido ya comparte ese prefijo (p. ej. +1 Canadá), se respeta.
 		if ( codes.indexOf( $c.val() ) !== -1 ) {
+			$c.trigger( 'validate' );
 			return;
 		}
 		if ( $c.find( 'option[value="' + billCountry + '"]' ).length ) {

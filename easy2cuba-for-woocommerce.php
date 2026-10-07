@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Easy2Cuba for WooCommerce
  * Description:       Checkout pensado para vender desde cualquier país y enviar a Cuba. Separa quién compra y quién recibe, incluye las 15 provincias y los 168 municipios de Cuba, cobra el envío según la provincia (con provincias activables), muestra el pedido con fotos, cantidades y precio por unidad, y es compatible con las pasarelas de pago de WooCommerce. Al confirmarse el pago envía por correo un PDF informativo con todos los datos de la entrega, con registro de documentos, logo propio, SMTP opcional y herramientas de privacidad. En español e inglés.
- * Version:           1.6.1
+ * Version:           1.6.2
  * Author:            GMETI
  * Author URI:        https://gmeti.com
  * Text Domain:       easy2cuba-for-woocommerce
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'E2C_VERSION', '1.6.1' );
+define( 'E2C_VERSION', '1.6.2' );
 define( 'E2C_FILE', __FILE__ );
 define( 'E2C_PATH', plugin_dir_path( __FILE__ ) );
 define( 'E2C_URL', plugin_dir_url( __FILE__ ) );

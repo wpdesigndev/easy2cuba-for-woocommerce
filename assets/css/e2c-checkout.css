@@ -141,6 +141,24 @@ body.e2c-wide .woocommerce:has(form.e2c-form) {
 .e2c-form .form-row.woocommerce-validated input.input-text,
 .e2c-form .form-row.woocommerce-validated select { border-color: var(--e2c-line); }
 
+/* Selector de país (WooCommerce lo convierte en un buscador): mismo aspecto que los demás campos */
+.e2c-form .e2c-fields .select2-container { width: 100% !important; }
+.e2c-form .e2c-fields .select2-container .select2-selection--single {
+	height: auto; min-height: 44px; display: flex; align-items: center;
+	background: var(--e2c-bg); border: 1px solid var(--e2c-line); border-radius: 8px; box-shadow: none;
+}
+.e2c-form .e2c-fields .select2-container .select2-selection--single .select2-selection__rendered {
+	font-size: 15px; color: var(--e2c-fg); line-height: 1.4; padding: 10px 40px 10px 12px;
+}
+.e2c-form .e2c-fields .select2-container .select2-selection--single .select2-selection__placeholder { color: var(--e2c-muted); }
+.e2c-form .e2c-fields .select2-container .select2-selection--single .select2-selection__arrow { height: 100%; top: 0; right: 10px; }
+.e2c-form .e2c-fields .select2-container--focus .select2-selection--single,
+.e2c-form .e2c-fields .select2-container--open .select2-selection--single { outline: 2px solid var(--e2c-accent); outline-offset: 1px; border-color: transparent; background: var(--e2c-surface); }
+.woocommerce form .e2c-fields .form-row.woocommerce-validated .select2-container:not(.select2-container--open) .select2-selection,
+.e2c-form .e2c-fields .form-row.woocommerce-validated .select2-container:not(.select2-container--open) .select2-selection { border-color: var(--wc-green, #7ad03a); }
+.woocommerce form .e2c-fields .form-row.woocommerce-invalid .select2-container:not(.select2-container--open) .select2-selection,
+.e2c-form .e2c-fields .form-row.woocommerce-invalid .select2-container:not(.select2-container--open) .select2-selection { border-color: var(--e2c-err); background: var(--e2c-err-soft); }
+
 /* Cuenta */
 .e2c-form .woocommerce-account-fields .create-account label { display: flex; gap: 8px; align-items: center; font-weight: 500; }
 
