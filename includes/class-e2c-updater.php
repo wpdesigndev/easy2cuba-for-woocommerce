@@ -31,6 +31,11 @@ class E2C_Updater {
 
 	/** Última release publicada en GitHub (se guarda 6 horas para no consultar en cada carga). */
 	private static function latest( $force = false ) {
+		// "Comprobar de nuevo" en Escritorio › Actualizaciones consulta GitHub al momento.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( is_admin() && ! empty( $_GET['force-check'] ) && current_user_can( 'update_plugins' ) ) {
+			$force = true;
+		}
 		$cached = get_site_transient( self::CACHE_KEY );
 		if ( ! $force && is_array( $cached ) ) {
 			return $cached;

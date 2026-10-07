@@ -106,6 +106,9 @@ Escribe a easy2cubaforwoo@gmeti.com.
 
 == Changelog ==
 
+= Próxima versión =
+* «Comprobar de nuevo» en Escritorio › Actualizaciones busca la versión nueva al momento, sin esperar 6 horas.
+
 = 1.6.0 =
 * Nuevo campo País en «Quién compra», con todos los países: se elige en la lista o se pone solo al escribir el prefijo del teléfono.
 * La dirección y el país de quien compra son obligatorios.
