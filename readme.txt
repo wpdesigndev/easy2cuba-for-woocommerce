@@ -108,6 +108,7 @@ Escribe a easy2cubaforwoo@gmeti.com.
 
 = Próxima versión =
 * «Comprobar de nuevo» en Escritorio › Actualizaciones busca la versión nueva al momento, sin esperar 6 horas.
+* El cuadro «Datos de entrega en Cuba» (pedido en la administración, página de gracias y correos de WooCommerce) sigue el mismo orden que el checkout.
 
 = 1.6.0 =
 * Nuevo campo País en «Quién compra», con todos los países: se elige en la lista o se pone solo al escribir el prefijo del teléfono.

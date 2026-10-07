@@ -64,6 +64,17 @@ class E2C_Orders {
 				$rows[ E2C_I18n::t( $label ) ] = $v;
 			}
 		}
+		// Mismo orden que el checkout: provincia, municipio, dirección, reparto y referencias.
+		$province = $order->get_meta( '_e2c_province' );
+		if ( ! $province ) {
+			$province = E2C_Data::province_name( $order->get_shipping_state() );
+		}
+		if ( $province ) {
+			$rows[ E2C_I18n::t( 'province' ) ] = $province;
+		}
+		if ( $order->get_shipping_city() ) {
+			$rows[ E2C_I18n::t( 'municipality' ) ] = $order->get_shipping_city();
+		}
 		$address = trim( $order->get_shipping_address_1() . ', ' . $order->get_shipping_address_2(), ', ' );
 		if ( $address ) {
 			$rows[ E2C_I18n::t( 'rec_address' ) ] = $address;
@@ -72,21 +83,13 @@ class E2C_Orders {
 		if ( '' !== (string) $reparto ) {
 			$rows[ E2C_I18n::t( 'rec_reparto' ) ] = $reparto;
 		}
-		$province = $order->get_meta( '_e2c_province' );
-		if ( ! $province ) {
-			$province = E2C_Data::province_name( $order->get_shipping_state() );
-		}
-		$place = trim( $order->get_shipping_city() . ', ' . $province, ', ' );
-		if ( $place ) {
-			$rows[ E2C_I18n::t( 'rec_place' ) ] = $place;
+		$refs = $order->get_meta( '_e2c_refs' );
+		if ( '' !== (string) $refs ) {
+			$rows[ E2C_I18n::t( 'rec_refs' ) ] = $refs;
 		}
 		$consent = (string) $order->get_meta( '_e2c_consent' );
 		if ( '' !== $consent ) {
 			$rows[ E2C_I18n::t( 'consent_short' ) ] = mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $consent );
-		}
-		$refs = $order->get_meta( '_e2c_refs' );
-		if ( '' !== (string) $refs ) {
-			$rows[ E2C_I18n::t( 'rec_refs' ) ] = $refs;
 		}
 		return $rows;
 	}

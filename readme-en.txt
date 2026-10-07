@@ -108,6 +108,7 @@ Write to easy2cubaforwoo@gmeti.com.
 
 = Next version =
 * "Check again" in Dashboard › Updates looks for a new version right away, without waiting 6 hours.
+* The "Delivery details in Cuba" box (admin order, thank-you page and WooCommerce emails) follows the same order as the checkout.
 
 = 1.6.0 =
 * New Country field for the buyer, with every country: choose it from the list or it is set automatically from the phone country code.
