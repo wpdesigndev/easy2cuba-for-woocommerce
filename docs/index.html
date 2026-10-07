@@ -68,7 +68,7 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--red); outline-off
 .hero p.lead { font-size: 20px; color: #d5e2f7; margin: 0 0 30px; max-width: 34em; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; }
 .meta { margin-top: 22px; font-size: 14px; color: #b9cdf0; }
-.hero .shot img { width: 100%; height: auto; aspect-ratio: 1392 / 1150; object-fit: cover; object-position: top; }
+.hero .shot img { width: 100%; height: auto; }
 .shot { border-radius: 16px; overflow: hidden; background: var(--white); box-shadow: 0 30px 70px rgba(0,0,0,.35); border: 6px solid rgba(255,255,255,.12); }
 
 /* Secciones */
@@ -118,6 +118,11 @@ footer a { color: var(--white); }
 .by { display: flex; align-items: center; gap: 10px; }
 .by img { width: 26px; height: 26px; }
 .mail { user-select: all; color: var(--white); font-weight: 600; }
+.to-top { position: fixed; right: 20px; bottom: 20px; z-index: 50; width: 52px; height: 52px; border: 0; border-radius: 50%; background: var(--red); color: var(--white); display: grid; place-items: center; cursor: pointer; box-shadow: 0 10px 24px rgba(4,57,122,.3); opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity .2s, transform .2s, visibility .2s, background .2s; }
+.to-top.show { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { background: #c4122f; }
+.to-top:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .to-top { transition: none; } }
 </style>
 </head>
 <body>
@@ -150,7 +155,7 @@ footer a { color: var(--white); }
 			</div>
 			<p class="meta">WordPress 6.0+ · WooCommerce 7.0+ · PHP 7.4+ · Español e inglés</p>
 		</div>
-		<div class="shot"><img src="screenshots/checkout.png" alt="Checkout de Easy2Cuba con las secciones Quién compra y Quién recibe en Cuba, y el resumen del pedido" width="1392" height="2022"></div>
+		<div class="shot"><img src="screenshots/hero.png" alt="Checkout de Easy2Cuba: Quién compra con su país, Quién recibe en Cuba y el resumen del pedido con el envío por provincia" width="2200" height="1400"></div>
 	</div>
 </div>
 
@@ -272,5 +277,19 @@ footer a { color: var(--white); }
 	</div>
 </footer>
 
+<button type="button" class="to-top" id="to-top" aria-label="Volver arriba"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
+<script>
+(function () {
+	var b = document.getElementById('to-top');
+	if (!b) return;
+	function onScroll() { b.classList.toggle('show', window.scrollY > 600); }
+	window.addEventListener('scroll', onScroll, { passive: true });
+	onScroll();
+	b.addEventListener('click', function () {
+		var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+	});
+})();
+</script>
 </body>
 </html>
