@@ -15,7 +15,6 @@ class E2C_Admin {
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_post_e2c_save', array( __CLASS__, 'save' ) );
-		add_action( 'admin_post_e2c_classic', array( __CLASS__, 'make_classic' ) );
 		add_action( 'admin_post_e2c_save_inv', array( __CLASS__, 'save_invoices' ) );
 		add_action( 'admin_post_e2c_test_inv', array( __CLASS__, 'test_invoice' ) );
 		add_action( 'admin_post_e2c_pdf', array( __CLASS__, 'view_pdf' ) );
@@ -39,7 +38,7 @@ class E2C_Admin {
 	}
 
 	public static function menu_icon_css() {
-		echo '<style>#adminmenu .toplevel_page_' . esc_attr( self::SLUG ) . ' .wp-menu-image img{width:20px;height:20px;padding:7px 0 0;opacity:1;border-radius:4px}</style>';
+		echo '<style>#adminmenu .toplevel_page_' . esc_attr( self::SLUG ) . ' .wp-menu-image img{width:22px;height:auto;padding:9px 0 0;opacity:.6}#adminmenu .toplevel_page_' . esc_attr( self::SLUG ) . ':hover .wp-menu-image img,#adminmenu .toplevel_page_' . esc_attr( self::SLUG ) . '.current .wp-menu-image img,#adminmenu .toplevel_page_' . esc_attr( self::SLUG ) . '.wp-has-current-submenu .wp-menu-image img{opacity:1}</style>';
 	}
 
 	public static function action_links( $links ) {
@@ -111,24 +110,6 @@ class E2C_Admin {
 		update_option( E2C_Data::OPTION, $settings );
 
 		wp_safe_redirect( self::page_url( array( 'e2c_msg' => 'saved' ) ) );
-		exit;
-	}
-
-	public static function make_classic() {
-		self::guard( 'e2c_classic' );
-		if ( ! current_user_can( 'edit_pages' ) ) {
-			wp_die( esc_html__( 'Sorry, you are not allowed to access this page.' ) );
-		}
-		$page_id = function_exists( 'wc_get_page_id' ) ? (int) wc_get_page_id( 'checkout' ) : 0;
-		if ( $page_id > 0 && get_post( $page_id ) ) {
-			wp_update_post(
-				array(
-					'ID'           => $page_id,
-					'post_content' => "<!-- wp:shortcode -->\n[woocommerce_checkout]\n<!-- /wp:shortcode -->",
-				)
-			);
-		}
-		wp_safe_redirect( self::page_url( array( 'e2c_msg' => 'classic' ) ) );
 		exit;
 	}
 
@@ -292,7 +273,6 @@ class E2C_Admin {
 	private static function notice( $msg ) {
 		$map = array(
 			'saved'     => array( 'success', E2C_I18n::t( 'saved' ) ),
-			'classic'   => array( 'success', E2C_I18n::t( 'adm_page_done' ) ),
 			'inv_saved' => array( 'success', E2C_I18n::t( 'inv_saved' ) ),
 			'deleted'   => array( 'success', E2C_I18n::t( 'deleted' ) ),
 			'test_bad'  => array( 'error', E2C_I18n::t( 'test_bad' ) ),
@@ -321,14 +301,16 @@ class E2C_Admin {
 		$all_mun  = E2C_Data::municipalities();
 		$symbol   = html_entity_decode( get_woocommerce_currency_symbol(), ENT_QUOTES, 'UTF-8' );
 		$currency = get_woocommerce_currency();
-		$page_id  = function_exists( 'wc_get_page_id' ) ? (int) wc_get_page_id( 'checkout' ) : 0;
-		$is_block = $page_id > 0 && has_block( 'woocommerce/checkout', $page_id );
 		$active   = count( E2C_Data::active_provinces() );
 		$t        = array( 'E2C_I18n', 't' );
 		?>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="e2c_save" />
 			<?php wp_nonce_field( 'e2c_save' ); ?>
+
+			<div class="e2c-save e2c-save-top">
+				<button type="submit" class="e2c-btn e2c-btn-pri"><?php echo esc_html( call_user_func( $t, 'save' ) ); ?></button>
+			</div>
 
 			<section class="e2c-sec">
 				<h3><?php echo esc_html( call_user_func( $t, 'adm_general' ) ); ?></h3>
@@ -353,18 +335,6 @@ class E2C_Admin {
 						<span class="e2c-muted"><?php echo esc_html( call_user_func( $t, 'adm_consent_d' ) ); ?></span>
 					</span>
 				</label>
-			</section>
-
-			<section class="e2c-sec">
-				<h3><?php echo esc_html( call_user_func( $t, 'adm_page' ) ); ?></h3>
-				<?php if ( $page_id <= 0 ) : ?>
-					<p class="e2c-status e2c-status-warn"><?php echo esc_html( call_user_func( $t, 'adm_page_none' ) ); ?></p>
-				<?php elseif ( $is_block ) : ?>
-					<p class="e2c-status e2c-status-warn"><?php echo esc_html( call_user_func( $t, 'adm_page_blk' ) ); ?></p>
-					<p><button type="submit" form="e2c-classic-form" class="e2c-btn e2c-btn-sec"><?php echo esc_html( call_user_func( $t, 'adm_page_btn' ) ); ?></button></p>
-				<?php else : ?>
-					<p class="e2c-status e2c-status-ok"><?php echo esc_html( call_user_func( $t, 'adm_page_ok' ) ); ?></p>
-				<?php endif; ?>
 			</section>
 
 			<section class="e2c-sec">
@@ -429,10 +399,6 @@ class E2C_Admin {
 			</div>
 		</form>
 
-		<form id="e2c-classic-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-			<input type="hidden" name="action" value="e2c_classic" />
-			<?php wp_nonce_field( 'e2c_classic' ); ?>
-		</form>
 		<?php
 	}
 
@@ -678,14 +644,13 @@ class E2C_Admin {
 				<dt><?php echo esc_html( call_user_func( $t, 'i_name' ) ); ?></dt><dd>Easy2Cuba for WooCommerce</dd>
 				<dt><?php echo esc_html( call_user_func( $t, 'i_version' ) ); ?></dt><dd><?php echo esc_html( E2C_VERSION ); ?></dd>
 				<dt><?php echo esc_html( call_user_func( $t, 'i_by' ) ); ?></dt><dd><a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI</a></dd>
-				<dt><?php echo esc_html( call_user_func( $t, 'i_created' ) ); ?></dt><dd><a href="https://www.instagram.com/chuckgomez92" target="_blank" rel="noopener noreferrer">Chuck Gomez</a></dd>
 				<dt><?php echo esc_html( call_user_func( $t, 'i_page' ) ); ?></dt><dd><a href="https://wpdesigndev.github.io/easy2cuba-for-woocommerce/" target="_blank" rel="noopener">wpdesigndev.github.io/easy2cuba-for-woocommerce</a></dd>
 				<dt><?php echo esc_html( call_user_func( $t, 'i_support' ) ); ?></dt>
 				<dd>
 					<span class="e2c-mail" id="e2c-support-mail"><?php echo esc_html( self::SUPPORT_EMAIL ); ?></span>
 					<button type="button" class="e2c-btn e2c-btn-sec e2c-small" id="e2c-copy-mail"><?php echo esc_html( call_user_func( $t, 'copy_btn' ) ); ?></button>
 				</dd>
-				<dt><?php echo esc_html( call_user_func( $t, 'i_req' ) ); ?></dt><dd>WordPress 6.0+ · WooCommerce 7.0+ · PHP 7.4+</dd>
+				<dt><?php echo esc_html( call_user_func( $t, 'i_req' ) ); ?></dt><dd>WooCommerce 7.0+ (<?php echo esc_html( call_user_func( $t, 'req_wc' ) ); ?>) · WordPress 6.0+ · PHP 7.4+</dd>
 				<dt><?php echo esc_html( call_user_func( $t, 'i_langs' ) ); ?></dt><dd>Español, English</dd>
 				<dt><?php echo esc_html( call_user_func( $t, 'i_license' ) ); ?></dt><dd>GPLv2</dd>
 			</dl>

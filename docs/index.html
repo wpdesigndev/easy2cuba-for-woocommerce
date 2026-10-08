@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Easy2Cuba for WooCommerce</title>
-<meta name="description" content="Checkout para WooCommerce pensado para vender desde cualquier país y enviar a Cuba: provincias y municipios, envío por provincia y PDF de entrega automático. Gratis. Por GMETI.">
+<title>Easy2Cuba for WooCommerce · La forma más fácil de vender y enviar a Cuba</title>
+<meta name="description" content="La forma más fácil de vender y enviar a Cuba. Checkout para WooCommerce pensado para vender desde cualquier país y enviar a Cuba: provincias y municipios, envío por provincia y PDF de entrega automático. Gratis. Por GMETI.">
 <link rel="icon" href="img/favicon.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Easy2Cuba for WooCommerce">
-<meta property="og:description" content="Vende desde cualquier país. Entrega en Cuba. Plugin gratis para WooCommerce.">
+<meta property="og:description" content="La forma más fácil de vender y enviar a Cuba. Vende desde cualquier país y entrega en Cuba. Plugin gratis para WooCommerce.">
 <meta property="og:image" content="https://wpdesigndev.github.io/easy2cuba-for-woocommerce/img/social-preview.png">
 <meta property="og:url" content="https://wpdesigndev.github.io/easy2cuba-for-woocommerce/">
 <meta name="twitter:card" content="summary_large_image">
@@ -43,6 +43,9 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--red); outline-off
 .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
 .brand { display: flex; align-items: center; gap: 12px; color: var(--white); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 18px; }
 .brand img { width: 38px; height: 38px; border-radius: 9px; }
+.brand-txt { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.brand-tag { font-family: var(--body); font-weight: 500; font-size: 12.5px; color: #b9cdf0; white-space: nowrap; }
+@media (max-width: 420px) { .brand-tag { font-size: 11px; white-space: normal; } }
 .nav { display: flex; align-items: center; gap: 22px; }
 .nav a { color: #d5e2f7; text-decoration: none; font-weight: 600; font-size: 15px; }
 .nav a:hover { color: var(--white); }
@@ -141,7 +144,7 @@ footer a { color: var(--white); }
 
 <header class="top">
 	<div class="wrap">
-		<a class="brand" href="#"><img src="img/logo.png" alt="">Easy2Cuba</a>
+		<a class="brand" href="#"><img src="img/logo.png" alt=""><span class="brand-txt"><span class="brand-name">Easy2Cuba</span><span class="brand-tag">La forma más fácil de vender y enviar a Cuba</span></span></a>
 		<nav class="nav" aria-label="Principal">
 			<a class="hide-sm" href="#funciones">Funciones</a>
 			<a class="hide-sm" href="demo/">Demo</a>
@@ -166,7 +169,7 @@ footer a { color: var(--white); }
 				</a>
 				<a class="btn btn-ghost" href="demo/">Probar la demo</a>
 			</div>
-			<p class="meta">WordPress 6.0+ · WooCommerce 7.0+ · PHP 7.4+ · Español e inglés</p>
+			<p class="meta">Requiere WooCommerce 7.0+ · WordPress 6.0+ · PHP 7.4+ · Español e inglés</p>
 		</div>
 		<div class="hero-media">
 			<a class="shot" href="demo/" style="display:block" aria-label="Probar la demo"><img src="screenshots/hero.png" alt="Checkout de Easy2Cuba: Quién compra con su país, Quién recibe en Cuba y el resumen del pedido con el envío por provincia" width="2207" height="1527"></a>
@@ -241,7 +244,7 @@ footer a { color: var(--white); }
 		<h2>Listo en cinco minutos</h2>
 		<ol class="steps">
 			<li><b>Descarga</b><span>El archivo <code>easy2cuba-for-woocommerce.zip</code>.</span></li>
-			<li><b>Sube el plugin</b><span>En WordPress: Plugins → Añadir nuevo plugin → Subir plugin, y actívalo.</span></li>
+			<li><b>Sube el plugin</b><span>Con WooCommerce ya activo (es obligatorio), ve en WordPress a Plugins → Añadir nuevo plugin → Subir plugin, y actívalo.</span></li>
 			<li><b>Pon los precios</b><span>En el menú Easy2Cuba, el envío de cada provincia.</span></li>
 			<li><b>Listo</b><span>Las actualizaciones llegan solas a tu panel de Plugins.</span></li>
 		</ol>
@@ -260,6 +263,10 @@ footer a { color: var(--white); }
 		<p class="eyebrow">Preguntas</p>
 		<h2>Preguntas frecuentes</h2>
 		<div class="faq">
+			<details>
+				<summary>¿Necesito WooCommerce?</summary>
+				<p>Sí, es obligatorio. Easy2Cuba es un complemento de WooCommerce: sin WooCommerce instalado y activo, WordPress no deja activarlo.</p>
+			</details>
 			<details>
 				<summary>¿Es gratis?</summary>
 				<p>Sí. Easy2Cuba es gratuito y de código abierto, con licencia GPL.</p>
@@ -297,7 +304,6 @@ footer a { color: var(--white); }
 <footer>
 	<div class="wrap">
 		<div class="by">Desarrollado por <img src="img/gmeti-white.png" alt=""><a href="https://gmeti.com" target="_blank" rel="noopener noreferrer"><b>GMETI</b></a></div>
-		<div>Creado por <a href="https://www.instagram.com/chuckgomez92" target="_blank" rel="noopener noreferrer"><b>Chuck Gomez</b></a></div>
 		<div>Soporte: <span class="mail">easy2cubaforwoo@gmeti.com</span></div>
 		<div>Licencia GPLv2 · <a href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce">GitHub</a></div>
 	</div>

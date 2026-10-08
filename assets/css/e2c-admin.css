@@ -82,6 +82,7 @@
 .e2c-wrap .e2c-pill { display: inline-block; margin-left: 8px; font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--e2c-ok); color: #fff; font-weight: 600; }
 
 .e2c-wrap .e2c-save { padding-top: 18px; }
+.e2c-wrap .e2c-save-top { padding-top: 10px; display: flex; justify-content: flex-end; margin-bottom: -8px; }
 
 .e2c-wrap .e2c-foot { text-align: center; color: var(--e2c-muted); font-size: 12.5px; padding: 18px 0 8px; }
 .e2c-wrap .e2c-foot a { color: var(--e2c-accent); font-weight: 600; text-decoration: none; }

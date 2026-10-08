@@ -15,7 +15,6 @@
   &nbsp;·&nbsp; <a href="https://wpdesigndev.github.io/easy2cuba-for-woocommerce/#instalar">🎬 Vídeo tutorial</a>
   &nbsp;·&nbsp; <a href="#english">English</a>
   &nbsp;·&nbsp; Desarrollado por <a href="https://gmeti.com">GMETI</a>
-  &nbsp;·&nbsp; Creado por <a href="https://www.instagram.com/chuckgomez92">Chuck Gomez</a>
 </p>
 
 ---
@@ -39,12 +38,12 @@
 
 ## Instalación
 
-1. Descarga **`easy2cuba-for-woocommerce.zip`** desde [la última versión](../../releases/latest) (el archivo adjunto, no "Source code").
-2. En WordPress: **Plugins → Añadir nuevo plugin → Subir plugin**, elige el zip y actívalo.
-3. Ve a **Easy2Cuba** en el menú lateral y pon el precio de envío de cada provincia.
-4. Si te avisa de que tu página de checkout usa bloques, pulsa **Cambiar a checkout clásico**.
+1. Ten **WooCommerce** instalado y activo. Es obligatorio.
+2. Descarga **`easy2cuba-for-woocommerce.zip`** desde [la última versión](../../releases/latest) (el archivo adjunto, no "Source code").
+3. En WordPress: **Plugins → Añadir nuevo plugin → Subir plugin**, elige el zip y actívalo.
+4. Ve a **Easy2Cuba** en el menú lateral y pon el precio de envío de cada provincia.
 
-**Requisitos:** WordPress 6.0+, WooCommerce 7.0+, PHP 7.4+.
+**Requisitos:** WooCommerce 7.0+ (**obligatorio**: sin WooCommerce activo el plugin no se deja activar), WordPress 6.0+, PHP 7.4+.
 
 🎬 **¿Prefieres verlo?** [Vídeo tutorial de 1 minuto y 39 segundos](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/#instalar) · 👀 [Probar la demo](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/demo/)
 
@@ -76,6 +75,6 @@ GPLv2 o posterior. Incluye [FPDF](http://www.fpdf.org) para generar los PDF (lic
 - Works with WooCommerce payment gateways, Elementor, multi-currency plugins and HPOS.
 - Privacy tools, Spanish and English.
 
-**Install:** download `easy2cuba-for-woocommerce.zip` from the [latest release](../../releases/latest), then *Plugins → Add New Plugin → Upload Plugin*. Updates arrive automatically from this repository.
+**Requires WooCommerce** (the plugin won't activate without it). **Install:** download `easy2cuba-for-woocommerce.zip` from the [latest release](../../releases/latest), then *Plugins → Add New Plugin → Upload Plugin*. Updates arrive automatically from this repository.
 
-Developed by [GMETI](https://gmeti.com) · Created by [Chuck Gomez](https://www.instagram.com/chuckgomez92) · Support: easy2cubaforwoo@gmeti.com · License: GPLv2 or later.
+Developed by [GMETI](https://gmeti.com) · Support: easy2cubaforwoo@gmeti.com · License: GPLv2 or later.

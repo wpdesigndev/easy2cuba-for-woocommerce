@@ -4,7 +4,7 @@ Tags: woocommerce, checkout, cuba, shipping
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.6.5
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,19 +63,23 @@ Developed by [GMETI](https://gmeti.com). Plugin page: [wpdesigndev.github.io/eas
 
 == Installation ==
 
-1. Download `easy2cuba-for-woocommerce.zip` from the [latest release on GitHub](https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest).
-2. In WordPress go to Plugins › Add New Plugin › Upload Plugin, choose the zip and activate it.
-3. Go to **Easy2Cuba** in the side menu and set the shipping cost for each province.
-4. If it warns you that your checkout page uses blocks, click **Switch to classic checkout**.
+1. Have WooCommerce installed and active. It is required.
+2. Download `easy2cuba-for-woocommerce.zip` from the [latest release on GitHub](https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest).
+3. In WordPress go to Plugins › Add New Plugin › Upload Plugin, choose the zip and activate it.
+4. Go to **Easy2Cuba** in the side menu and set the shipping cost for each province.
 5. In the **Invoices** tab check the email that will receive the PDFs and send a test.
 
-**Requirements:** WordPress 6.0+, WooCommerce 7.0+, PHP 7.4+.
+**Requirements:** WooCommerce 7.0+ (required: the plugin cannot be activated without WooCommerce active), WordPress 6.0+, PHP 7.4+.
 
 **Video tutorial (Spanish):** [see how to install and set it up in 1 minute 39 seconds](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/#instalar).
 
 **Demo:** [try the checkout and the admin without installing anything](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/demo/).
 
 == Frequently Asked Questions ==
+
+= Do I need WooCommerce? =
+
+Yes, it is required. Easy2Cuba is a WooCommerce add-on: without WooCommerce installed and active, WordPress will not let you activate it.
 
 = Is it free? =
 
@@ -110,6 +114,13 @@ Write to easy2cubaforwoo@gmeti.com.
 
 == Changelog ==
 
+= 1.6.6 =
+* "Save changes" button also at the top of the Shipping tab.
+* The "Checkout page" section is removed: Easy2Cuba already replaces the block checkout on its own.
+* New icon in the admin side menu.
+* The Information tab no longer shows the author.
+* The plugin cannot be activated unless WooCommerce is installed and active (also on WordPress older than 6.5).
+
 = 1.6.5 =
 * Checkout field borders are always light gray (green when valid, red on error), even if the theme sets others.
 
@@ -130,7 +141,7 @@ Write to easy2cubaforwoo@gmeti.com.
 * New Country field for the buyer, with every country: choose it from the list or it is set automatically from the phone country code.
 * The buyer's address and country are now required.
 * The PDF shows the details in the same order as the checkout.
-* Information tab: GMETI link, "Created by Chuck Gomez" and the plugin page.
+* Information tab: GMETI link and the plugin page.
 
 = 1.5.1 =
 * "View details" in Plugins now shows the full description, installation, FAQ, screenshots and what's new in each version, in Spanish or English.

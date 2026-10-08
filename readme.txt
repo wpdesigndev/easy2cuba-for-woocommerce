@@ -4,7 +4,7 @@ Tags: woocommerce, checkout, cuba, shipping, envios
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.6.5
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,19 +63,23 @@ Desarrollado por [GMETI](https://gmeti.com). Página del plugin: [wpdesigndev.gi
 
 == Installation ==
 
-1. Descarga `easy2cuba-for-woocommerce.zip` desde la [última versión en GitHub](https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest).
-2. En WordPress ve a Plugins › Añadir nuevo plugin › Subir plugin, elige el zip y actívalo.
-3. Ve a **Easy2Cuba** en el menú lateral y pon el costo de envío de cada provincia.
-4. Si te avisa de que tu página de checkout usa bloques, pulsa **Cambiar a checkout clásico**.
+1. Ten WooCommerce instalado y activo. Es obligatorio.
+2. Descarga `easy2cuba-for-woocommerce.zip` desde la [última versión en GitHub](https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest).
+3. En WordPress ve a Plugins › Añadir nuevo plugin › Subir plugin, elige el zip y actívalo.
+4. Ve a **Easy2Cuba** en el menú lateral y pon el costo de envío de cada provincia.
 5. En la pestaña **Facturas** revisa el correo que recibirá los PDF y haz un envío de prueba.
 
-**Requisitos:** WordPress 6.0+, WooCommerce 7.0+, PHP 7.4+.
+**Requisitos:** WooCommerce 7.0+ (obligatorio: sin WooCommerce activo el plugin no se deja activar), WordPress 6.0+, PHP 7.4+.
 
 **Vídeo tutorial:** [mira cómo se instala y se configura en 1 minuto y 39 segundos](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/#instalar).
 
 **Demo:** [prueba el checkout y el panel sin instalar nada](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/demo/).
 
 == Frequently Asked Questions ==
+
+= ¿Necesito WooCommerce? =
+
+Sí, es obligatorio. Easy2Cuba es un complemento de WooCommerce: sin WooCommerce instalado y activo, WordPress no deja activarlo.
 
 = ¿Es gratis? =
 
@@ -110,6 +114,13 @@ Escribe a easy2cubaforwoo@gmeti.com.
 
 == Changelog ==
 
+= 1.6.6 =
+* Botón «Guardar cambios» también arriba de la pestaña Envíos.
+* Se quita la sección «Página de checkout»: Easy2Cuba ya sustituye solo el checkout de bloques.
+* Nuevo icono en el menú lateral de la administración.
+* La pestaña Información ya no muestra el autor.
+* Sin WooCommerce instalado y activo, el plugin no se deja activar (también en WordPress anterior a 6.5).
+
 = 1.6.5 =
 * Los bordes de los campos del checkout son siempre gris claro (verde si están bien y rojo si hay un error), aunque el tema ponga otros.
 
@@ -130,7 +141,7 @@ Escribe a easy2cubaforwoo@gmeti.com.
 * Nuevo campo País en «Quién compra», con todos los países: se elige en la lista o se pone solo al escribir el prefijo del teléfono.
 * La dirección y el país de quien compra son obligatorios.
 * El PDF muestra los datos en el mismo orden que el checkout.
-* Pestaña Información: GMETI enlazado, «Creado por Chuck Gomez» y la página del plugin.
+* Pestaña Información: GMETI enlazado y la página del plugin.
 
 = 1.5.1 =
 * "Ver detalles" en Plugins ahora muestra la descripción completa, instalación, preguntas frecuentes, capturas y novedades de cada versión, en español o inglés.
