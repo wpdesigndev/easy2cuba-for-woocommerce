@@ -12,7 +12,7 @@ class E2C_I18n {
 
 	private static $strings = array(
 		'es' => array(
-			'plugin_desc'   => 'Checkout pensado para vender desde cualquier país y enviar a Cuba. Separa quién compra y quién recibe, incluye las 15 provincias y los 168 municipios de Cuba, cobra el envío según la provincia (con provincias activables), muestra el pedido con fotos, cantidades y precio por unidad, y es compatible con las pasarelas de pago de WooCommerce. Al confirmarse el pago envía por correo un PDF informativo con todos los datos de la entrega, con registro de documentos, logo propio, SMTP opcional y herramientas de privacidad. En español e inglés.',
+			'plugin_desc'   => 'La forma más fácil de vender y enviar a Cuba. Checkout pensado para vender desde cualquier país y enviar a Cuba. Separa quién compra y quién recibe, incluye las 15 provincias y los 168 municipios de Cuba, cobra el envío según la provincia (con provincias activables), muestra el pedido con fotos, cantidades y precio por unidad, y es compatible con las pasarelas de pago de WooCommerce. Al confirmarse el pago envía por correo un PDF informativo con todos los datos de la entrega, con registro de documentos, logo propio, SMTP opcional y herramientas de privacidad. En español e inglés.',
 			'tagline'       => 'La forma más fácil de vender y enviar a Cuba',
 			'wc_missing'    => 'necesita WooCommerce instalado y activo.',
 			'wc_install'    => 'Instala y activa WooCommerce primero (Plugins › Añadir nuevo plugin) y después activa Easy2Cuba.',
@@ -242,7 +242,7 @@ class E2C_I18n {
 			'copied'        => 'Copiado',
 		),
 		'en' => array(
-			'plugin_desc'   => 'Checkout built to sell from anywhere and ship to Cuba. It separates buyer and recipient, includes all 15 Cuban provinces and 168 municipalities, charges shipping by province (provinces can be switched on or off), shows the order with photos, quantities and unit prices, and works with WooCommerce payment gateways. When the payment is confirmed it emails an informative PDF with all the delivery details, with a document log, custom logo, optional SMTP and privacy tools. In Spanish and English.',
+			'plugin_desc'   => 'The easiest way to sell and ship to Cuba. Checkout built to sell from anywhere and ship to Cuba. It separates buyer and recipient, includes all 15 Cuban provinces and 168 municipalities, charges shipping by province (provinces can be switched on or off), shows the order with photos, quantities and unit prices, and works with WooCommerce payment gateways. When the payment is confirmed it emails an informative PDF with all the delivery details, with a document log, custom logo, optional SMTP and privacy tools. In Spanish and English.',
 			'tagline'       => 'The easiest way to sell and ship to Cuba',
 			'wc_missing'    => 'requires WooCommerce to be installed and active.',
 			'wc_install'    => 'Install and activate WooCommerce first (Plugins › Add New Plugin), then activate Easy2Cuba.',
