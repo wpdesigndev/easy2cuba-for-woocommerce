@@ -64,12 +64,16 @@ Developed by [GMETI](https://gmeti.com). Plugin page: [wpdesigndev.github.io/eas
 == Installation ==
 
 1. Download `easy2cuba-for-woocommerce.zip` from the [latest release on GitHub](https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest).
-2. In WordPress go to Plugins › Add New › Upload Plugin, choose the zip and activate it.
+2. In WordPress go to Plugins › Add New Plugin › Upload Plugin, choose the zip and activate it.
 3. Go to **Easy2Cuba** in the side menu and set the shipping cost for each province.
 4. If it warns you that your checkout page uses blocks, click **Switch to classic checkout**.
 5. In the **Invoices** tab check the email that will receive the PDFs and send a test.
 
 **Requirements:** WordPress 6.0+, WooCommerce 7.0+, PHP 7.4+.
+
+**Video tutorial (Spanish):** [see how to install and set it up in 1 minute 39 seconds](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/#instalar).
+
+**Demo:** [try the checkout and the admin without installing anything](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/demo/).
 
 == Frequently Asked Questions ==
 
