@@ -100,6 +100,11 @@ figcaption b { color: var(--ink); }
 .steps li::before { content: counter(s); display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--red); color: var(--white); font-family: var(--display); font-weight: 700; margin-bottom: 12px; }
 .steps b { display: block; font-family: var(--display); color: var(--navy); font-size: 18px; margin-bottom: 4px; }
 .steps span { color: var(--muted); font-size: 15px; }
+.video { margin-top: 40px; max-width: 900px; margin-inline: auto; }
+.video-lead { margin: 0 0 14px; color: var(--muted); text-align: center; }
+.video-lead b { color: var(--navy); }
+.video .frame { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #04397a; box-shadow: 0 20px 50px rgba(4,57,122,.18); }
+.video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #04397a; }
 code { font-size: .92em; background: var(--blue-soft); color: var(--navy); padding: 1px 6px; border-radius: 5px; }
 
 .faq { display: grid; gap: 12px; max-width: 820px; }
@@ -223,10 +228,17 @@ footer a { color: var(--white); }
 		<h2>Listo en cinco minutos</h2>
 		<ol class="steps">
 			<li><b>Descarga</b><span>El archivo <code>easy2cuba-for-woocommerce.zip</code>.</span></li>
-			<li><b>Sube el plugin</b><span>En WordPress: Plugins → Añadir nuevo → Subir plugin, y actívalo.</span></li>
+			<li><b>Sube el plugin</b><span>En WordPress: Plugins → Añadir nuevo plugin → Subir plugin, y actívalo.</span></li>
 			<li><b>Pon los precios</b><span>En el menú Easy2Cuba, el envío de cada provincia.</span></li>
 			<li><b>Listo</b><span>Las actualizaciones llegan solas a tu panel de Plugins.</span></li>
 		</ol>
+		<div class="video">
+			<p class="video-lead"><b>¿Prefieres verlo?</b> Todo el proceso en 1 minuto y 39 segundos.</p>
+			<div class="frame"><video controls playsinline preload="none" poster="video/tutorial-poster.jpg" width="1920" height="1080" aria-label="Vídeo tutorial: cómo instalar y configurar Easy2Cuba for WooCommerce">
+				<source src="video/tutorial-easy2cuba.mp4" type="video/mp4">
+				<a href="video/tutorial-easy2cuba.mp4">Ver el vídeo tutorial</a>
+			</video></div>
+		</div>
 	</div>
 </section>
 
