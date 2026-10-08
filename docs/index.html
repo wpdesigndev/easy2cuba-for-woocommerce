@@ -67,7 +67,8 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--red); outline-off
 .hero h1 em { font-style: normal; color: #ff6b80; }
 .hero p.lead { font-size: 20px; color: #d5e2f7; margin: 0 0 30px; max-width: 34em; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; }
-.stats { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 0; }
+.hero-media { min-width: 0; }
+.stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 18px 0 0; }
 .stats[hidden], .stats span[hidden] { display: none; }
 .stats span { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); color: #d5e2f7; font-size: 15px; }
 .stats svg { width: 18px; height: 18px; flex: none; }
@@ -166,12 +167,14 @@ footer a { color: var(--white); }
 				<a class="btn btn-ghost" href="demo/">Probar la demo</a>
 			</div>
 			<p class="meta">WordPress 6.0+ · WooCommerce 7.0+ · PHP 7.4+ · Español e inglés</p>
+		</div>
+		<div class="hero-media">
+			<a class="shot" href="demo/" style="display:block" aria-label="Probar la demo"><img src="screenshots/hero.png" alt="Checkout de Easy2Cuba: Quién compra con su país, Quién recibe en Cuba y el resumen del pedido con el envío por provincia" width="2207" height="1527"></a>
 			<p class="stats" id="stats" hidden>
 				<span id="st-v" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg><b></b> <i>visitas</i></span>
 				<span id="st-d" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"></path><path d="M7 10l5 5 5-5"></path><path d="M5 20h14"></path></svg><b></b> <i>descargas</i></span>
 			</p>
 		</div>
-		<a class="shot" href="demo/" style="display:block" aria-label="Probar la demo"><img src="screenshots/hero.png" alt="Checkout de Easy2Cuba: Quién compra con su país, Quién recibe en Cuba y el resumen del pedido con el envío por provincia" width="2207" height="1527"></a>
 	</div>
 </div>
 
