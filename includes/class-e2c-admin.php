@@ -21,7 +21,6 @@ class E2C_Admin {
 		add_action( 'admin_post_e2c_pdf_test', array( __CLASS__, 'view_test_pdf' ) );
 		add_action( 'admin_post_e2c_del_inv', array( __CLASS__, 'delete_invoice' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'assets' ) );
-		add_action( 'admin_head', array( __CLASS__, 'menu_icon_css' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( E2C_FILE ), array( __CLASS__, 'action_links' ) );
 	}
 
@@ -32,13 +31,19 @@ class E2C_Admin {
 			'manage_woocommerce',
 			self::SLUG,
 			array( __CLASS__, 'render' ),
-			E2C_URL . 'assets/img/menu-icon.png',
+			self::menu_icon(),
 			56
 		);
 	}
 
-	public static function menu_icon_css() {
-		echo '<style>#adminmenu .toplevel_page_' . esc_attr( self::SLUG ) . ' .wp-menu-image img{width:22px;height:auto;padding:9px 0 0;opacity:.6}#adminmenu .toplevel_page_' . esc_attr( self::SLUG ) . ':hover .wp-menu-image img,#adminmenu .toplevel_page_' . esc_attr( self::SLUG ) . '.current .wp-menu-image img,#adminmenu .toplevel_page_' . esc_attr( self::SLUG ) . '.wp-has-current-submenu .wp-menu-image img{opacity:1}</style>';
+	/**
+	 * Icono del menú en SVG: WordPress lo pinta con los mismos colores que el resto
+	 * de iconos del menú (normal, al pasar el ratón y seleccionado) en cualquier esquema de color.
+	 */
+	private static function menu_icon() {
+		$file = E2C_PATH . 'assets/img/menu-icon.svg';
+		$svg  = is_readable( $file ) ? (string) file_get_contents( $file ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		return '' !== $svg ? 'data:image/svg+xml;base64,' . base64_encode( $svg ) : 'dashicons-cart'; // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 	}
 
 	public static function action_links( $links ) {

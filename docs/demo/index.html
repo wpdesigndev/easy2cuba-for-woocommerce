@@ -157,7 +157,9 @@ td.n{color:var(--muted);font-variant-numeric:tabular-nums}
 .sw input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
 tr.off td:not(:first-child){opacity:.45}
 .save-row{display:flex;gap:12px;align-items:center}
-.save-top{justify-content:flex-end}
+.admin-body{position:relative}
+.save-top{position:absolute;top:16px;right:22px;margin:0;z-index:1}
+@media (max-width:600px){.save-top{position:static;justify-content:flex-end}}
 .btn-pri,.btn-sec{font:inherit;font-weight:600;border-radius:7px;padding:9px 16px;cursor:pointer}
 .btn-pri{background:var(--accent);color:var(--accent-ink);border:0}
 .btn-sec{background:transparent;color:var(--accent);border:1px solid var(--accent)}
