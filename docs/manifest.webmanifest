@@ -1,0 +1,15 @@
+{
+  "name": "Easy2Cuba for WooCommerce",
+  "short_name": "Easy2Cuba",
+  "description": "La forma más fácil de vender y enviar a Cuba",
+  "start_url": "/easy2cuba-for-woocommerce/",
+  "scope": "/easy2cuba-for-woocommerce/",
+  "display": "browser",
+  "background_color": "#04397a",
+  "theme_color": "#04397a",
+  "lang": "es",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
