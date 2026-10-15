@@ -2,9 +2,9 @@
 Contributors: gmeti
 Tags: woocommerce, checkout, cuba, shipping
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.6.6
+Stable tag: 1.6.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,9 @@ Write to easy2cubaforwoo@gmeti.com.
 4. PDF document with all the delivery details.
 
 == Changelog ==
+
+= 1.6.7 =
+* Tested with WordPress 7.1 and WooCommerce 11.2.
 
 = 1.6.6 =
 * "Save changes" button also at the top of the Shipping tab.
