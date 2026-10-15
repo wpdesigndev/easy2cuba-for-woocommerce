@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacidad · Easy2Cuba for WooCommerce</title>
+<meta name="description" content="Qué datos recoge la web de Easy2Cuba for WooCommerce y qué hace el plugin con los datos de tu tienda.">
+<link rel="icon" href="../img/favicon.png">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png?v=5">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Easy2Cuba">
+<meta name="theme-color" content="#04397a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Privacidad · Easy2Cuba for WooCommerce">
+<meta property="og:description" content="Qué datos recoge la web de Easy2Cuba y qué hace el plugin con los datos de tu tienda.">
+<meta property="og:image" content="https://wpdesigndev.github.io/easy2cuba-for-woocommerce/img/social-preview.png">
+<meta property="og:url" content="https://wpdesigndev.github.io/easy2cuba-for-woocommerce/privacidad/">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+@font-face { font-family: "Sora"; src: url("../fonts/Sora-var.woff") format("woff"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url("../fonts/PlusJakartaSans-var.woff") format("woff"); font-weight: 200 800; font-display: swap; }
+:root {
+	--navy: #04397a; --blue: #0450b4; --blue-soft: #e3ecf9; --red: #e51a3a;
+	--ink: #0d2647; --muted: #4a6688; --line: #d9e1ec; --bg: #f5f7fa; --white: #ffffff;
+	--display: "Sora", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	--body: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.65; }
+a { color: var(--blue); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 8px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-inline: 20px; }
+.top { background: var(--navy); color: var(--white); position: sticky; top: 0; z-index: 10; }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.brand { display: flex; align-items: center; gap: 12px; color: var(--white); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 18px; min-width: 0; }
+.brand img { width: 38px; height: 38px; border-radius: 9px; flex: none; }
+.brand-txt { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.brand-tag { font-family: var(--body); font-weight: 500; font-size: 12.5px; color: #b9cdf0; }
+@media (max-width: 420px) { .brand-tag { font-size: 11px; } }
+.lang { display: flex; gap: 4px; background: rgba(255,255,255,.1); border-radius: 999px; padding: 4px; flex: none; }
+.lang button { border: 0; background: transparent; color: #d5e2f7; font: 700 14px var(--display); padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--white); color: var(--navy); }
+main { padding-block: 56px 72px; }
+.doc { max-width: 760px; margin: 0 auto; }
+.eyebrow { font-weight: 700; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--red); margin: 0 0 10px; }
+h1 { font-family: var(--display); font-weight: 800; font-size: clamp(32px, 5vw, 48px); line-height: 1.08; letter-spacing: -.02em; color: var(--navy); margin: 0 0 12px; }
+.date { color: var(--muted); font-size: 15px; margin: 0 0 32px; }
+.sum { background: var(--white); border: 1px solid var(--line); border-left: 5px solid var(--blue); border-radius: 14px; padding: 20px 24px; margin-bottom: 36px; }
+.sum p { margin: 0; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 23px; color: var(--navy); margin: 38px 0 10px; line-height: 1.25; }
+p, li { color: var(--ink); }
+ul { padding-left: 22px; margin: 10px 0; }
+li { margin: 6px 0; }
+.muted { color: var(--muted); }
+.mail { user-select: all; font-weight: 600; color: var(--navy); }
+.back { display: inline-block; margin-top: 40px; font-weight: 700; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+[hidden] { display: none !important; }
+footer { background: #032c5f; color: #b9cdf0; font-size: 15px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: center; padding-block: 28px; }
+footer a { color: var(--white); }
+.by { display: flex; align-items: center; gap: 10px; }
+.by img { width: 26px; height: 26px; }
+footer .mail { color: var(--white); }
+</style>
+</head>
+<body>
+
+<header class="top">
+	<div class="wrap">
+		<a class="brand" href="../">
+			<img src="../img/logo.png" alt="">
+			<span class="brand-txt">Easy2Cuba for WooCommerce<span class="brand-tag" data-es="La forma más fácil de vender y enviar a Cuba" data-en="The easiest way to sell and ship to Cuba">La forma más fácil de vender y enviar a Cuba</span></span>
+		</a>
+		<div class="lang" role="group" aria-label="Idioma / Language">
+			<button type="button" id="b-es" aria-pressed="true" lang="es">ES</button>
+			<button type="button" id="b-en" aria-pressed="false" lang="en">EN</button>
+		</div>
+	</div>
+</header>
+
+<main>
+<div class="wrap">
+
+<article class="doc" id="es" lang="es">
+	<p class="eyebrow">Privacidad</p>
+	<h1>Tu privacidad</h1>
+	<p class="date">Última actualización: 15 de octubre de 2026</p>
+
+	<div class="sum"><p><b>En resumen:</b> esta web no usa cookies, no te pide datos y no te rastrea. El plugin no nos envía ningún dato de tu tienda ni de tus clientes.</p></div>
+
+	<h2>Quién está detrás</h2>
+	<p>Easy2Cuba for WooCommerce es un plugin gratuito desarrollado por <a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI</a>. Para cualquier duda sobre privacidad, escríbenos a <span class="mail">easy2cubaforwoo@gmeti.com</span>.</p>
+
+	<h2>Esta web y la demo</h2>
+	<ul>
+		<li><b>Sin cookies.</b> No guardamos nada en tu navegador, así que no hace falta ningún aviso de cookies.</li>
+		<li><b>Visitas.</b> Contamos cuántas personas visitan la web con <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener noreferrer">GoatCounter</a>, que no usa cookies ni guarda tu dirección IP ni datos que te identifiquen. Solo vemos totales, como el número de visitas, la página y el tipo de navegador.</li>
+		<li><b>Descargas.</b> El número de descargas que ves en la portada se pide a GitHub desde tu navegador. Esa consulta no lleva datos tuyos.</li>
+		<li><b>Alojamiento.</b> La web está en GitHub Pages. Como cualquier servidor, GitHub puede registrar tu dirección IP por seguridad, según su <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">declaración de privacidad</a>.</li>
+		<li><b>La demo.</b> Lo que escribas en la demo se queda en tu navegador y se borra al cerrar o recargar la página. No se envía a ningún sitio.</li>
+		<li><b>Correo.</b> Si nos escribes, usaremos tu correo solo para responderte.</li>
+	</ul>
+
+	<h2>El plugin en tu tienda</h2>
+	<ul>
+		<li>Los datos de los pedidos (quién compra, quién recibe, dirección, teléfonos y facturas) se guardan <b>solo en tu WordPress</b>. Nosotros no los recibimos.</li>
+		<li>Las facturas en PDF se envían desde tu propia web, con tu correo o con el SMTP que configures.</li>
+		<li>Para avisarte de versiones nuevas, el plugin consulta a GitHub cuál es la última versión. No envía datos de la tienda ni de los clientes.</li>
+		<li>El plugin añade un texto sugerido a <b>Ajustes › Privacidad</b> de WordPress y se integra con las herramientas de exportar y borrar datos personales. También puede borrar automáticamente las facturas antiguas.</li>
+		<li>Cada tienda que lo instala es responsable de su propia política de privacidad ante sus clientes.</li>
+	</ul>
+
+	<h2>Cambios</h2>
+	<p>Si algo cambia, lo actualizaremos aquí con su nueva fecha.</p>
+
+	<a class="back" href="../">← Volver a Easy2Cuba</a>
+</article>
+
+<article class="doc" id="en" lang="en" hidden>
+	<p class="eyebrow">Privacy</p>
+	<h1>Your privacy</h1>
+	<p class="date">Last updated: October 15, 2026</p>
+
+	<div class="sum"><p><b>In short:</b> this website uses no cookies, asks for no data and does not track you. The plugin never sends us any data from your store or your customers.</p></div>
+
+	<h2>Who is behind it</h2>
+	<p>Easy2Cuba for WooCommerce is a free plugin developed by <a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI</a>. For any privacy question, write to us at <span class="mail">easy2cubaforwoo@gmeti.com</span>.</p>
+
+	<h2>This website and the demo</h2>
+	<ul>
+		<li><b>No cookies.</b> We store nothing in your browser, so no cookie notice is needed.</li>
+		<li><b>Visits.</b> We count visits with <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener noreferrer">GoatCounter</a>, which uses no cookies and does not store your IP address or anything that identifies you. We only see totals, such as visits, page and browser type.</li>
+		<li><b>Downloads.</b> The download count on the home page is requested from GitHub by your browser. That request carries none of your data.</li>
+		<li><b>Hosting.</b> The website is hosted on GitHub Pages. Like any server, GitHub may log your IP address for security, as described in its <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">privacy statement</a>.</li>
+		<li><b>The demo.</b> Whatever you type in the demo stays in your browser and is cleared when you close or reload the page. It is not sent anywhere.</li>
+		<li><b>Email.</b> If you write to us, we will only use your email to reply.</li>
+	</ul>
+
+	<h2>The plugin in your store</h2>
+	<ul>
+		<li>Order data (buyer, recipient, address, phones and invoices) is stored <b>only in your WordPress</b>. We never receive it.</li>
+		<li>PDF invoices are sent from your own website, using your email or the SMTP you set up.</li>
+		<li>To tell you about new versions, the plugin asks GitHub for the latest version. It sends no store or customer data.</li>
+		<li>The plugin adds suggested text to WordPress <b>Settings › Privacy</b> and works with the export and erase personal data tools. It can also delete old invoices automatically.</li>
+		<li>Each store that installs it is responsible for its own privacy policy towards its customers.</li>
+	</ul>
+
+	<h2>Changes</h2>
+	<p>If anything changes, we will update it here with a new date.</p>
+
+	<a class="back" href="../">← Back to Easy2Cuba</a>
+</article>
+
+</div>
+</main>
+
+<footer>
+	<div class="wrap">
+		<div class="by"><span data-es="Desarrollado por" data-en="Developed by">Desarrollado por</span> <img src="../img/gmeti-white.png" alt=""><a href="https://gmeti.com" target="_blank" rel="noopener noreferrer"><b>GMETI</b></a></div>
+		<div><span data-es="Soporte:" data-en="Support:">Soporte:</span> <span class="mail">easy2cubaforwoo@gmeti.com</span></div>
+		<div><span data-es="Licencia" data-en="License">Licencia</span> GPLv2 · <a href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce">GitHub</a></div>
+	</div>
+</footer>
+
+<script>
+(function () {
+	var es = document.getElementById('es'), en = document.getElementById('en');
+	var bes = document.getElementById('b-es'), ben = document.getElementById('b-en');
+	function set(l) {
+		var isEn = l === 'en';
+		en.hidden = !isEn; es.hidden = isEn;
+		bes.setAttribute('aria-pressed', String(!isEn)); ben.setAttribute('aria-pressed', String(isEn));
+		document.documentElement.lang = l;
+		document.title = isEn ? 'Privacy · Easy2Cuba for WooCommerce' : 'Privacidad · Easy2Cuba for WooCommerce';
+		document.querySelectorAll('[data-es]').forEach(function (n) { n.textContent = n.getAttribute(isEn ? 'data-en' : 'data-es'); });
+		if (history.replaceState) history.replaceState(null, '', isEn ? '#en' : location.pathname);
+	}
+	bes.addEventListener('click', function () { set('es'); });
+	ben.addEventListener('click', function () { set('en'); });
+	var nav = (navigator.language || '').toLowerCase();
+	set(location.hash === '#en' || (location.hash !== '#es' && nav.indexOf('es') !== 0 && nav !== '') ? 'en' : 'es');
+})();
+</script>
+<script data-goatcounter="https://easy2cuba.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>
