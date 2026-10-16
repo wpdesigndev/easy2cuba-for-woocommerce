@@ -4,7 +4,7 @@ Tags: woocommerce, checkout, cuba, shipping, envios
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.6.7
+Stable tag: 1.6.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,9 @@ Escribe a easy2cubaforwoo@gmeti.com.
 4. Documento PDF con todos los datos de la entrega.
 
 == Changelog ==
+
+= 1.6.8 =
+* El aviso de copyright del panel ahora dice GMETI LLC.
 
 = 1.6.7 =
 * Probado con WordPress 7.1 y WooCommerce 11.2.

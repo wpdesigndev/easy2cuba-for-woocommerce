@@ -267,7 +267,7 @@ class E2C_Admin {
 				printf(
 					esc_html( E2C_I18n::t( 'copy' ) ),
 					esc_html( wp_date( 'Y' ) ),
-					'<a href="https://gmeti.com" target="_blank" rel="noopener">GMETI</a>'
+					'<a href="https://gmeti.com" target="_blank" rel="noopener">GMETI LLC</a>'
 				);
 				?>
 			</footer>

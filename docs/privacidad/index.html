@@ -85,12 +85,12 @@ footer .mail { color: var(--white); }
 <article class="doc" id="es" lang="es">
 	<p class="eyebrow">Privacidad</p>
 	<h1>Tu privacidad</h1>
-	<p class="date">Última actualización: 15 de octubre de 2026</p>
+	<p class="date">Última actualización: 16 de octubre de 2026</p>
 
 	<div class="sum"><p><b>En resumen:</b> esta web no usa cookies, no te pide datos y no te rastrea. El plugin no nos envía ningún dato de tu tienda ni de tus clientes.</p></div>
 
 	<h2>Quién está detrás</h2>
-	<p>Easy2Cuba for WooCommerce es un plugin gratuito desarrollado por <a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI</a>. Para cualquier duda sobre privacidad, escríbenos a <span class="mail">easy2cubaforwoo@gmeti.com</span>.</p>
+	<p>Easy2Cuba for WooCommerce es un plugin gratuito desarrollado por <a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI LLC</a>. Para cualquier duda sobre privacidad, escríbenos a <span class="mail">easy2cubaforwoo@gmeti.com</span>.</p>
 
 	<h2>Esta web y la demo</h2>
 	<ul>
@@ -120,12 +120,12 @@ footer .mail { color: var(--white); }
 <article class="doc" id="en" lang="en" hidden>
 	<p class="eyebrow">Privacy</p>
 	<h1>Your privacy</h1>
-	<p class="date">Last updated: October 15, 2026</p>
+	<p class="date">Last updated: October 16, 2026</p>
 
 	<div class="sum"><p><b>In short:</b> this website uses no cookies, asks for no data and does not track you. The plugin never sends us any data from your store or your customers.</p></div>
 
 	<h2>Who is behind it</h2>
-	<p>Easy2Cuba for WooCommerce is a free plugin developed by <a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI</a>. For any privacy question, write to us at <span class="mail">easy2cubaforwoo@gmeti.com</span>.</p>
+	<p>Easy2Cuba for WooCommerce is a free plugin developed by <a href="https://gmeti.com" target="_blank" rel="noopener noreferrer">GMETI LLC</a>. For any privacy question, write to us at <span class="mail">easy2cubaforwoo@gmeti.com</span>.</p>
 
 	<h2>This website and the demo</h2>
 	<ul>
@@ -149,7 +149,7 @@ footer .mail { color: var(--white); }
 	<h2>Changes</h2>
 	<p>If anything changes, we will update it here with a new date.</p>
 
-	<a class="back" href="../#en">← Back to Easy2Cuba</a>
+	<a class="back" href="../">← Back to Easy2Cuba</a>
 </article>
 
 </div>
@@ -174,13 +174,13 @@ footer .mail { color: var(--white); }
 		document.documentElement.lang = l;
 		document.title = isEn ? 'Privacy · Easy2Cuba for WooCommerce' : 'Privacidad · Easy2Cuba for WooCommerce';
 		document.querySelectorAll('[data-es]').forEach(function (n) { n.textContent = n.getAttribute(isEn ? 'data-en' : 'data-es'); });
-		if (history.replaceState) history.replaceState(null, '', isEn ? '#en' : location.pathname);
-		document.getElementById('home-link').setAttribute('href', isEn ? '../#en' : '../');
+		try { localStorage.setItem('e2c-lang', l); } catch (e) {}
 	}
 	bes.addEventListener('click', function () { set('es'); });
 	ben.addEventListener('click', function () { set('en'); });
+	var saved = (function(){try{return localStorage.getItem('e2c-lang')}catch(e){return null}})();
 	var nav = (navigator.language || '').toLowerCase();
-	set(location.hash === '#en' || (location.hash !== '#es' && nav.indexOf('es') !== 0 && nav !== '') ? 'en' : 'es');
+	set(location.hash === '#en' ? 'en' : location.hash === '#es' ? 'es' : saved ? saved : (nav !== '' && nav.indexOf('es') !== 0 ? 'en' : 'es'));
 })();
 </script>
 <script data-goatcounter="https://easy2cuba.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
