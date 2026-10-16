@@ -54,6 +54,11 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--red); outline-off
 .nav a { color: #d5e2f7; text-decoration: none; font-weight: 600; font-size: 15px; }
 .nav a:hover { color: var(--white); }
 @media (max-width: 720px) { .nav .hide-sm { display: none; } }
+.lang { display: flex; gap: 4px; background: rgba(255,255,255,.1); border-radius: 999px; padding: 4px; flex: none; }
+.lang button { border: 0; background: transparent; color: #d5e2f7; font: 700 14px var(--display); padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--white); color: var(--navy); }
+.lang button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+@media (max-width: 420px) { .nav { gap: 10px; } .lang button { padding: 6px 9px; font-size: 13px; } }
 
 /* Botones */
 .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 10px; font-family: var(--display); font-weight: 700; font-size: 16px; text-decoration: none; line-height: 1.2; }
@@ -148,13 +153,14 @@ footer a { color: var(--white); }
 
 <header class="top">
 	<div class="wrap">
-		<a class="brand" href="#"><img src="img/logo.png" alt=""><span class="brand-txt"><span class="brand-name">Easy2Cuba</span><span class="brand-tag">La forma más fácil de vender y enviar a Cuba</span></span></a>
-		<nav class="nav" aria-label="Principal">
-			<a class="hide-sm" href="#funciones">Funciones</a>
-			<a class="hide-sm" href="demo/">Demo</a>
-			<a class="hide-sm" href="#instalar">Instalación</a>
+		<a class="brand" href="#"><img src="img/logo.png" alt=""><span class="brand-txt"><span class="brand-name">Easy2Cuba</span><span class="brand-tag" data-en="The easiest way to sell and ship to Cuba">La forma más fácil de vender y enviar a Cuba</span></span></a>
+		<nav class="nav" aria-label="Principal" data-en-aria="Main">
+			<a class="hide-sm" href="#funciones" data-en="Features">Funciones</a>
+			<a class="hide-sm" href="demo/" data-link="demo/">Demo</a>
+			<a class="hide-sm" href="#instalar" data-en="Install">Instalación</a>
 			<a class="hide-sm" href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce">GitHub</a>
-			<a class="btn btn-red btn-sm" href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest/download/easy2cuba-for-woocommerce.zip">Descargar</a>
+			<a class="btn btn-red btn-sm" href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest/download/easy2cuba-for-woocommerce.zip" data-en="Download">Descargar</a>
+			<div class="lang" role="group" aria-label="Idioma / Language"><button type="button" id="b-es" aria-pressed="true" lang="es">ES</button><button type="button" id="b-en" aria-pressed="false" lang="en">EN</button></div>
 		</nav>
 	</div>
 </header>
@@ -163,23 +169,23 @@ footer a { color: var(--white); }
 <div class="hero">
 	<div class="wrap">
 		<div>
-			<span class="pill">Plugin gratis para WooCommerce</span>
-			<h1>Vende desde cualquier país. <em>Entrega en Cuba.</em></h1>
-			<p class="lead">Easy2Cuba convierte el checkout de tu tienda en uno pensado para Cuba: quien compra y quien recibe por separado, todas las provincias y municipios, envío por provincia y un PDF con todos los datos de la entrega.</p>
+			<span class="pill" data-en="Free plugin for WooCommerce">Plugin gratis para WooCommerce</span>
+			<h1 data-en-h="Sell from anywhere. &lt;em&gt;Deliver in Cuba.&lt;/em&gt;">Vende desde cualquier país. <em>Entrega en Cuba.</em></h1>
+			<p class="lead" data-en="Easy2Cuba turns your store checkout into one built for Cuba: buyer and recipient kept separate, every province and municipality, shipping by province and a PDF with all the delivery details.">Easy2Cuba convierte el checkout de tu tienda en uno pensado para Cuba: quien compra y quien recibe por separado, todas las provincias y municipios, envío por provincia y un PDF con todos los datos de la entrega.</p>
 			<div class="cta">
 				<a class="btn btn-red" href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest/download/easy2cuba-for-woocommerce.zip">
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"></path><path d="M7 10l5 5 5-5"></path><path d="M5 20h14"></path></svg>
-					Descargar gratis
+					<span data-en="Download free">Descargar gratis</span>
 				</a>
-				<a class="btn btn-ghost" href="demo/">Probar la demo</a>
+				<a class="btn btn-ghost" href="demo/" data-link="demo/" data-en="Try the demo">Probar la demo</a>
 			</div>
-			<p class="meta">Requiere WooCommerce 7.0+ · WordPress 6.0+ · PHP 7.4+ · Español e inglés</p>
+			<p class="meta" data-en="Requires WooCommerce 7.0+ · WordPress 6.0+ · PHP 7.4+ · Spanish and English">Requiere WooCommerce 7.0+ · WordPress 6.0+ · PHP 7.4+ · Español e inglés</p>
 		</div>
 		<div class="hero-media">
-			<a class="shot" href="demo/" style="display:block" aria-label="Probar la demo"><img src="screenshots/hero.png" alt="Checkout de Easy2Cuba: Quién compra con su país, Quién recibe en Cuba y el resumen del pedido con el envío por provincia" width="2207" height="1527"></a>
+			<a class="shot" href="demo/" data-link="demo/" style="display:block" aria-label="Probar la demo" data-en-aria="Try the demo"><img src="screenshots/hero.png" data-en-src="screenshots/en/hero.png" alt="Checkout de Easy2Cuba: Quién compra con su país, Quién recibe en Cuba y el resumen del pedido con el envío por provincia" data-en-alt="Easy2Cuba checkout: the buyer with their country, the recipient in Cuba and the order summary with shipping by province" width="2207" height="1527"></a>
 			<p class="stats" id="stats" hidden>
-				<span id="st-v" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg><b></b> <i>visitas</i></span>
-				<span id="st-d" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"></path><path d="M7 10l5 5 5-5"></path><path d="M5 20h14"></path></svg><b></b> <i>descargas</i></span>
+				<span id="st-v" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg><b></b> <i data-en="visits">visitas</i></span>
+				<span id="st-d" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"></path><path d="M7 10l5 5 5-5"></path><path d="M5 20h14"></path></svg><b></b> <i data-en="downloads">descargas</i></span>
 			</p>
 		</div>
 	</div>
@@ -187,39 +193,39 @@ footer a { color: var(--white); }
 
 <section id="funciones">
 	<div class="wrap">
-		<p class="eyebrow">Funciones</p>
-		<h2>Todo lo que hace falta para entregar en Cuba</h2>
-		<p class="intro">Se instala, pones el precio de envío de cada provincia y tu checkout queda listo.</p>
+		<p class="eyebrow" data-en="Features">Funciones</p>
+		<h2 data-en="Everything you need to deliver in Cuba">Todo lo que hace falta para entregar en Cuba</h2>
+		<p class="intro" data-en="Install it, set the shipping price for each province and your checkout is ready.">Se instala, pones el precio de envío de cada provincia y tu checkout queda listo.</p>
 		<div class="grid">
 			<div class="card">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="3.5"></circle><circle cx="17" cy="15" r="3.5"></circle><path d="M3 20c.6-3 2.6-5 5-5"></path><path d="M11.5 7.5h4.5l-1.5-1.5M16 7.5l-1.5 1.5"></path></svg>
-				<h3>Quién compra y quién recibe</h3>
-				<p>Quien paga puede estar en cualquier país; su país se elige en la lista o se pone solo con el prefijo del teléfono.</p>
+				<h3 data-en="Buyer and recipient">Quién compra y quién recibe</h3>
+				<p data-en="The person paying can be anywhere; their country is picked from the list or set automatically from the phone code.">Quien paga puede estar en cualquier país; su país se elige en la lista o se pone solo con el prefijo del teléfono.</p>
 			</div>
 			<div class="card">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
-				<h3>15 provincias, 168 municipios</h3>
-				<p>Más la Isla de la Juventud. Con móvil y fijo +53, carné, entre calles, reparto y referencias.</p>
+				<h3 data-en="15 provinces, 168 municipalities">15 provincias, 168 municipios</h3>
+				<p data-en="Plus Isla de la Juventud. With +53 mobile and landline, ID card, cross streets, neighborhood and directions.">Más la Isla de la Juventud. Con móvil y fijo +53, carné, entre calles, reparto y referencias.</p>
 			</div>
 			<div class="card">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="12" height="9" rx="1.5"></rect><path d="M14.5 10h4l3 3v3h-7"></path><circle cx="7" cy="18" r="1.8"></circle><circle cx="17.5" cy="18" r="1.8"></circle></svg>
-				<h3>Envío por provincia</h3>
-				<p>Un precio para cada provincia, que se suma solo al total. Activa solo donde entregas.</p>
+				<h3 data-en="Shipping by province">Envío por provincia</h3>
+				<p data-en="One price per province, added to the total automatically. Turn on only the provinces you deliver to.">Un precio para cada provincia, que se suma solo al total. Activa solo donde entregas.</p>
 			</div>
 			<div class="card">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><path d="M9 13h6M9 17h4"></path></svg>
-				<h3>PDF de entrega automático</h3>
-				<p>Al confirmarse el pago llega por correo un documento con todo, listo para el mensajero. Con tu logo.</p>
+				<h3 data-en="Automatic delivery PDF">PDF de entrega automático</h3>
+				<p data-en="Once payment is confirmed, a document with everything arrives by email, ready for the courier. With your logo.">Al confirmarse el pago llega por correo un documento con todo, listo para el mensajero. Con tu logo.</p>
 			</div>
 			<div class="card">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"></rect><path d="M2.5 10h19"></path><path d="M6 15h4"></path></svg>
-				<h3>Tus pasarelas de pago</h3>
-				<p>Funciona con los métodos de pago de WooCommerce, Elementor y plugins de multimoneda.</p>
+				<h3 data-en="Your payment gateways">Tus pasarelas de pago</h3>
+				<p data-en="Works with WooCommerce payment methods, Elementor and multi-currency plugins.">Funciona con los métodos de pago de WooCommerce, Elementor y plugins de multimoneda.</p>
 			</div>
 			<div class="card">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"></path><path d="M9 12l2.2 2.2L15.5 10"></path></svg>
-				<h3>Privacidad incluida</h3>
-				<p>Exportar y borrar datos personales, texto para tu política de privacidad y borrado de documentos antiguos.</p>
+				<h3 data-en="Privacy built in">Privacidad incluida</h3>
+				<p data-en="Export and erase personal data, suggested privacy policy text and automatic deletion of old documents.">Exportar y borrar datos personales, texto para tu política de privacidad y borrado de documentos antiguos.</p>
 			</div>
 		</div>
 	</div>
@@ -227,16 +233,16 @@ footer a { color: var(--white); }
 
 <section class="alt">
 	<div class="wrap">
-		<p class="eyebrow">Así se ve</p>
-		<h2>Fácil de configurar, claro para el mensajero</h2>
+		<p class="eyebrow" data-en="How it looks">Así se ve</p>
+		<h2 data-en="Easy to set up, clear for the courier">Fácil de configurar, claro para el mensajero</h2>
 		<div class="two">
 			<figure>
-				<div class="frame"><img src="screenshots/admin-envios.png" alt="Ajustes de Easy2Cuba con el precio de envío de cada provincia" loading="lazy"></div>
-				<figcaption><b>Envíos por provincia.</b> Un precio por provincia y un interruptor para activarla.</figcaption>
+				<div class="frame"><img src="screenshots/admin-envios.png" data-en-src="screenshots/en/admin-envios.png" alt="Ajustes de Easy2Cuba con el precio de envío de cada provincia" data-en-alt="Easy2Cuba settings with the shipping price for each province" loading="lazy"></div>
+				<figcaption data-en-h="&lt;b&gt;Shipping by province.&lt;/b&gt; One price per province and a switch to turn it on."><b>Envíos por provincia.</b> Un precio por provincia y un interruptor para activarla.</figcaption>
 			</figure>
 			<figure>
-				<div class="frame"><img src="screenshots/factura-pdf.png" alt="Documento PDF con el bloque Entregar a y los datos del pedido" loading="lazy"></div>
-				<figcaption><b>PDF de entrega.</b> El bloque «Entregar a» reúne todo lo que necesita el mensajero.</figcaption>
+				<div class="frame"><img src="screenshots/factura-pdf.png" data-en-src="screenshots/en/factura-pdf.png" alt="Documento PDF con el bloque Entregar a y los datos del pedido" data-en-alt="PDF document with the Deliver to block and the order details" loading="lazy"></div>
+				<figcaption data-en-h="&lt;b&gt;Delivery PDF.&lt;/b&gt; The “Deliver to” block gathers everything the courier needs."><b>PDF de entrega.</b> El bloque «Entregar a» reúne todo lo que necesita el mensajero.</figcaption>
 			</figure>
 		</div>
 	</div>
@@ -244,19 +250,19 @@ footer a { color: var(--white); }
 
 <section id="instalar">
 	<div class="wrap">
-		<p class="eyebrow">Instalación</p>
-		<h2>Listo en cinco minutos</h2>
+		<p class="eyebrow" data-en="Installation">Instalación</p>
+		<h2 data-en="Ready in five minutes">Listo en cinco minutos</h2>
 		<ol class="steps">
-			<li><b>Descarga</b><span>El archivo <code>easy2cuba-for-woocommerce.zip</code>.</span></li>
-			<li><b>Sube el plugin</b><span>Con WooCommerce ya activo (es obligatorio), ve en WordPress a Plugins → Añadir nuevo plugin → Subir plugin, y actívalo.</span></li>
-			<li><b>Pon los precios</b><span>En el menú Easy2Cuba, el envío de cada provincia.</span></li>
-			<li><b>Listo</b><span>Las actualizaciones llegan solas a tu panel de Plugins.</span></li>
+			<li data-en-h="&lt;b&gt;Download&lt;/b&gt;&lt;span&gt;The &lt;code&gt;easy2cuba-for-woocommerce.zip&lt;/code&gt; file.&lt;/span&gt;"><b>Descarga</b><span>El archivo <code>easy2cuba-for-woocommerce.zip</code>.</span></li>
+			<li data-en-h="&lt;b&gt;Upload the plugin&lt;/b&gt;&lt;span&gt;With WooCommerce already active (it is required), go to Plugins → Add New Plugin → Upload Plugin in WordPress and activate it.&lt;/span&gt;"><b>Sube el plugin</b><span>Con WooCommerce ya activo (es obligatorio), ve en WordPress a Plugins → Añadir nuevo plugin → Subir plugin, y actívalo.</span></li>
+			<li data-en-h="&lt;b&gt;Set the prices&lt;/b&gt;&lt;span&gt;In the Easy2Cuba menu, the shipping for each province.&lt;/span&gt;"><b>Pon los precios</b><span>En el menú Easy2Cuba, el envío de cada provincia.</span></li>
+			<li data-en-h="&lt;b&gt;Done&lt;/b&gt;&lt;span&gt;Updates arrive automatically in your Plugins screen.&lt;/span&gt;"><b>Listo</b><span>Las actualizaciones llegan solas a tu panel de Plugins.</span></li>
 		</ol>
 		<div class="video">
-			<p class="video-lead"><b>¿Prefieres verlo?</b> Todo el proceso en 1 minuto y 39 segundos.</p>
-			<div class="frame"><video controls playsinline preload="none" poster="video/tutorial-poster.jpg" width="1920" height="1080" aria-label="Vídeo tutorial: cómo instalar y configurar Easy2Cuba for WooCommerce">
+			<p class="video-lead" data-en-h="&lt;b&gt;Rather watch it?&lt;/b&gt; The whole process in 1 minute 39 seconds (video in Spanish)."><b>¿Prefieres verlo?</b> Todo el proceso en 1 minuto y 39 segundos.</p>
+			<div class="frame"><video controls playsinline preload="none" poster="video/tutorial-poster.jpg" width="1920" height="1080" aria-label="Vídeo tutorial: cómo instalar y configurar Easy2Cuba for WooCommerce" data-en-aria="Video tutorial: how to install and set up Easy2Cuba for WooCommerce">
 				<source src="video/tutorial-easy2cuba.mp4" type="video/mp4">
-				<a href="video/tutorial-easy2cuba.mp4">Ver el vídeo tutorial</a>
+				<a href="video/tutorial-easy2cuba.mp4" data-en="Watch the video tutorial">Ver el vídeo tutorial</a>
 			</video></div>
 		</div>
 	</div>
@@ -264,28 +270,28 @@ footer a { color: var(--white); }
 
 <section class="alt">
 	<div class="wrap">
-		<p class="eyebrow">Preguntas</p>
-		<h2>Preguntas frecuentes</h2>
+		<p class="eyebrow" data-en="Questions">Preguntas</p>
+		<h2 data-en="Frequently asked questions">Preguntas frecuentes</h2>
 		<div class="faq">
 			<details>
-				<summary>¿Necesito WooCommerce?</summary>
-				<p>Sí, es obligatorio. Easy2Cuba es un complemento de WooCommerce: sin WooCommerce instalado y activo, WordPress no deja activarlo.</p>
+				<summary data-en="Do I need WooCommerce?">¿Necesito WooCommerce?</summary>
+				<p data-en="Yes, it is required. Easy2Cuba is a WooCommerce add-on: without WooCommerce installed and active, WordPress will not let you activate it.">Sí, es obligatorio. Easy2Cuba es un complemento de WooCommerce: sin WooCommerce instalado y activo, WordPress no deja activarlo.</p>
 			</details>
 			<details>
-				<summary>¿Es gratis?</summary>
-				<p>Sí. Easy2Cuba es gratuito y de código abierto, con licencia GPL.</p>
+				<summary data-en="Is it free?">¿Es gratis?</summary>
+				<p data-en="Yes. Easy2Cuba is free and open source, under the GPL license.">Sí. Easy2Cuba es gratuito y de código abierto, con licencia GPL.</p>
 			</details>
 			<details>
-				<summary>¿Funciona con mi tema y mi pasarela de pago?</summary>
-				<p>Usa la zona de pago estándar de WooCommerce, así que tus métodos de pago aparecen como siempre. Funciona con Elementor y con la mayoría de temas; si tu tema es estrecho, el checkout puede ocupar todo el ancho. Recomendamos hacer un pedido de prueba con cada método de pago que uses.</p>
+				<summary data-en="Does it work with my theme and payment gateway?">¿Funciona con mi tema y mi pasarela de pago?</summary>
+				<p data-en="It uses the standard WooCommerce payment area, so your payment methods show up as usual. It works with Elementor and most themes; if your theme is narrow, the checkout can use the full width. We recommend placing a test order with each payment method you use.">Usa la zona de pago estándar de WooCommerce, así que tus métodos de pago aparecen como siempre. Funciona con Elementor y con la mayoría de temas; si tu tema es estrecho, el checkout puede ocupar todo el ancho. Recomendamos hacer un pedido de prueba con cada método de pago que uses.</p>
 			</details>
 			<details>
-				<summary>¿El PDF es una factura fiscal?</summary>
-				<p>No. Es un documento informativo que reúne en un solo lugar todos los datos del pedido y de la entrega.</p>
+				<summary data-en="Is the PDF a tax invoice?">¿El PDF es una factura fiscal?</summary>
+				<p data-en="No. It is an informational document that brings together all the order and delivery details in one place.">No. Es un documento informativo que reúne en un solo lugar todos los datos del pedido y de la entrega.</p>
 			</details>
 			<details>
-				<summary>¿Cómo se actualiza?</summary>
-				<p>Cuando hay una versión nueva, aparece el aviso en Plugins y se actualiza con un clic. El plugin solo consulta cuál es la última versión; no envía datos de tu tienda ni de tus clientes.</p>
+				<summary data-en="How does it update?">¿Cómo se actualiza?</summary>
+				<p data-en="When a new version is out, a notice appears in Plugins and it updates with one click. The plugin only checks which version is the latest; it sends no data about your store or your customers.">Cuando hay una versión nueva, aparece el aviso en Plugins y se actualiza con un clic. El plugin solo consulta cuál es la última versión; no envía datos de tu tienda ni de tus clientes.</p>
 			</details>
 		</div>
 	</div>
@@ -293,12 +299,12 @@ footer a { color: var(--white); }
 
 <section class="band">
 	<div class="wrap">
-		<h2>¿Vendes a Cuba? Empieza hoy.</h2>
-		<p>Descárgalo gratis e instálalo en tu tienda WooCommerce.</p>
+		<h2 data-en="Selling to Cuba? Start today.">¿Vendes a Cuba? Empieza hoy.</h2>
+		<p data-en="Download it free and install it in your WooCommerce store.">Descárgalo gratis e instálalo en tu tienda WooCommerce.</p>
 		<div class="cta">
 			<a class="btn btn-red" href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest/download/easy2cuba-for-woocommerce.zip">
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"></path><path d="M7 10l5 5 5-5"></path><path d="M5 20h14"></path></svg>
-				Descargar gratis
+				<span data-en="Download free">Descargar gratis</span>
 			</a>
 		</div>
 	</div>
@@ -307,13 +313,13 @@ footer a { color: var(--white); }
 
 <footer>
 	<div class="wrap">
-		<div class="by">Desarrollado por <img src="img/gmeti-white.png" alt=""><a href="https://gmeti.com" target="_blank" rel="noopener noreferrer"><b>GMETI</b></a></div>
-		<div>Soporte: <span class="mail">easy2cubaforwoo@gmeti.com</span></div>
-		<div>Licencia GPLv2 · <a href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce">GitHub</a> · <a href="privacidad/">Privacidad</a></div>
+		<div class="by"><span data-en="Developed by">Desarrollado por</span> <img src="img/gmeti-white.png" alt=""><a href="https://gmeti.com" target="_blank" rel="noopener noreferrer"><b>GMETI</b></a></div>
+		<div><span data-en="Support:">Soporte:</span> <span class="mail">easy2cubaforwoo@gmeti.com</span></div>
+		<div><span data-en="License">Licencia</span> GPLv2 · <a href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce">GitHub</a> · <a href="privacidad/" data-link="privacidad/" data-en="Privacy">Privacidad</a></div>
 	</div>
 </footer>
 
-<button type="button" class="to-top" id="to-top" aria-label="Volver arriba"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
+<button type="button" class="to-top" id="to-top" aria-label="Volver arriba" data-en-aria="Back to top"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
 <script>
 (function () {
 	var b = document.getElementById('to-top');
@@ -329,14 +335,58 @@ footer a { color: var(--white); }
 </script>
 <script>
 (function () {
+	var ES = {
+		title: document.title,
+		desc: document.querySelector('meta[name=description]').getAttribute('content')
+	};
+	var EN = {
+		title: 'Easy2Cuba for WooCommerce · The easiest way to sell and ship to Cuba',
+		desc: 'The easiest way to sell and ship to Cuba. A WooCommerce checkout built to sell from any country and ship to Cuba: provinces and municipalities, shipping by province and an automatic delivery PDF. Free. By GMETI.'
+	};
+	var bes = document.getElementById('b-es'), ben = document.getElementById('b-en');
+	function each(sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); }
+	window.e2cLang = 'es';
+	function set(l) {
+		var en = l === 'en';
+		window.e2cLang = l;
+		document.documentElement.lang = l;
+		document.title = en ? EN.title : ES.title;
+		document.querySelector('meta[name=description]').setAttribute('content', en ? EN.desc : ES.desc);
+		each('[data-en]', function (n) { if (n.dataset.es === undefined) n.dataset.es = n.textContent; n.textContent = en ? n.dataset.en : n.dataset.es; });
+		each('[data-en-h]', function (n) { if (n.dataset.esH === undefined) n.dataset.esH = n.innerHTML; n.innerHTML = en ? n.dataset.enH : n.dataset.esH; });
+		each('[data-en-alt]', function (n) { if (n.dataset.esAlt === undefined) n.dataset.esAlt = n.alt; n.alt = en ? n.dataset.enAlt : n.dataset.esAlt; });
+		each('[data-en-src]', function (n) { if (n.dataset.esSrc === undefined) n.dataset.esSrc = n.getAttribute('src'); n.setAttribute('src', en ? n.dataset.enSrc : n.dataset.esSrc); });
+		each('[data-en-aria]', function (n) { if (n.dataset.esAria === undefined) n.dataset.esAria = n.getAttribute('aria-label'); n.setAttribute('aria-label', en ? n.dataset.enAria : n.dataset.esAria); });
+		each('[data-link]', function (n) { n.setAttribute('href', n.dataset.link + (en ? '#en' : '')); });
+		bes.setAttribute('aria-pressed', String(!en)); ben.setAttribute('aria-pressed', String(en));
+		if (history.replaceState) history.replaceState(null, '', en ? '#en' : location.pathname + location.search);
+		if (window.e2cStats) window.e2cStats();
+	}
+	bes.addEventListener('click', function () { set('es'); });
+	ben.addEventListener('click', function () { set('en'); });
+	var nav = (navigator.language || '').toLowerCase();
+	if (location.hash === '#en' || (location.hash !== '#es' && nav !== '' && nav.indexOf('es') !== 0)) set('en');
+})();
+</script>
+<script>
+(function () {
 	var box = document.getElementById('stats');
-	var fmt = function (n) { return n.toLocaleString('es-ES'); };
+	var counts = {};
+	function render() {
+		var en = window.e2cLang === 'en';
+		Object.keys(counts).forEach(function (id) {
+			var n = counts[id], el = document.getElementById(id), i = el.querySelector('i');
+			el.querySelector('b').textContent = n.toLocaleString(en ? 'en-US' : 'es-ES');
+			var word = en ? i.dataset.en : (i.dataset.es !== undefined ? i.dataset.es : i.textContent);
+			i.textContent = n === 1 ? word.replace(/s$/, '') : word;
+		});
+	}
+	window.e2cStats = render;
 	function show(id, n) {
 		if (!n || n < 1) return;
-		var el = document.getElementById(id);
-		el.querySelector('b').textContent = fmt(n);
-		if (n === 1) { var i = el.querySelector('i'); i.textContent = i.textContent.replace(/s$/, ''); }
-		el.hidden = false; box.hidden = false;
+		counts[id] = n;
+		document.getElementById(id).hidden = false; box.hidden = false;
+		render();
 	}
 	fetch('https://easy2cuba.goatcounter.com/counter/TOTAL.json')
 		.then(function (r) { if (!r.ok) throw 0; return r.json(); })

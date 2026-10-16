@@ -68,7 +68,7 @@ footer .mail { color: var(--white); }
 
 <header class="top">
 	<div class="wrap">
-		<a class="brand" href="../">
+		<a class="brand" href="../" id="home-link">
 			<img src="../img/logo.png" alt="">
 			<span class="brand-txt">Easy2Cuba for WooCommerce<span class="brand-tag" data-es="La forma más fácil de vender y enviar a Cuba" data-en="The easiest way to sell and ship to Cuba">La forma más fácil de vender y enviar a Cuba</span></span>
 		</a>
@@ -149,7 +149,7 @@ footer .mail { color: var(--white); }
 	<h2>Changes</h2>
 	<p>If anything changes, we will update it here with a new date.</p>
 
-	<a class="back" href="../">← Back to Easy2Cuba</a>
+	<a class="back" href="../#en">← Back to Easy2Cuba</a>
 </article>
 
 </div>
@@ -175,6 +175,7 @@ footer .mail { color: var(--white); }
 		document.title = isEn ? 'Privacy · Easy2Cuba for WooCommerce' : 'Privacidad · Easy2Cuba for WooCommerce';
 		document.querySelectorAll('[data-es]').forEach(function (n) { n.textContent = n.getAttribute(isEn ? 'data-en' : 'data-es'); });
 		if (history.replaceState) history.replaceState(null, '', isEn ? '#en' : location.pathname);
+		document.getElementById('home-link').setAttribute('href', isEn ? '../#en' : '../');
 	}
 	bes.addEventListener('click', function () { set('es'); });
 	ben.addEventListener('click', function () { set('en'); });

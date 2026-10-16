@@ -261,7 +261,7 @@ tr.off td:not(:first-child){opacity:.45}
 </style>
 
 <div class="wrap">
-  <div class="demo-bar"><a href="../" data-t="back"></a><span data-t="demoNote"></span><a class="dl" href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest/download/easy2cuba-for-woocommerce.zip" data-t="dlBtn"></a></div>
+  <div class="demo-bar"><a href="../" id="back-link" data-t="back"></a><span data-t="demoNote"></span><a class="dl" href="https://github.com/wpdesigndev/easy2cuba-for-woocommerce/releases/latest/download/easy2cuba-for-woocommerce.zip" data-t="dlBtn"></a></div>
   <div class="preview-note" data-t="note"></div>
 
   <div class="topbar">
@@ -602,7 +602,7 @@ const T = {
   rTitle:"How the order would reach your dashboard", rBuys:"Buyer", rGets:"Recipient", rPhones:"Phones", rMob:"Mobile", rLand:"Landline", rAddr:"Address", rPlace:"Location"
  }
 };
-let L = "es";
+let L = (location.hash === "#en" || (location.hash !== "#es" && navigator.language && navigator.language.toLowerCase().indexOf("es") !== 0)) ? "en" : "es";
 const t = k => T[L][k];
 
 const CUBA = {
@@ -713,6 +713,8 @@ function applyLang(){
   document.querySelectorAll("[data-ph]").forEach(el => el.placeholder = t(el.dataset.ph));
   $("copy").innerHTML = t("copy")(new Date().getFullYear());
   $("l-es").setAttribute("aria-pressed", L==="es"); $("l-en").setAttribute("aria-pressed", L==="en");
+  $("back-link").setAttribute("href", L==="en" ? "../#en" : "../");
+  if(history.replaceState) history.replaceState(null, "", L==="en" ? "#en" : location.pathname + location.search);
   renderItems(); fillProv(); fillCountries(); detectCountry();
   if(!$("v-admin").hidden) renderAdmin();
   renderInv(); renderInfo(); renderLogo();
