@@ -260,8 +260,7 @@ footer a { color: var(--white); }
 		</ol>
 		<div class="video">
 			<p class="video-lead" data-en-h="&lt;b&gt;Rather watch it?&lt;/b&gt; The whole process in 1 minute 39 seconds."><b>¿Prefieres verlo?</b> Todo el proceso en 1 minuto y 39 segundos.</p>
-			<div class="frame"><video controls playsinline preload="none" poster="video/tutorial-poster.jpg" data-en-poster="video/en/tutorial-poster.jpg" width="1920" height="1080" aria-label="Vídeo tutorial: cómo instalar y configurar Easy2Cuba for WooCommerce" data-en-aria="Video tutorial: how to install and set up Easy2Cuba for WooCommerce">
-				<source src="video/tutorial-easy2cuba.mp4" data-en-src="video/en/tutorial-easy2cuba.mp4" type="video/mp4">
+			<div class="frame"><video controls playsinline preload="none" src="video/tutorial-easy2cuba.mp4" data-en-src="video/en/tutorial-easy2cuba.mp4" poster="video/tutorial-poster.jpg" data-en-poster="video/en/tutorial-poster.jpg" width="1920" height="1080" aria-label="Vídeo tutorial: cómo instalar y configurar Easy2Cuba for WooCommerce" data-en-aria="Video tutorial: how to install and set up Easy2Cuba for WooCommerce">
 				<a href="video/tutorial-easy2cuba.mp4" data-en-href="video/en/tutorial-easy2cuba.mp4" data-en="Watch the video tutorial">Ver el vídeo tutorial</a>
 			</video></div>
 		</div>
@@ -358,7 +357,6 @@ footer a { color: var(--white); }
 		each('[data-en-src]', function (n) { if (n.dataset.esSrc === undefined) n.dataset.esSrc = n.getAttribute('src'); n.setAttribute('src', en ? n.dataset.enSrc : n.dataset.esSrc); });
 		each('[data-en-poster]', function (n) { if (n.dataset.esPoster === undefined) n.dataset.esPoster = n.getAttribute('poster'); n.setAttribute('poster', en ? n.dataset.enPoster : n.dataset.esPoster); });
 		each('[data-en-href]', function (n) { if (n.dataset.esHref === undefined) n.dataset.esHref = n.getAttribute('href'); n.setAttribute('href', en ? n.dataset.enHref : n.dataset.esHref); });
-		each('video', function (v) { var src = v.querySelector('source'); if (src && v.currentSrc && v.currentSrc.indexOf(src.getAttribute('src')) === -1) { v.load(); } else if (src && !v.currentSrc) { v.load(); } });
 		each('[data-en-aria]', function (n) { if (n.dataset.esAria === undefined) n.dataset.esAria = n.getAttribute('aria-label'); n.setAttribute('aria-label', en ? n.dataset.enAria : n.dataset.esAria); });
 		bes.setAttribute('aria-pressed', String(!en)); ben.setAttribute('aria-pressed', String(en));
 		try { localStorage.setItem('e2c-lang', l); } catch (e) {}
