@@ -707,8 +707,10 @@ function detectCountry(fromUser){
 $("b_pref").addEventListener("input", ()=>detectCountry(true));
 
 // Idioma
+const defMail = () => "admin@" + t("siteNote");
 function applyLang(){
   document.documentElement.lang = L;
+  ["inv-email","test-to"].forEach(id => { const el=$(id); if(el && /^admin@(mitienda|mystore)\.com$/.test(el.value.trim())) el.value = defMail(); });
   document.querySelectorAll("[data-t]").forEach(el => el.innerHTML = t(el.dataset.t));
   document.querySelectorAll("[data-ph]").forEach(el => el.placeholder = t(el.dataset.ph));
   $("copy").innerHTML = t("copy")(new Date().getFullYear());
@@ -837,7 +839,7 @@ function renderInv(){
     <td>${esc(v.rec.n+" "+v.rec.l)}</td>
     <td>${esc(v.rec.prov)}</td>
     <td class="num r">${money2(sumItems(v)+v.ship)}</td>
-    <td>${esc(v.sentTo)}</td>
+    <td>${esc(v.example ? defMail() : v.sentTo)}</td>
     <td><div class="inv-actions"><button type="button" class="btn-sec small" data-view="${i}">${t("view")}</button><button type="button" class="btn-del" data-del="${i}">${t("del")}</button></div></td>
   </tr>`).join("");
   $("inv-empty").hidden = INVOICES.length>0;
@@ -917,7 +919,7 @@ function addInvoiceFromForm(){
   const no = "FAC-"+String(nextNo++).padStart(4,"0");
   const pad = n=>String(n).padStart(2,"0"); const d=new Date();
   const payLabel = document.querySelector('.pay input:checked')?.closest("label")?.textContent.trim() || "";
-  const email = $("inv-email").value.trim() || "admin@mitienda.com";
+  const email = $("inv-email").value.trim() || defMail();
   INVOICES.unshift({no, order:nextOrder++, date:`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`, sentTo:email, pay:payLabel, notes:$("notas").value.trim(),
     buyer:{n:$("b_nombre").value,l:$("b_apellidos").value,email:$("b_email").value,phone:$("b_tel").value?($("b_pref").value+" "+$("b_tel").value):"",country:$("b_pais").value?cname($("b_pais").value):"",addr:$("b_dir").value},
     rec:{n:$("s_nombre").value,l:$("s_apellidos").value,mobile:"+53 "+$("s_tel").value,land:$("s_fijo").value?"+53 "+$("s_fijo").value:"",ci:$("s_ci").value,street:$("s_calle").value,between:$("s_entre").value,reparto:$("s_reparto").value,mun:mun.value,prov:prov.value,refs:$("s_ref").value},
@@ -959,7 +961,7 @@ document.querySelectorAll(".atabs button").forEach(b=>b.addEventListener("click"
 // Ajustes generales, SMTP y prueba de envío
 $("set-consent").addEventListener("change", ()=>{ const f=$("s_consent").closest(".f"); f.hidden = !$("set-consent").checked; if(f.hidden){ $("s_consent").checked=false; f.classList.remove("bad"); f.querySelector(".msg")?.remove(); } });
 $("smtp-on").addEventListener("change", ()=>{ $("smtp-fields").hidden = !$("smtp-on").checked; });
-$("test-send").addEventListener("click", ()=>toast(t("testSent").replace("{e}", $("test-to").value.trim() || "admin@mitienda.com")));
+$("test-send").addEventListener("click", ()=>toast(t("testSent").replace("{e}", $("test-to").value.trim() || defMail())));
 $("test-view").addEventListener("click", ()=>{
   const base = INVOICES[INVOICES.length-1]; if(!base) return;
   const v = Object.assign({}, base, {no:"FAC-0000", order:1000});
