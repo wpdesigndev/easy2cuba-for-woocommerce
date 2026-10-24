@@ -53,7 +53,7 @@ El plugin se actualiza solo desde este repositorio: cuando se publica una versi�
 
 ## Soporte
 
-Escríbenos a **easy2cubaforwoo@gmeti.com** o abre un [issue](../../issues).
+Escríbenos a **easy2cubaforwoo@gmeti.com** o abre un [issue](../../issues). [Privacidad](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/privacidad/) · [Aviso legal](https://wpdesigndev.github.io/easy2cuba-for-woocommerce/legal/).
 
 ## Licencia
 
